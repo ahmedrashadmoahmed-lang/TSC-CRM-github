@@ -1,4 +1,5 @@
 import "./globals.css";
+import { SessionProvider } from '@/components/SessionProvider';
 
 export const metadata = {
   title: "Supply Chain ERP - Management System",
@@ -7,11 +8,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="ar" dir="rtl">
       <body>
-        {children}
+        <SessionProvider>
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );
 }
+
 

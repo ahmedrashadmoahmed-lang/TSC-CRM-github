@@ -1,6 +1,7 @@
 'use client';
 
 import Sidebar from './Sidebar';
+import Chatbot from '../ai/Chatbot';
 import styles from './MainLayout.module.css';
 
 export default function MainLayout({ children }) {
@@ -10,6 +11,8 @@ export default function MainLayout({ children }) {
             <main className={styles.main}>
                 {children}
             </main>
+            <Chatbot />
         </div>
     );
 }
+

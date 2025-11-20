@@ -17,6 +17,7 @@ export default function Sidebar() {
         { icon: '💰', label: 'Invoicing', href: '/invoicing' },
         { icon: '👥', label: 'Contacts', href: '/contacts' },
         { icon: '💼', label: 'HR & Payroll', href: '/hr' },
+        { icon: '🤖', label: 'AI Analytics', href: '/analytics' },
         { icon: '📈', label: 'Reports', href: '/reports' },
         { icon: '⚙️', label: 'Settings', href: '/settings' },
     ];

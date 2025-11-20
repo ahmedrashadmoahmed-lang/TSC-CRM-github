@@ -1,0 +1,101 @@
+/* AI Insights */
+.aiGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-4);
+}
+
+.alertsList,
+.recsList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.alertItem,
+.recItem {
+    padding: var(--spacing-3);
+    border-radius: var(--radius-md);
+    border-right: 3px solid;
+    background: var(--color-background);
+    transition: all 0.2s;
+}
+
+.alertItem:hover,
+.recItem:hover {
+    transform: translateX(-4px);
+    box-shadow: var(--shadow-sm);
+}
+
+.alertItem.critical {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.alertItem.warning {
+    border-color: #f59e0b;
+    background: rgba(245, 158, 11, 0.05);
+}
+
+.alertItem.info {
+    border-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.05);
+}
+
+.recItem.high {
+    border-color: #ef4444;
+}
+
+.recItem.medium {
+    border-color: #f59e0b;
+}
+
+.recItem.low {
+    border-color: #10b981;
+}
+
+.alertHeader,
+.recHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-2);
+}
+
+.alertTitle,
+.recTitle {
+    font-weight: 600;
+    color: var(--color-text);
+    font-size: 0.95rem;
+}
+
+.alertMessage,
+.recDesc {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    margin: 0 0 var(--spacing-2) 0;
+    line-height: 1.5;
+}
+
+.alertAction {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.recFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--spacing-2);
+    padding-top: var(--spacing-2);
+    border-top: 1px solid var(--color-border);
+}
+
+.recImpact {
+    font-size: 0.85rem;
+    color: #10b981;
+    font-weight: 500;
+}

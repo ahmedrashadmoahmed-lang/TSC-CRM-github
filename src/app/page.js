@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import Header from '@/components/layout/Header';
 import Card from '@/components/ui/Card';
@@ -9,6 +10,34 @@ import styles from './page.module.css';
 import { stats, invoices, customers } from '@/data/realData';
 
 export default function Home() {
+  const [alerts, setAlerts] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
+  const [loadingAI, setLoadingAI] = useState(true);
+
+  useEffect(() => {
+    loadAIData();
+  }, []);
+
+  const loadAIData = async () => {
+    try {
+      const [alertsRes, recsRes] = await Promise.all([
+        fetch('/api/ai/alerts'),
+        fetch('/api/ai/recommendations')
+      ]);
+
+      const [alertsData, recsData] = await Promise.all([
+        alertsRes.json(),
+        recsRes.json()
+      ]);
+
+      setAlerts(alertsData.alerts || []);
+      setRecommendations(recsData.recommendations || []);
+    } catch (error) {
+      console.error('Failed to load AI data:', error);
+    } finally {
+      setLoadingAI(false);
+    }
+  };
   const recentActivities = invoices.slice(0, 5).map(inv => ({
     id: inv.id,
     type: inv.status === 'paid' ? 'payment' : 'invoice',

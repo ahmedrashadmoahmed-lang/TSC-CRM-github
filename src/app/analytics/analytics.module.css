@@ -1,0 +1,360 @@
+.container {
+    padding: var(--spacing-6);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: var(--spacing-6);
+}
+
+.header h1 {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-2);
+    color: var(--color-text);
+}
+
+.header p {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+}
+
+.loading {
+    text-align: center;
+    padding: var(--spacing-8);
+    color: var(--color-text-secondary);
+    font-size: 1.2rem;
+}
+
+.section {
+    margin-bottom: var(--spacing-8);
+}
+
+.section h2 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-4);
+    color: var(--color-text);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: var(--spacing-4);
+}
+
+/* Stats */
+.stats {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-3);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+}
+
+.label {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}
+
+.value {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.value.positive {
+    color: #10b981;
+}
+
+.value.negative {
+    color: #ef4444;
+}
+
+/* Forecast */
+.forecastList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.forecastItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-3);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+    border-right: 3px solid var(--color-primary);
+}
+
+.month {
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.amount {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.confidence {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+/* Customers */
+.customerList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.customerItem {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-3);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+}
+
+.customerItem:hover {
+    background: var(--color-surface);
+    transform: translateX(-4px);
+}
+
+.rank {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.customerInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.name {
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.details {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-2);
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+}
+
+.scoreValue {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.scoreLabel {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+}
+
+/* Risk */
+.riskList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.riskItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-3);
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: var(--radius-md);
+    border-right: 3px solid #ef4444;
+}
+
+.riskName {
+    flex: 1;
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.riskRate {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-left: var(--spacing-3);
+}
+
+.badge {
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge.high {
+    background: #ef4444;
+    color: white;
+}
+
+.noRisk {
+    padding: var(--spacing-4);
+    text-align: center;
+    color: #10b981;
+    font-weight: 500;
+}
+
+/* Expenses */
+.expenseList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.expenseItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-3);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+}
+
+.expenseInfo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.category {
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.count {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.expenseAmount {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--spacing-1);
+}
+
+.total {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.percentage {
+    font-size: 0.85rem;
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+/* Recommendations */
+.recommendations {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.recommendation {
+    padding: var(--spacing-3);
+    border-radius: var(--radius-md);
+    border-right: 3px solid;
+}
+
+.recommendation.high {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: #ef4444;
+}
+
+.recommendation.medium {
+    background: rgba(251, 191, 36, 0.1);
+    border-color: #fbbf24;
+}
+
+.recHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-2);
+}
+
+.recTitle {
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.priority {
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: var(--color-primary);
+    color: white;
+}
+
+.recDesc {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.noRecommendations {
+    padding: var(--spacing-4);
+    text-align: center;
+    color: #10b981;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-4);
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .section h2 {
+        font-size: 1.2rem;
+    }
+}
