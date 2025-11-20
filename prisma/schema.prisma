@@ -1,0 +1,158 @@
+// This is your Prisma schema file
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Customer model
+model Customer {
+  id            String    @id @default(cuid())
+  name          String
+  type          String
+  totalInvoices Int       @default(0)
+  totalValue    Float     @default(0)
+  status        String    @default("active")
+  invoices      Invoice[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// Invoice model
+model Invoice {
+  id              String    @id @default(cuid())
+  invoiceNumber   String    @unique
+  date            DateTime
+  customerId      String
+  customer        Customer  @relation(fields: [customerId], references: [id])
+  description     String
+  salesPerson     String
+  type            String
+  salesValue      Float
+  profitTax       Float
+  vat             Float
+  hasDiscount     Boolean   @default(false)
+  discounts       Float     @default(0)
+  finalValue      Float
+  collected       Float     @default(0)
+  collectionDate  DateTime?
+  balance         Float
+  status          String    @default("pending")
+  notes           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+// Employee model
+model Employee {
+  id          String    @id @default(cuid())
+  name        String
+  position    String
+  baseSalary  Float
+  status      String    @default("active")
+  joinDate    DateTime
+  payroll     Payroll[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Payroll model
+model Payroll {
+  id          String    @id @default(cuid())
+  employeeId  String
+  employee    Employee  @relation(fields: [employeeId], references: [id])
+  month       String
+  year        Int
+  baseSalary  Float
+  additions   Float     @default(0)
+  deductions  Float     @default(0)
+  netSalary   Float
+  paid        Boolean   @default(false)
+  signature   String    @default("")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Expense model
+model Expense {
+  id          String    @id @default(cuid())
+  date        DateTime
+  description String
+  amount      Float
+  category    String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Supplier model
+model Supplier {
+  id              String          @id @default(cuid())
+  name            String
+  category        String
+  totalOrders     Int             @default(0)
+  totalValue      Float           @default(0)
+  status          String          @default("active")
+  purchaseOrders  PurchaseOrder[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+// Purchase Order model
+model PurchaseOrder {
+  id          String    @id @default(cuid())
+  poNumber    String    @unique
+  date        DateTime
+  supplierId  String
+  supplier    Supplier  @relation(fields: [supplierId], references: [id])
+  description String
+  amount      Float
+  status      String    @default("pending")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Product model
+model Product {
+  id          String    @id @default(cuid())
+  name        String
+  sku         String    @unique
+  category    String
+  stock       Int       @default(0)
+  minStock    Int       @default(0)
+  price       Float
+  cost        Float
+  status      String    @default("active")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// User model for authentication
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  role          String    @default("employee") // admin, manager, employee
+  image         String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// Bank Guarantee model
+model BankGuarantee {
+  id          String    @id @default(cuid())
+  type        String
+  amount      Float
+  status      String    @default("active")
+  issueDate   DateTime
+  returnDate  DateTime?
+  description String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}

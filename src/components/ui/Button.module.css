@@ -1,0 +1,105 @@
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    font-family: var(--font-family);
+    font-weight: 500;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+    outline: none;
+}
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Sizes */
+.sm {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: var(--font-size-sm);
+}
+
+.md {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-size-base);
+}
+
+.lg {
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-lg);
+}
+
+/* Variants */
+.primary {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+    color: white;
+    box-shadow: var(--shadow-sm);
+}
+
+.primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.primary:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.secondary {
+    background: linear-gradient(135deg, var(--color-secondary), hsl(280, 70%, 65%));
+    color: white;
+    box-shadow: var(--shadow-sm);
+}
+
+.secondary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.outline {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+.outline:hover:not(:disabled) {
+    background: var(--color-primary);
+    color: white;
+}
+
+.ghost {
+    background: transparent;
+    color: var(--color-text-secondary);
+}
+
+.ghost:hover:not(:disabled) {
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+}
+
+.danger {
+    background: var(--color-error);
+    color: white;
+}
+
+.danger:hover:not(:disabled) {
+    background: hsl(0, 84%, 55%);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.success {
+    background: var(--color-success);
+    color: white;
+}
+
+.success:hover:not(:disabled) {
+    background: hsl(142, 76%, 40%);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
