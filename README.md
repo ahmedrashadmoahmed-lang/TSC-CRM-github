@@ -1,191 +1,285 @@
-# Supply Chain ERP System
+# 📋 README - Complete ERP System
 
-A comprehensive Supply Chain ERP system built with Next.js 15 and vanilla CSS, featuring 10 fully functional modules for managing the complete supply chain lifecycle.
+## 🎯 Overview
 
-![Supply Chain ERP](https://img.shields.io/badge/Next.js-15.1.3-black?style=for-the-badge&logo=next.js)
-![React](https://img.shields.io/badge/React-19.2.0-blue?style=for-the-badge&logo=react)
-![CSS](https://img.shields.io/badge/CSS-Vanilla-1572B6?style=for-the-badge&logo=css3)
-
-## 🚀 Features
-
-### Core Modules
-
-- **📊 Dashboard** - Real-time overview with metrics, quick actions, and activity timeline
-- **🎯 Sales Pipeline** - Kanban board for managing deals from lead to close
-- **📝 RFQ Management** - Create and manage Request for Quotations with supplier selection
-- **🛒 Purchase Orders** - Track POs and monitor supplier performance
-- **📦 Inventory** - Stock management with low-stock alerts and incoming shipments
-- **🚚 Order Fulfillment** - Shipping and delivery tracking
-- **💰 Invoicing** - Invoice generation and payment tracking
-- **👥 Contacts** - Customer and supplier database management
-- **📈 Reports** - Business analytics and insights
-- **⚙️ Settings** - System configuration and preferences
-
-### Design Highlights
-
-- **Premium Dark Theme** with HSL-based color palette
-- **Smooth Animations** with micro-interactions
-- **Fully Responsive** layouts for all screen sizes
-- **Custom UI Components** - No external UI libraries
-- **Inter Font** from Google Fonts
-- **Gradient Accents** and glassmorphism effects
-
-## 📋 Prerequisites
-
-- Node.js 16.x or higher
-- npm or yarn
-
-## 🛠️ Installation
-
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd antigravity
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Start the development server:
-```bash
-npm run dev
-```
-
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-## 📁 Project Structure
-
-```
-src/
-├── app/
-│   ├── page.js                    # Dashboard
-│   ├── pipeline/                  # Sales Pipeline
-│   ├── rfq/                       # RFQ Management
-│   ├── po/                        # Purchase Orders
-│   ├── inventory/                 # Inventory
-│   ├── fulfillment/               # Order Fulfillment
-│   ├── invoicing/                 # Invoicing
-│   ├── contacts/                  # Contacts
-│   ├── reports/                   # Reports
-│   ├── settings/                  # Settings
-│   ├── layout.js                  # Root layout
-│   └── globals.css                # Design system
-└── components/
-    ├── ui/                        # Reusable UI components
-    │   ├── Button.js
-    │   ├── Card.js
-    │   ├── Input.js
-    │   ├── Badge.js
-    │   └── Table.js
-    └── layout/                    # Layout components
-        ├── Sidebar.js
-        ├── Header.js
-        └── MainLayout.js
-```
-
-## 🎨 Design System
-
-### Color Palette
-- **Primary**: `hsl(210, 100%, 60%)` - Vibrant blue
-- **Secondary**: `hsl(280, 70%, 60%)` - Purple
-- **Accent**: `hsl(160, 70%, 50%)` - Teal
-- **Background**: `hsl(220, 18%, 8-16%)` - Deep blue-gray
-
-### Components
-- **Button** - 6 variants (Primary, Secondary, Outline, Ghost, Danger, Success)
-- **Card** - With optional title, subtitle, and hover effects
-- **Input** - With label, validation, and error states
-- **Badge** - 6 color variants for status indicators
-- **Table** - Configurable columns with custom cell rendering
-
-## 🔧 Available Scripts
-
-```bash
-# Development
-npm run dev          # Start development server
-
-# Production
-npm run build        # Build for production
-npm start            # Start production server
-
-# Code Quality
-npm run lint         # Run ESLint
-```
-
-## 📊 Module Details
-
-### Dashboard
-- Overview cards with key metrics
-- Quick action buttons
-- Animated activity timeline with pulsing dots
-
-### Sales Pipeline
-- 4-column Kanban board (Leads → Quotes → Negotiations → Won)
-- Click-to-move deals between stages
-- Filter by priority and search functionality
-
-### RFQ Management
-- Dynamic form with add/remove items
-- Multi-supplier selection
-- Active RFQs table with status tracking
-
-### Purchase Orders
-- Tabbed interface (PO List & Supplier Performance)
-- Statistics dashboard
-- Supplier rating and on-time delivery tracking
-
-### Inventory
-- Stock level monitoring with automatic alerts
-- Incoming shipments tracking
-- Location-based organization
-
-## 🚀 Future Enhancements
-
-- [ ] Backend API integration (REST/GraphQL)
-- [ ] User authentication and authorization
-- [ ] Real-time notifications
-- [ ] Drag-and-drop for Kanban board
-- [ ] Chart libraries for analytics
-- [ ] PDF generation for invoices
-- [ ] Email notifications
-- [ ] Dark/light theme toggle
-- [ ] Advanced filtering and sorting
-- [ ] Bulk operations
-
-## 🛡️ Technical Stack
-
-- **Framework**: Next.js 15.1.3 (App Router)
-- **UI Library**: React 19.2.0
-- **Styling**: Vanilla CSS with CSS Modules
-- **Font**: Inter (Google Fonts)
-- **Icons**: Unicode emojis
-
-## 📝 License
-
-This project is licensed under the MIT License.
-
-## 👨‍💻 Development
-
-Built with ❤️ using modern web technologies and best practices.
-
-### Key Features
-- ✅ Zero external UI dependencies
-- ✅ Premium custom design system
-- ✅ Fully responsive layouts
-- ✅ Smooth animations and transitions
-- ✅ Mock data for demonstration
-- ✅ Ready for backend integration
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📧 Support
-
-For support, please open an issue in the repository.
+A comprehensive, production-ready Enterprise Resource Planning (ERP) system built with Next.js 15, React 19, PostgreSQL, and Prisma. Features include multi-tenant architecture, RBAC, advanced analytics, and AI integration.
 
 ---
 
-**Note**: This application currently uses mock data for demonstration purposes. Connect to your backend API to use real data.
+## ✨ Features
+
+### Core Modules
+- ✅ **Dashboard** - Real-time analytics and insights
+- ✅ **Customer Management** - Complete CRM functionality
+- ✅ **Supplier Management** - Vendor tracking and ratings
+- ✅ **Product Catalog** - Inventory and pricing
+- ✅ **Invoicing** - Automated billing and payments
+- ✅ **Purchase Orders** - Procurement workflow
+- ✅ **Employee Management** - HR and payroll
+- ✅ **Accounting** - Chart of accounts and journal entries
+- ✅ **Reports & Analytics** - 6 report types with export
+- ✅ **AI Integration** - Google Gemini chatbot
+
+### Security & Authorization
+- ✅ **RBAC** - 6 roles with 40+ permissions
+- ✅ **Multi-tenant** - Complete data isolation
+- ✅ **Rate Limiting** - Configurable limits
+- ✅ **Security Headers** - CSP, XSS protection, HSTS
+- ✅ **Audit Logging** - Complete activity tracking
+- ✅ **Authentication** - NextAuth with JWT
+
+### Technical Features
+- ✅ **Testing** - Jest + React Testing Library
+- ✅ **Error Handling** - Global error boundaries
+- ✅ **Responsive Design** - Mobile-first approach
+- ✅ **RTL/LTR Support** - Arabic/English
+- ✅ **Real-time Notifications** - Toast and notification center
+- ✅ **File Upload** - Drag-and-drop support
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+ 
+- PostgreSQL 16+
+- npm or yarn
+
+### Installation
+
+```bash
+# 1. Clone the repository
+git clone <repository-url>
+cd antigravity
+
+# 2. Install dependencies
+npm install
+
+# 3. Setup environment variables
+cp .env.example .env
+# Edit .env with your database credentials
+
+# 4. Setup database
+npm run setup
+
+# 5. Run development server
+npm run dev
+```
+
+Visit `http://localhost:3000`
+
+---
+
+## 📚 Documentation
+
+- [Quick Start Guide](./QUICK_START.md)
+- [PostgreSQL Setup](./POSTGRESQL_SETUP.md)
+- [Database Setup Guide](./DATABASE_SETUP_GUIDE.md)
+- [AI Setup](./AI_SETUP.md)
+- [Installation Guide](./INSTALLATION.md)
+- [Implementation Summary](./IMPLEMENTATION_SUMMARY.md)
+- [Final Summary](./FINAL_SUMMARY.md)
+
+---
+
+## 🏗️ Architecture
+
+### Tech Stack
+- **Frontend:** Next.js 15, React 19, CSS Modules
+- **Backend:** Next.js API Routes, Prisma ORM
+- **Database:** PostgreSQL 16+
+- **Authentication:** NextAuth.js
+- **Validation:** Zod
+- **Testing:** Jest, React Testing Library
+- **AI:** Google Gemini API
+
+### Project Structure
+```
+src/
+├── app/                    # Next.js app directory
+│   ├── api/               # API routes
+│   ├── admin/             # Admin pages
+│   ├── customers/         # Customer pages
+│   ├── products/          # Product pages
+│   └── ...
+├── components/            # React components
+│   ├── ui/               # UI components
+│   ├── layout/           # Layout components
+│   └── dashboard/        # Dashboard components
+├── services/             # Business logic services
+├── middleware/           # Auth, rate limiting, security
+├── utils/                # Utilities and helpers
+├── hooks/                # Custom React hooks
+└── lib/                  # Library configurations
+```
+
+---
+
+## 🔐 Security
+
+### Authentication & Authorization
+- NextAuth with JWT sessions
+- Role-Based Access Control (RBAC)
+- Permission-based authorization
+- Multi-tenant data isolation
+
+### Security Measures
+- Rate limiting (configurable)
+- Security headers (CSP, XSS, HSTS)
+- Input validation (Zod schemas)
+- SQL injection protection (Prisma)
+- CSRF protection (Next.js)
+- Audit logging
+
+---
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+npm test
+
+# Run with coverage
+npm test -- --coverage
+
+# Run specific test
+npm test CustomerService
+
+# Watch mode
+npm test -- --watch
+```
+
+**Coverage Target:** 70%+
+
+---
+
+## 📊 Database Schema
+
+### Core Tables (17)
+- `tenants` - Multi-tenant isolation
+- `users` - User authentication
+- `customers` - Customer management
+- `suppliers` - Supplier management
+- `products` - Product catalog
+- `invoices` + `invoice_items` - Billing
+- `purchase_orders` + `purchase_order_items` - Procurement
+- `employees` - HR management
+- `payroll` - Payroll processing
+- `accounts` - Chart of accounts
+- `journal_entries` + `journal_lines` - Accounting
+- `notifications` - User notifications
+- `audit_logs` - Activity tracking
+- `inventory_movements` - Stock tracking
+
+---
+
+## 🎨 UI Components
+
+### Basic Components (8)
+- SkeletonLoader, DataTable, FormBuilder, Modal
+- Badge, ConfirmDialog, Dropdown, Tabs
+
+### Advanced Components (9)
+- Accordion, Pagination, Alert, NotificationCenter
+- FileUpload, SearchBar, Timeline, ExportButton, DateRangePicker
+
+### Dashboard Components (4)
+- StatCard, ChartCard, SimpleBarChart, ReportViewer
+
+### Utility Components (4)
+- ProgressBar, Card, EmptyState, ErrorBoundary
+
+---
+
+## 🔧 Configuration
+
+### Environment Variables
+
+```env
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/erp_database"
+
+# NextAuth
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret-key"
+
+# Google Gemini (Optional)
+GOOGLE_GEMINI_API_KEY="your-api-key"
+```
+
+### Scripts
+
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run start        # Start production server
+npm run lint         # Run ESLint
+npm test             # Run tests
+npm run db:generate  # Generate Prisma client
+npm run db:push      # Push schema to database
+npm run db:studio    # Open Prisma Studio
+npm run setup        # Complete setup
+```
+
+---
+
+## 📈 Performance
+
+- Code splitting with Next.js
+- Lazy loading components
+- Optimized database queries
+- Caching strategies
+- Image optimization
+
+---
+
+## 🌍 Internationalization
+
+- RTL/LTR support
+- Arabic/English languages
+- Language switcher component
+- Date/number formatting
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Write/update tests
+5. Submit a pull request
+
+---
+
+## 📝 License
+
+MIT License - see LICENSE file for details
+
+---
+
+## 📞 Support
+
+For issues and questions:
+- Email: support@example.com
+- Documentation: See docs folder
+- Issues: GitHub Issues
+
+---
+
+## 🎉 Acknowledgments
+
+Built with:
+- Next.js 15
+- React 19
+- PostgreSQL
+- Prisma
+- NextAuth
+- Google Gemini
+- And many other amazing open-source projects
+
+---
+
+**Version:** 1.0.0  
+**Last Updated:** November 24, 2025  
+**Status:** Production Ready ✅

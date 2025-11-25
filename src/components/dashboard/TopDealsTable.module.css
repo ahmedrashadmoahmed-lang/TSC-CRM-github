@@ -1,0 +1,198 @@
+.container {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    height: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f8fafc;
+    margin: 0;
+}
+
+.viewAll {
+    color: #3b82f6;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.viewAll:hover {
+    color: #60a5fa;
+}
+
+.table {
+    width: 100%;
+}
+
+.tableHeader {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1.2fr 1fr 1fr;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.tableHeader .col {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.tableBody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1.2fr 1fr 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.3);
+    border-radius: 8px;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid transparent;
+}
+
+.row:hover {
+    background: rgba(30, 41, 59, 0.5);
+    border-color: rgba(59, 130, 246, 0.3);
+    transform: translateX(-4px);
+}
+
+.col {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+}
+
+.dealTitle {
+    color: #f8fafc;
+    font-weight: 600;
+}
+
+.customer {
+    color: #cbd5e1;
+}
+
+.value {
+    color: #10b981;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+}
+
+.stage {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+}
+
+.probability {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.probabilityBar {
+    flex: 1;
+    height: 6px;
+    background: rgba(148, 163, 184, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.probabilityFill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    border-radius: 3px;
+    transition: width 0.3s;
+}
+
+.probabilityText {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 600;
+    min-width: 35px;
+}
+
+.loading,
+.empty {
+    padding: 2rem;
+    text-align: center;
+    color: #64748b;
+}
+
+.skeletonRow {
+    height: 60px;
+    background: linear-gradient(90deg, rgba(148, 163, 184, 0.1) 25%, rgba(148, 163, 184, 0.2) 50%, rgba(148, 163, 184, 0.1) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@media (max-width: 1024px) {
+
+    .tableHeader,
+    .row {
+        grid-template-columns: 2fr 1.5fr 1fr;
+    }
+
+    .col:nth-child(4),
+    .col:nth-child(5) {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .tableHeader,
+    .row {
+        grid-template-columns: 1fr;
+    }
+
+    .col {
+        justify-content: space-between;
+    }
+
+    .col::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #94a3b8;
+    }
+}

@@ -4,7 +4,7 @@
     justify-content: center;
     gap: var(--spacing-sm);
     font-family: var(--font-family);
-    font-weight: 500;
+    font-weight: 600;
     border: none;
     border-radius: var(--radius-md);
     cursor: pointer;
@@ -36,12 +36,13 @@
 
 /* Variants */
 .primary {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+    background: var(--color-primary);
     color: white;
     box-shadow: var(--shadow-sm);
 }
 
 .primary:hover:not(:disabled) {
+    background: var(--color-primary-hover);
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
 }
@@ -51,12 +52,13 @@
 }
 
 .secondary {
-    background: linear-gradient(135deg, var(--color-secondary), hsl(280, 70%, 65%));
+    background: var(--color-secondary);
     color: white;
     box-shadow: var(--shadow-sm);
 }
 
 .secondary:hover:not(:disabled) {
+    background: var(--color-text-secondary);
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
 }
@@ -64,33 +66,11 @@
 .outline {
     background: transparent;
     color: var(--color-primary);
-    border: 1px solid var(--color-primary);
+    border: 2px solid var(--color-primary);
 }
 
 .outline:hover:not(:disabled) {
-    background: var(--color-primary);
-    color: white;
-}
-
-.ghost {
-    background: transparent;
-    color: var(--color-text-secondary);
-}
-
-.ghost:hover:not(:disabled) {
-    background: var(--color-bg-hover);
-    color: var(--color-text-primary);
-}
-
-.danger {
-    background: var(--color-error);
-    color: white;
-}
-
-.danger:hover:not(:disabled) {
-    background: hsl(0, 84%, 55%);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    background: var(--color-primary-light);
 }
 
 .success {
@@ -99,7 +79,38 @@
 }
 
 .success:hover:not(:disabled) {
-    background: hsl(142, 76%, 40%);
+    background: #218838;
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
+}
+
+.danger {
+    background: var(--color-error);
+    color: white;
+}
+
+.danger:hover:not(:disabled) {
+    background: #c82333;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }

@@ -1,0 +1,163 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.content {
+    background: white;
+    border-radius: 16px;
+    padding: 3rem;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0 0 1rem 0;
+}
+
+.message {
+    font-size: 1.1rem;
+    color: #4a5568;
+    margin: 0 0 2rem 0;
+    line-height: 1.6;
+}
+
+.errorDetails {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 2rem 0;
+    text-align: left;
+}
+
+.errorDetails summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #2d3748;
+    padding: 0.5rem;
+}
+
+.errorStack {
+    margin: 1rem 0 0 0;
+    padding: 1rem;
+    background: #2d3748;
+    color: #f7fafc;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.primaryButton {
+    padding: 0.875rem 2rem;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.primaryButton:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.secondaryButton {
+    padding: 0.875rem 2rem;
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+}
+
+.secondaryButton:hover {
+    background: #f7fafc;
+    transform: translateY(-2px);
+}
+
+.help {
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+    color: #718096;
+}
+
+.help p {
+    margin: 0 0 0.5rem 0;
+}
+
+.help a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.help a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+    .content {
+        padding: 2rem 1.5rem;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .message {
+        font-size: 1rem;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .primaryButton,
+    .secondaryButton {
+        width: 100%;
+    }
+}

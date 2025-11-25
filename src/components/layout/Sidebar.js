@@ -15,6 +15,7 @@ export default function Sidebar() {
         { icon: '📦', label: 'Inventory', href: '/inventory' },
         { icon: '🚚', label: 'Fulfillment', href: '/fulfillment' },
         { icon: '💰', label: 'Invoicing', href: '/invoicing' },
+        { icon: '📚', label: 'Accounting', href: '/accounting/chart-of-accounts' },
         { icon: '👥', label: 'Contacts', href: '/contacts' },
         { icon: '💼', label: 'HR & Payroll', href: '/hr' },
         { icon: '🤖', label: 'AI Analytics', href: '/analytics' },

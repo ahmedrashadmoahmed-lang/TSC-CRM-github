@@ -1,0 +1,118 @@
+.container {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table thead {
+    background: var(--gray-50);
+}
+
+.table th {
+    padding: var(--spacing-md);
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--gray-700);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--gray-200);
+}
+
+.row {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.row:hover {
+    background: var(--gray-50);
+}
+
+.table td {
+    padding: var(--spacing-md);
+    font-size: 0.875rem;
+    color: var(--gray-700);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.companyCell,
+.contactCell,
+.dateCell {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.companyCell svg {
+    color: var(--primary-600);
+}
+
+.contactCell svg,
+.dateCell svg {
+    color: var(--gray-400);
+}
+
+.company {
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+.valueCell {
+    font-weight: 700;
+    color: var(--success-600);
+}
+
+.viewButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--primary-50);
+    border: 1px solid var(--primary-200);
+    border-radius: var(--radius-md);
+    color: var(--primary-600);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.viewButton:hover {
+    background: var(--primary-100);
+    border-color: var(--primary-300);
+}
+
+.empty {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--gray-500);
+}
+
+[data-theme="dark"] .container {
+    background: var(--gray-800);
+}
+
+[data-theme="dark"] .table thead {
+    background: var(--gray-700);
+}
+
+[data-theme="dark"] .row:hover {
+    background: var(--gray-700);
+}
+
+@media (max-width: 768px) {
+    .table {
+        font-size: 0.75rem;
+    }
+
+    .table th,
+    .table td {
+        padding: var(--spacing-sm);
+    }
+}

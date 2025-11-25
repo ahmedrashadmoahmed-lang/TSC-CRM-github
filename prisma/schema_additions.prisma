@@ -1,0 +1,67 @@
+// Update Prisma schema with CustomAlert model
+
+model CustomAlert {
+  id            String    @id @default(cuid())
+  userId        String
+  name          String
+  condition     Json      // { metric: 'revenue', operator: '<', value: 10000 }
+  channels      String[]  // ['email', 'slack', 'in-app']
+  isActive      Boolean   @default(true)
+  lastTriggered DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([isActive])
+}
+
+model MetricTarget {
+  id        String   @id @default(cuid())
+  userId    String
+  metric    String
+  target    Float
+  period    String   // monthly, quarterly, yearly
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([metric])
+}
+
+model Forecast {
+  id         String   @id @default(cuid())
+  metric     String
+  predicted  Float
+  actual     Float?
+  confidence Float
+  period     DateTime
+  createdAt  DateTime @default(now())
+
+  @@index([metric])
+  @@index([period])
+}
+
+model DashboardLayout {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  layout    Json     // Widget positions and sizes
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model CustomerSegment {
+  id          String   @id @default(cuid())
+  customerId  String
+  rfmScore    Json     // { recency: 5, frequency: 4, monetary: 5 }
+  segment     String   // VIP, At-Risk, New, etc.
+  lastUpdated DateTime @default(now())
+
+  @@index([customerId])
+  @@index([segment])
+}

@@ -1,4 +1,7 @@
+import { Inter } from 'next/font/google';
 import "./globals.css";
+import '../styles/design-system.css';
+import '../styles/dark-mode.css';
 import { SessionProvider } from '@/components/SessionProvider';
 
 export const metadata = {

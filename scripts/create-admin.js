@@ -20,13 +20,19 @@ async function createAdminUser() {
         // Hash password
         const hashedPassword = await bcrypt.hash('admin123', 10);
 
-        // Create admin user
+        // Create admin user with tenant
         const admin = await prisma.user.create({
             data: {
                 name: 'Admin',
                 email: 'admin@erp.com',
                 password: hashedPassword,
-                role: 'admin'
+                role: 'admin',
+                tenant: {
+                    create: {
+                        name: 'Default Tenant',
+                        domain: 'default'
+                    }
+                }
             }
         });
 

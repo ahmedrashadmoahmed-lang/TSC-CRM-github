@@ -1,0 +1,65 @@
+﻿
+> erp-system@1.0.0 build
+> next build
+
+   Γû▓ Next.js 15.1.3
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+node.exe :  ΓÜá Found lockfile missing swc 
+dependencies, patching...
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" 
+"C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: 
+    ( ΓÜá Found lock...es, patching...:Str  
+  ing) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommand 
+   Error
+ 
+ Γ¿» Failed to patch lockfile, please try 
+uninstalling and reinstalling next in this 
+workspace
+[TypeError: terminated] {
+  [cause]: [Error: read ECONNRESET] {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+<w> [webpack.cache.PackFileCacheStrategy] 
+Skipped not serializable cache item 'Compila
+tion/modules|javascript/auto|D:\Private data
+\CRM_Project\antigravity\node_modules\next\d
+ist\build\webpack\loaders\next-flight-css-lo
+ader.js??ruleSet[1].rules[13].oneOf[5].use[0
+]!D:\Private data\CRM_Project\antigravity\no
+de_modules\next\dist\build\webpack\loaders\c
+ss-loader\src\index.js??ruleSet[1].rules[13]
+.oneOf[5].use[1]!D:\Private data\CRM_Project
+\antigravity\node_modules\next\dist\build\we
+bpack\loaders\postcss-loader\src\index.js??r
+uleSet[1].rules[13].oneOf[5].use[2]!D:\Priva
+te data\CRM_Project\antigravity\src\componen
+ts\dashboard\AIInsightsPanel.module.css|ssr'
+: No serializer registered for Warning
+<w> while serializing webpack/lib/cache/Pack
+FileCacheStrategy.PackContentItems -> 
+webpack/lib/NormalModule -> Array { 1 items 
+} -> webpack/lib/ModuleWarning -> Warning
+Failed to compile.
+
+./src/lib/monitoring.js
+Module not found: Can't resolve 
+'@sentry/nextjs'
+
+https://nextjs.org/docs/messages/module-not-
+found
+
+Import trace for requested module:
+./src/app/api/health/route.js
+
+
+> Build failed because of webpack errors

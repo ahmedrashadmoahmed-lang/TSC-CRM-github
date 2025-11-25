@@ -1,0 +1,80 @@
+.kanban {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+}
+
+.column {
+    background: var(--gray-50);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-md);
+    min-height: 600px;
+}
+
+.columnHeader {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.columnTitle {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.columnTitle svg {
+    color: var(--primary-600);
+}
+
+.columnTitle h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    flex: 1;
+}
+
+.columnValue {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-600);
+}
+
+.columnContent {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    min-height: 400px;
+}
+
+.dragOverlay {
+    padding: var(--spacing-md) !important;
+    cursor: grabbing;
+    box-shadow: var(--shadow-xl);
+    transform: rotate(3deg);
+}
+
+.dealCompany {
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--spacing-xs);
+}
+
+.dealValue {
+    font-weight: 600;
+    color: var(--success-600);
+}
+
+[data-theme="dark"] .column {
+    background: var(--gray-800);
+}
+
+[data-theme="dark"] .columnHeader {
+    background: var(--gray-700);
+}

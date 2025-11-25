@@ -1,0 +1,133 @@
+.container {
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+}
+
+.timeline {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.activityItem {
+    display: flex;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    transition: background var(--transition-fast);
+}
+
+.activityItem:hover {
+    background: var(--color-bg-secondary);
+}
+
+.iconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.blue {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+.green {
+    background: var(--color-success-light);
+    color: var(--color-success);
+}
+
+.orange {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+}
+
+.red {
+    background: var(--color-error-light);
+    color: var(--color-error);
+}
+
+.gray {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+}
+
+.content {
+    flex: 1;
+    min-width: 0;
+}
+
+.description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    margin: 0 0 var(--spacing-xs) 0;
+    line-height: 1.5;
+}
+
+.meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+}
+
+.user {
+    font-weight: 500;
+}
+
+.separator {
+    opacity: 0.5;
+}
+
+.time {
+    opacity: 0.8;
+}
+
+.loading,
+.error,
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl);
+    gap: var(--spacing-md);
+    color: var(--color-text-secondary);
+    text-align: center;
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.error {
+    color: var(--color-error);
+}
+
+@media (max-width: 768px) {
+    .activityItem {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .meta {
+        flex-wrap: wrap;
+    }
+}

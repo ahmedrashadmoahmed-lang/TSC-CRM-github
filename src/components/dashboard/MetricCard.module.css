@@ -1,0 +1,222 @@
+.card {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--gray-100);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-500), var(--primary-600));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+.cardLink {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
+    border-radius: var(--radius-lg);
+    font-size: 1.75rem;
+    color: var(--primary-600);
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+}
+
+.label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+}
+
+.value {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1.2;
+    margin-bottom: var(--spacing-sm);
+}
+
+.unit {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--gray-500);
+    margin-right: var(--spacing-sm);
+}
+
+.secondary {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-sm);
+    background: var(--gray-50);
+    border-radius: var(--radius-md);
+}
+
+.count {
+    font-size: 0.875rem;
+    color: var(--gray-700);
+    font-weight: 500;
+}
+
+.total {
+    font-size: 1rem;
+    color: var(--gray-900);
+    font-weight: 700;
+}
+
+.trend {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    width: fit-content;
+}
+
+.trendUp {
+    background: linear-gradient(135deg, var(--success-50) 0%, #f0fdf4 100%);
+    color: var(--success-700);
+    border: 1px solid var(--success-200);
+}
+
+.trendDown {
+    background: linear-gradient(135deg, var(--error-50) 0%, #fef2f2 100%);
+    color: var(--error-700);
+    border: 1px solid var(--error-200);
+}
+
+.trendIcon {
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+.trendValue {
+    font-weight: 700;
+}
+
+.trendLabel {
+    color: var(--gray-500);
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+/* Status Variants */
+.statusSuccess {
+    border-left: 4px solid var(--success-500);
+}
+
+.statusSuccess .icon {
+    background: linear-gradient(135deg, var(--success-50) 0%, var(--success-100) 100%);
+    color: var(--success-600);
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.15);
+}
+
+.statusWarning {
+    border-left: 4px solid var(--warning-500);
+}
+
+.statusWarning .icon {
+    background: linear-gradient(135deg, var(--warning-50) 0%, #fef3c7 100%);
+    color: var(--warning-600);
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+}
+
+.statusDanger {
+    border-left: 4px solid var(--error-500);
+}
+
+.statusDanger .icon {
+    background: linear-gradient(135deg, var(--error-50) 0%, #fee2e2 100%);
+    color: var(--error-600);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+}
+
+/* Loading State */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.skeleton {
+    padding: var(--spacing-md) 0;
+}
+
+.skeletonLine {
+    height: 36px;
+    background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s ease-in-out infinite;
+    border-radius: var(--radius-md);
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card {
+        padding: var(--spacing-md);
+    }
+
+    .icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+    }
+
+    .value {
+        font-size: 1.75rem;
+    }
+
+    .label {
+        font-size: 0.8125rem;
+    }
+}

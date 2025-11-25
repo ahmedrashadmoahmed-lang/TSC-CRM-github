@@ -1,73 +1,121 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { withAuth } from '@/lib/authMiddleware';
+import { InvoiceService } from '@/services/InvoiceService';
+import { PERMISSIONS } from '@/lib/permissions';
+import { validate, invoiceSchema, paymentSchema } from '@/lib/validation';
 
 // GET /api/invoices - Get all invoices
-export async function GET(request) {
-    try {
-        const { searchParams } = new URL(request.url);
-        const status = searchParams.get('status');
+export const GET = withAuth(async (request) => {
+    const { tenant, user } = request;
+    const { searchParams } = new URL(request.url);
 
-        const where = status && status !== 'all' ? { status } : {};
+    const filters = {
+        status: searchParams.get('status') || 'all',
+        customerId: searchParams.get('customerId') || null,
+        startDate: searchParams.get('startDate') || null,
+        endDate: searchParams.get('endDate') || null,
+        search: searchParams.get('search') || null,
+    };
 
-        const invoices = await prisma.invoice.findMany({
-            where,
-            include: {
-                customer: true
-            },
-            orderBy: {
-                date: 'desc'
-            }
-        });
+    const service = new InvoiceService(
+        tenant.id,
+        tenant.settings,
+        user.id,
+        user.name,
+        user.email
+    );
 
-        return NextResponse.json(invoices);
-    } catch (error) {
-        return NextResponse.json(
-            { error: 'Failed to fetch invoices' },
-            { status: 500 }
-        );
-    }
-}
+    const invoices = await service.getInvoices(filters);
+
+    return NextResponse.json(invoices);
+}, { permission: PERMISSIONS.INVOICE_READ });
 
 // POST /api/invoices - Create new invoice
-export async function POST(request) {
+export const POST = withAuth(async (request) => {
+    const { tenant, user } = request;
+    const data = await request.json();
+
+    // Validate input
+    const { success, data: validatedData, errors } = validate(invoiceSchema, data);
+
+    if (!success) {
+        return NextResponse.json(
+            { error: 'Validation failed', errors },
+            { status: 400 }
+        );
+    }
+
+    const service = new InvoiceService(
+        tenant.id,
+        tenant.settings,
+        user.id,
+        user.name,
+        user.email
+    );
+
     try {
-        const body = await request.json();
-
-        const invoice = await prisma.invoice.create({
-            data: {
-                invoiceNumber: body.invoiceNumber || `INV-${Date.now()}`,
-                date: new Date(body.date),
-                customerId: body.customerId,
-                description: body.description,
-                salesPerson: body.salesPerson,
-                type: body.type,
-                salesValue: parseFloat(body.salesValue),
-                profitTax: parseFloat(body.profitTax),
-                vat: parseFloat(body.vat),
-                finalValue: parseFloat(body.finalValue),
-                balance: parseFloat(body.finalValue),
-                status: 'pending'
-            },
-            include: {
-                customer: true
-            }
-        });
-
-        // Update customer totals
-        await prisma.customer.update({
-            where: { id: body.customerId },
-            data: {
-                totalInvoices: { increment: 1 },
-                totalValue: { increment: parseFloat(body.finalValue) }
-            }
-        });
+        const invoice = await service.createInvoice(validatedData, request);
 
         return NextResponse.json(invoice, { status: 201 });
     } catch (error) {
-        console.error('Invoice creation error:', error);
         return NextResponse.json(
-            { error: 'Failed to create invoice' },
-            { status: 500 }
+            { error: error.message },
+            { status: 400 }
         );
     }
+}, { permission: PERMISSIONS.INVOICE_CREATE });
+
+// PUT /api/invoices/[id] - Update invoice
+export async function PUT(request, { params }) {
+    return withAuth(async (request) => {
+        const { tenant, user } = request;
+        const { id } = params;
+        const data = await request.json();
+
+        const service = new InvoiceService(
+            tenant.id,
+            tenant.settings,
+            user.id,
+            user.name,
+            user.email
+        );
+
+        try {
+            const invoice = await service.updateInvoice(id, data, request);
+
+            return NextResponse.json(invoice);
+        } catch (error) {
+            return NextResponse.json(
+                { error: error.message },
+                { status: 400 }
+            );
+        }
+    }, { permission: PERMISSIONS.INVOICE_UPDATE })(request);
+}
+
+// DELETE /api/invoices/[id] - Delete invoice
+export async function DELETE(request, { params }) {
+    return withAuth(async (request) => {
+        const { tenant, user } = request;
+        const { id } = params;
+
+        const service = new InvoiceService(
+            tenant.id,
+            tenant.settings,
+            user.id,
+            user.name,
+            user.email
+        );
+
+        try {
+            await service.deleteInvoice(id, request);
+
+            return NextResponse.json({ success: true });
+        } catch (error) {
+            return NextResponse.json(
+                { error: error.message },
+                { status: 400 }
+            );
+        }
+    }, { permission: PERMISSIONS.INVOICE_DELETE })(request);
 }

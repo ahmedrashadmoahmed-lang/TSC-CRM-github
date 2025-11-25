@@ -1,0 +1,201 @@
+.card {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    border: 1px solid var(--gray-200);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.header {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.iconWrapper {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
+    color: white;
+    flex-shrink: 0;
+}
+
+.content {
+    flex: 1;
+}
+
+.title {
+    margin: 0 0 var(--spacing-xs) 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.value {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+/* Trend */
+.trend {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+}
+
+.trend.up {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success-700);
+}
+
+.trend.down {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger-700);
+}
+
+.trend.neutral {
+    background: var(--gray-100);
+    color: var(--gray-600);
+}
+
+.trendValue {
+    font-weight: 700;
+}
+
+.trendLabel {
+    color: var(--gray-600);
+    font-weight: 500;
+}
+
+/* Target Progress */
+.targetSection {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--gray-100);
+}
+
+.targetHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.targetLabel {
+    font-size: 0.75rem;
+    color: var(--gray-600);
+    font-weight: 600;
+}
+
+.targetProgress {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--gray-700);
+}
+
+.targetProgress.targetMet {
+    color: var(--success-600);
+}
+
+.progressBar {
+    height: 6px;
+    background: var(--gray-100);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-500) 0%, var(--primary-600) 100%);
+    transition: width 0.5s ease;
+    border-radius: 3px;
+}
+
+.progressFill.progressComplete {
+    background: linear-gradient(90deg, var(--success-500) 0%, var(--success-600) 100%);
+}
+
+/* Loading Skeleton */
+.skeleton {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.skeletonIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(90deg, var(--gray-200) 0%, var(--gray-300) 50%, var(--gray-200) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.skeletonContent {
+    flex: 1;
+}
+
+.skeletonTitle {
+    height: 14px;
+    width: 60%;
+    background: linear-gradient(90deg, var(--gray-200) 0%, var(--gray-300) 50%, var(--gray-200) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.skeletonValue {
+    height: 28px;
+    width: 40%;
+    background: linear-gradient(90deg, var(--gray-200) 0%, var(--gray-300) 50%, var(--gray-200) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Dark Mode */
+[data-theme="dark"] .card {
+    background: var(--gray-800);
+    border-color: var(--gray-700);
+}
+
+[data-theme="dark"] .value {
+    color: var(--gray-100);
+}
+
+[data-theme="dark"] .targetSection {
+    border-top-color: var(--gray-700);
+}
+
+[data-theme="dark"] .progressBar {
+    background: var(--gray-700);
+}

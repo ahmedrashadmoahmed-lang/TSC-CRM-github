@@ -1,0 +1,235 @@
+.container {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+}
+
+.funnel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.stageWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stage {
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    transition: all 0.3s ease;
+    margin: 0 auto;
+    box-shadow: var(--shadow-md);
+}
+
+.stage:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-lg);
+}
+
+.stage.warning {
+    background: linear-gradient(135deg, var(--warning-500) 0%, var(--warning-600) 100%);
+}
+
+.stageContent {
+    text-align: center;
+    color: white;
+}
+
+.stageHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.stageName {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.warningIcon {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.stageMetrics {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+}
+
+.count {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.rate {
+    font-size: 1.25rem;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.value {
+    margin-top: var(--spacing-sm);
+    font-size: 0.875rem;
+    opacity: 0.8;
+}
+
+/* Drop-off */
+.dropOff {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin: var(--spacing-sm) 0;
+    background: var(--gray-100);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-600);
+}
+
+.dropOff.highDropOff {
+    background: var(--danger-50);
+    color: var(--danger-700);
+}
+
+.dropOff svg {
+    color: var(--gray-500);
+}
+
+.dropOff.highDropOff svg {
+    color: var(--danger-600);
+}
+
+/* Summary */
+.summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+    padding-top: var(--spacing-xl);
+    border-top: 2px solid var(--gray-200);
+}
+
+.summaryItem {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.summaryLabel {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summaryValue {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+/* Loading Skeleton */
+.skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.skeletonStage {
+    height: 100px;
+    background: linear-gradient(90deg, var(--gray-200) 0%, var(--gray-300) 50%, var(--gray-200) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-lg);
+}
+
+.skeletonStage:nth-child(1) {
+    width: 100%;
+}
+
+.skeletonStage:nth-child(2) {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.skeletonStage:nth-child(3) {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.skeletonStage:nth-child(4) {
+    width: 40%;
+    margin: 0 auto;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Empty State */
+.emptyState {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--gray-500);
+}
+
+/* Dark Mode */
+[data-theme="dark"] .container {
+    background: var(--gray-800);
+}
+
+[data-theme="dark"] .summary {
+    border-top-color: var(--gray-700);
+}
+
+[data-theme="dark"] .dropOff {
+    background: var(--gray-700);
+    color: var(--gray-300);
+}
+
+[data-theme="dark"] .dropOff.highDropOff {
+    background: var(--danger-900);
+    color: var(--danger-200);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .stage {
+        width: 100% !important;
+    }
+
+    .summary {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,12 @@
+.sparkline {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.dot {
+    transition: r 0.2s ease;
+}
+
+.sparkline:hover .dot {
+    r: 3;
+}

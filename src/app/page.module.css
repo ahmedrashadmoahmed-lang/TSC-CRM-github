@@ -1,152 +1,107 @@
 .container {
+  min-height: 100vh;
+  background: var(--color-bg-secondary);
   padding: var(--spacing-xl);
-  max-width: 1600px;
-  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-2xl);
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.subtitle {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
 }
 
 .section {
-  margin-bottom: var(--spacing-2xl);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
 }
 
 .sectionTitle {
   font-size: var(--font-size-xl);
   font-weight: 600;
   color: var(--color-text-primary);
-  margin-bottom: var(--spacing-lg);
+  margin: 0 0 var(--spacing-lg) 0;
 }
 
-/* Overview Grid */
-.overviewGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--spacing-lg);
+.placeholder {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  color: var(--color-text-secondary);
 }
 
-.overviewCard {
-  background: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-tertiary) 100%);
+.comingSoon {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  font-style: italic;
+  margin-top: var(--spacing-sm);
 }
 
-.cardHeader {
+.quickActions {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-md);
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
 }
 
-.cardIcon {
-  font-size: 2rem;
-  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
-}
-
-.cardBody {
+.error {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  gap: var(--spacing-md);
+  color: var(--color-error);
 }
 
-.cardValue {
-  font-size: var(--font-size-3xl);
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.error h2 {
+  font-size: var(--font-size-2xl);
   margin: 0;
 }
 
-.cardLabel {
-  font-size: var(--font-size-sm);
+.error p {
   color: var(--color-text-secondary);
   margin: 0;
 }
 
-/* Quick Actions */
-.quickActions {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--spacing-md);
-}
-
-/* Timeline */
-.timeline {
-  position: relative;
-  padding-left: var(--spacing-xl);
-}
-
-.timelineItem {
-  position: relative;
-  padding-bottom: var(--spacing-lg);
-}
-
-.timelineItem:not(:last-child)::before {
-  content: '';
-  position: absolute;
-  left: -22px;
-  top: 24px;
-  width: 2px;
-  height: calc(100% - 12px);
-  background: var(--color-border);
-}
-
-.timelineDot {
-  position: absolute;
-  left: -28px;
-  top: 8px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  box-shadow: 0 0 0 4px var(--color-bg-secondary);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-
-  0%,
-  100% {
-    box-shadow: 0 0 0 4px var(--color-bg-secondary), 0 0 0 0 var(--color-primary);
-  }
-
-  50% {
-    box-shadow: 0 0 0 4px var(--color-bg-secondary), 0 0 0 8px rgba(59, 130, 246, 0);
-  }
-}
-
-.timelineContent {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-}
-
-.timelineHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.timelineTitle {
-  font-size: var(--font-size-base);
-  font-weight: 500;
-  color: var(--color-text-primary);
-}
-
-.timelineTime {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-tertiary);
-}
-
-/* Responsive */
 @media (max-width: 768px) {
   .container {
     padding: var(--spacing-md);
   }
 
-  .overviewGrid {
+  .kpiGrid {
     grid-template-columns: 1fr;
   }
 
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .quickActions {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 }

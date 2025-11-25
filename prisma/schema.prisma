@@ -1,158 +1,814 @@
-// This is your Prisma schema file
-// Learn more: https://pris.ly/d/prisma-schema
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = "postgresql://postgres:Admin123@localhost:5433/erp_database?schema=public"
 }
 
-// Customer model
-model Customer {
-  id            String    @id @default(cuid())
-  name          String
-  type          String
-  totalInvoices Int       @default(0)
-  totalValue    Float     @default(0)
-  status        String    @default("active")
-  invoices      Invoice[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+// ============================================
+// CORE MODELS
+// ============================================
+
+model Tenant {
+  id        String   @id @default(cuid())
+  name      String
+  domain    String   @unique
+  status    String   @default("active") // active, suspended, cancelled
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  users               User[]
+  customers           Customer[]
+  suppliers           Supplier[]
+  products            Product[]
+  invoices            Invoice[]
+  purchaseOrders      PurchaseOrder[]
+  employees           Employee[]
+  payroll             Payroll[]
+  accounts            Account[]
+  journalEntries      JournalEntry[]
+  auditLogs           AuditLog[]
+  notifications       Notification[]
+  eInvoiceConfig      EInvoiceConfig?
+  eInvoiceSubmissions EInvoiceSubmission[]
+  inventoryMovements  InventoryMovement[]
+  expenses            Expense[]
+  currencies          Currency[]
+  taxRates            TaxRate[]
+  bankAccounts        BankAccount[]
+  bankTransactions    BankTransaction[]
+  fixedAssets         FixedAsset[]
+  depreciationEntries DepreciationEntry[]
+  recurringEntries    RecurringEntry[]
+  costCenters         CostCenter[]
+  budgets             Budget[]
+  opportunities       Opportunity[]
+  rfqs                RFQ[]
+  tasks               Task[]
+  tickets             Ticket[]
+  activities          Activity[]
+
+  @@map("tenants")
 }
 
-// Invoice model
-model Invoice {
-  id              String    @id @default(cuid())
-  invoiceNumber   String    @unique
-  date            DateTime
-  customerId      String
-  customer        Customer  @relation(fields: [customerId], references: [id])
-  description     String
-  salesPerson     String
-  type            String
-  salesValue      Float
-  profitTax       Float
-  vat             Float
-  hasDiscount     Boolean   @default(false)
-  discounts       Float     @default(0)
-  finalValue      Float
-  collected       Float     @default(0)
-  collectionDate  DateTime?
-  balance         Float
-  status          String    @default("pending")
-  notes           String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-}
-
-// Employee model
-model Employee {
-  id          String    @id @default(cuid())
-  name        String
-  position    String
-  baseSalary  Float
-  status      String    @default("active")
-  joinDate    DateTime
-  payroll     Payroll[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
-// Payroll model
-model Payroll {
-  id          String    @id @default(cuid())
-  employeeId  String
-  employee    Employee  @relation(fields: [employeeId], references: [id])
-  month       String
-  year        Int
-  baseSalary  Float
-  additions   Float     @default(0)
-  deductions  Float     @default(0)
-  netSalary   Float
-  paid        Boolean   @default(false)
-  signature   String    @default("")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
-// Expense model
-model Expense {
-  id          String    @id @default(cuid())
-  date        DateTime
-  description String
-  amount      Float
-  category    String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
-// Supplier model
-model Supplier {
-  id              String          @id @default(cuid())
-  name            String
-  category        String
-  totalOrders     Int             @default(0)
-  totalValue      Float           @default(0)
-  status          String          @default("active")
-  purchaseOrders  PurchaseOrder[]
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-}
-
-// Purchase Order model
-model PurchaseOrder {
-  id          String    @id @default(cuid())
-  poNumber    String    @unique
-  date        DateTime
-  supplierId  String
-  supplier    Supplier  @relation(fields: [supplierId], references: [id])
-  description String
-  amount      Float
-  status      String    @default("pending")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
-// Product model
-model Product {
-  id          String    @id @default(cuid())
-  name        String
-  sku         String    @unique
-  category    String
-  stock       Int       @default(0)
-  minStock    Int       @default(0)
-  price       Float
-  cost        Float
-  status      String    @default("active")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
-// User model for authentication
 model User {
-  id            String    @id @default(cuid())
-  name          String
-  email         String    @unique
-  password      String
-  role          String    @default("employee") // admin, manager, employee
-  image         String?
-  emailVerified DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      String   @default("user") // admin, manager, user, accountant, sales, viewer
+  status    String   @default("active")
+  tenantId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant         Tenant         @relation(fields: [tenantId], references: [id])
+  auditLogs      AuditLog[]
+  notifications  Notification[]
+  assignedTasks  Task[]         @relation("AssignedTasks")
+  assignedTickets Ticket[]      @relation("AssignedTickets")
+  activities     Activity[]
+
+  @@index([tenantId])
+  @@map("users")
 }
 
-// Bank Guarantee model
-model BankGuarantee {
-  id          String    @id @default(cuid())
-  type        String
-  amount      Float
-  status      String    @default("active")
-  issueDate   DateTime
-  returnDate  DateTime?
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  address   String?
+  taxNumber String?
+  status    String   @default("active")
+  tenantId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant        Tenant        @relation(fields: [tenantId], references: [id])
+  invoices      Invoice[]
+  opportunities Opportunity[]
+  tasks         Task[]
+  tickets       Ticket[]
+
+  @@index([tenantId])
+  @@map("customers")
+}
+
+model Supplier {
+  id              String   @id @default(cuid())
+  name            String
+  email           String?
+  phone           String?
+  address         String?
+  taxNumber       String?
+  rating          Float?
+  onTimeDelivery  Float?
+  status          String   @default("active")
+  tenantId        String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant         Tenant          @relation(fields: [tenantId], references: [id])
+  purchaseOrders PurchaseOrder[]
+  rfqs           RFQ[]
+
+  @@index([tenantId])
+  @@map("suppliers")
+}
+
+model Product {
+  id           String   @id @default(cuid())
+  name         String
+  sku          String   @unique
+  description  String?
+  category     String?
+  price        Float
+  cost         Float
+  quantity     Int      @default(0)
+  unit         String   @default("unit")
+  reorderPoint Int      @default(10)
+  status       String   @default("active")
+  tenantId     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenant              Tenant                @relation(fields: [tenantId], references: [id])
+  invoiceItems        InvoiceItem[]
+  purchaseOrderItems  PurchaseOrderItem[]
+  inventoryMovements  InventoryMovement[]
+
+  @@index([tenantId])
+  @@map("products")
+}
+
+// ============================================
+// TRANSACTION MODELS
+// ============================================
+
+model Invoice {
+  id            String   @id @default(cuid())
+  invoiceNumber String   @unique
+  customerId    String
+  issueDate     DateTime
+  dueDate       DateTime
+  subtotal      Float
+  tax           Float
+  discount      Float    @default(0)
+  total         Float
+  paidAmount    Float    @default(0)
+  status        String   @default("draft") // draft, sent, paid, overdue, cancelled
+  notes         String?
+  tenantId      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  customer            Customer             @relation(fields: [customerId], references: [id])
+  tenant              Tenant               @relation(fields: [tenantId], references: [id])
+  items               InvoiceItem[]
+  eInvoiceSubmissions EInvoiceSubmission[]
+
+  @@index([customerId])
+  @@index([tenantId])
+  @@index([status])
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id          String   @id @default(cuid())
+  invoiceId   String
+  productId   String
   description String
+  quantity    Float
+  unitPrice   Float
+  tax         Float
+  discount    Float    @default(0)
+  total       Float
+  createdAt   DateTime @default(now())
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([invoiceId])
+  @@map("invoice_items")
+}
+
+model PurchaseOrder {
+  id              String   @id @default(cuid())
+  orderNumber     String   @unique
+  supplierId      String
+  orderDate       DateTime
+  expectedDate    DateTime
+  subtotal        Float
+  tax             Float
+  total           Float
+  status          String   @default("pending") // pending, approved, received, cancelled
+  notes           String?
+  tenantId        String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  supplier Supplier            @relation(fields: [supplierId], references: [id])
+  tenant   Tenant              @relation(fields: [tenantId], references: [id])
+  items    PurchaseOrderItem[]
+
+  @@index([supplierId])
+  @@index([tenantId])
+  @@index([status])
+  @@map("purchase_orders")
+}
+
+model PurchaseOrderItem {
+  id              String   @id @default(cuid())
+  purchaseOrderId String
+  productId       String
+  description     String
+  quantity        Float
+  unitPrice       Float
+  tax             Float
+  total           Float
+  createdAt       DateTime @default(now())
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  product       Product       @relation(fields: [productId], references: [id])
+
+  @@index([purchaseOrderId])
+  @@map("purchase_order_items")
+}
+
+// ============================================
+// HR MODELS
+// ============================================
+
+model Employee {
+  id          String   @id @default(cuid())
+  name        String
+  email       String?
+  phone       String?
+  position    String
+  department  String?
+  salary      Float
+  hireDate    DateTime
+  status      String   @default("active")
+  tenantId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant  Tenant    @relation(fields: [tenantId], references: [id])
+  payroll Payroll[]
+
+  @@index([tenantId])
+  @@map("employees")
+}
+
+model Payroll {
+  id            String   @id @default(cuid())
+  employeeId    String
+  month         String
+  year          Int
+  basicSalary   Float
+  allowances    Float    @default(0)
+  deductions    Float    @default(0)
+  netSalary     Float
+  status        String   @default("pending") // pending, paid
+  paymentDate   DateTime?
+  tenantId      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+  tenant   Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@unique([employeeId, month, year])
+  @@index([tenantId])
+  @@map("payroll")
+}
+
+// ============================================
+// ACCOUNTING MODELS
+// ============================================
+
+model Account {
+  id           String   @id @default(cuid())
+  code         String
+  name         String
+  type         String   // asset, liability, equity, revenue, expense
+  parentId     String?
+  level        Int      @default(0)
+  balance      Float    @default(0)
+  currencyId   String?
+  taxRateId    String?
+  isActive     Boolean  @default(true)
+  tenantId     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenant              Tenant        @relation(fields: [tenantId], references: [id])
+  parent              Account?      @relation("AccountHierarchy", fields: [parentId], references: [id])
+  children            Account[]     @relation("AccountHierarchy")
+  currency            Currency?     @relation(fields: [currencyId], references: [id])
+  taxRate             TaxRate?      @relation("AccountTaxRate", fields: [taxRateId], references: [id])
+  journalLines        JournalLine[]
+  taxRates            TaxRate[]     @relation("TaxLiabilityAccount")
+  bankAccounts        BankAccount[]
+  fixedAssetsAsset    FixedAsset[]  @relation("AssetAccount")
+  fixedAssetsDepr     FixedAsset[]  @relation("DepreciationAccount")
+  budgets             Budget[]
+
+  @@unique([code, tenantId])
+  @@index([tenantId])
+  @@index([parentId])
+  @@map("accounts")
+}
+
+model JournalEntry {
+  id          String   @id @default(cuid())
+  entryNumber String   @unique
+  date        DateTime
+  description String
+  status      String   @default("draft") // draft, posted, approved
+  reference   String?
+  tenantId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant              Tenant              @relation(fields: [tenantId], references: [id])
+  lines               JournalLine[]
+  bankTransactions    BankTransaction[]
+  depreciationEntries DepreciationEntry[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("journal_entries")
+}
+
+model JournalLine {
+  id             String   @id @default(cuid())
+  journalEntryId String
+  accountId      String
+  debit          Float    @default(0)
+  credit         Float    @default(0)
+  description    String?
+  costCenterId   String?
+  currencyId     String?
+  exchangeRate   Float    @default(1)
+  taxAmount      Float    @default(0)
+  createdAt      DateTime @default(now())
+
+  journalEntry JournalEntry @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  account      Account      @relation(fields: [accountId], references: [id])
+  costCenter   CostCenter?  @relation(fields: [costCenterId], references: [id])
+  currency     Currency?    @relation(fields: [currencyId], references: [id])
+
+  @@index([journalEntryId])
+  @@index([accountId])
+  @@index([costCenterId])
+  @@map("journal_lines")
+}
+
+// ============================================
+// INVENTORY MODELS
+// ============================================
+
+model InventoryMovement {
+  id          String   @id @default(cuid())
+  productId   String
+  type        String   // in, out, adjustment
+  quantity    Float
+  reference   String?
+  notes       String?
+  tenantId    String
+  createdAt   DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id])
+  tenant  Tenant  @relation(fields: [tenantId], references: [id])
+
+  @@index([productId])
+  @@index([tenantId])
+  @@map("inventory_movements")
+}
+
+// ============================================
+// SYSTEM MODELS
+// ============================================
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      String   // info, success, warning, error
+  read      Boolean  @default(false)
+  tenantId  String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([userId])
+  @@index([tenantId])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String
+  userName   String
+  userEmail  String
+  action     String   // CREATE, UPDATE, DELETE, LOGIN, LOGOUT
+  entity     String   // Invoice, Customer, Product, etc.
+  entityId   String?
+  oldData    Json?
+  newData    Json?
+  ipAddress  String?
+  userAgent  String?
+  tenantId   String
+  createdAt  DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([userId])
+  @@index([tenantId])
+  @@index([action])
+  @@index([entity])
+  @@map("audit_logs")
+}
+
+// ============================================
+// E-INVOICE MODELS (NEW)
+// ============================================
+
+model EInvoiceConfig {
+  id           String   @id @default(cuid())
+  tenantId     String   @unique
+  clientId     String
+  clientSecret String // Should be encrypted in production
+  taxNumber    String
+  branchId     String
+  isActive     Boolean  @default(false)
+  environment  String   @default("sandbox") // sandbox, production
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@map("einvoice_configs")
+}
+
+model EInvoiceSubmission {
+  id             String    @id @default(cuid())
+  invoiceId      String
+  tenantId       String
+  submissionUUID String    @unique
+  internalId     String
+  status         String // pending, submitted, accepted, rejected
+  etaResponse    Json?
+  errorMessage   String?
+  submittedAt    DateTime?
+  acceptedAt     DateTime?
+  rejectedAt     DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id])
+  tenant  Tenant  @relation(fields: [tenantId], references: [id])
+
+  @@index([invoiceId])
+  @@index([tenantId])
+  @@index([status])
+  @@map("einvoice_submissions")
+}
+
+// ============================================
+// ACCOUNTING MODELS (ADVANCED)
+// ============================================
+
+model Currency {
+  id           String   @id @default(cuid())
+  code         String   @unique // USD, EUR, EGP
+  name         String
+  symbol       String
+  rate         Float    @default(1) // Exchange rate to base currency
+  isBase       Boolean  @default(false)
+  isActive     Boolean  @default(true)
+  tenantId     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id])
+  accounts     Account[]
+  journalLines JournalLine[]
+
+  @@index([tenantId])
+  @@map("currencies")
+}
+
+model TaxRate {
+  id        String   @id @default(cuid())
+  name      String
+  rate      Float
+  type      String   // VAT, Sales Tax, Withholding
+  accountId String   // Tax liability account
+  isActive  Boolean  @default(true)
+  tenantId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account  Account   @relation("TaxLiabilityAccount", fields: [accountId], references: [id])
+  tenant   Tenant    @relation(fields: [tenantId], references: [id])
+  accounts Account[] @relation("AccountTaxRate")
+
+  @@index([tenantId])
+  @@map("tax_rates")
+}
+
+model CostCenter {
+  id           String   @id @default(cuid())
+  code         String
+  name         String
+  description  String?
+  parentId     String?
+  isActive     Boolean  @default(true)
+  tenantId     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id])
+  parent       CostCenter?   @relation("CostCenterHierarchy", fields: [parentId], references: [id])
+  children     CostCenter[]  @relation("CostCenterHierarchy")
+  journalLines JournalLine[]
+
+  @@unique([code, tenantId])
+  @@index([tenantId])
+  @@map("cost_centers")
+}
+
+model Budget {
+  id        String   @id @default(cuid())
+  accountId String
+  year      Int
+  month     Int?
+  amount    Float
+  actual    Float    @default(0)
+  variance  Float    @default(0)
+  tenantId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account Account @relation(fields: [accountId], references: [id])
+  tenant  Tenant  @relation(fields: [tenantId], references: [id])
+
+  @@unique([accountId, year, month, tenantId])
+  @@index([tenantId])
+  @@map("budgets")
+}
+
+model BankAccount {
+  id             String    @id @default(cuid())
+  accountId      String    // Link to GL account
+  bankName       String
+  accountNumber  String
+  iban           String?
+  swiftCode      String?
+  balance        Float     @default(0)
+  lastReconciled DateTime?
+  tenantId       String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  account      Account           @relation(fields: [accountId], references: [id])
+  tenant       Tenant            @relation(fields: [tenantId], references: [id])
+  transactions BankTransaction[]
+
+  @@index([tenantId])
+  @@map("bank_accounts")
+}
+
+model BankTransaction {
+  id             String        @id @default(cuid())
+  bankAccountId  String
+  date           DateTime
+  description    String
+  reference      String?
+  debit          Float         @default(0)
+  credit         Float         @default(0)
+  balance        Float
+  isReconciled   Boolean       @default(false)
+  journalEntryId String?
+  tenantId       String
+  createdAt      DateTime      @default(now())
+
+  bankAccount  BankAccount   @relation(fields: [bankAccountId], references: [id])
+  journalEntry JournalEntry? @relation(fields: [journalEntryId], references: [id])
+  tenant       Tenant        @relation(fields: [tenantId], references: [id])
+
+  @@index([bankAccountId])
+  @@index([tenantId])
+  @@map("bank_transactions")
+}
+
+model FixedAsset {
+  id                    String   @id @default(cuid())
+  name                  String
+  assetAccountId        String
+  depreciationAccountId String
+  category              String
+  purchaseDate          DateTime
+  purchasePrice         Float
+  salvageValue          Float    @default(0)
+  usefulLife            Int      // in months
+  depreciationMethod    String   // Straight-line, Declining balance
+  accumulatedDepr       Float    @default(0)
+  bookValue             Float
+  isActive              Boolean  @default(true)
+  tenantId              String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  assetAccount        Account             @relation("AssetAccount", fields: [assetAccountId], references: [id])
+  depreciationAccount Account             @relation("DepreciationAccount", fields: [depreciationAccountId], references: [id])
+  tenant              Tenant              @relation(fields: [tenantId], references: [id])
+  depreciationEntries DepreciationEntry[]
+
+  @@index([tenantId])
+  @@map("fixed_assets")
+}
+
+model DepreciationEntry {
+  id             String   @id @default(cuid())
+  fixedAssetId   String
+  journalEntryId String
+  period         DateTime
+  amount         Float
+  tenantId       String
+  createdAt      DateTime @default(now())
+
+  fixedAsset   FixedAsset   @relation(fields: [fixedAssetId], references: [id])
+  journalEntry JournalEntry @relation(fields: [journalEntryId], references: [id])
+  tenant       Tenant       @relation(fields: [tenantId], references: [id])
+
+  @@index([fixedAssetId])
+  @@index([tenantId])
+  @@map("depreciation_entries")
+}
+
+model RecurringEntry {
+  id            String    @id @default(cuid())
+  description   String
+  frequency     String    // Daily, Weekly, Monthly, Yearly
+  startDate     DateTime
+  endDate       DateTime?
+  nextDate      DateTime
+  templateLines Json      // Array of debit/credit lines
+  isActive      Boolean   @default(true)
+  lastGenerated DateTime?
+  tenantId      String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([nextDate])
+  @@map("recurring_entries")
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  description String
+  amount      Float
+  category    String
+  date        DateTime
+  receipt     String?
+  tenantId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([category])
+  @@map("expenses")
+}
+
+// ============================================
+// SALES PIPELINE MODELS
+// ============================================
+
+model Opportunity {
+  id          String    @id @default(cuid())
+  title       String
+  customerId  String
+  value       Float
+  stage       String    @default("lead") // lead, qualified, proposal, negotiation, won, lost
+  probability Int       @default(0)
+  closedDate  DateTime?
+  tenantId    String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  tenant   Tenant   @relation(fields: [tenantId], references: [id])
+  tasks    Task[]
+
+  @@index([tenantId])
+  @@index([stage])
+  @@index([customerId])
+  @@map("opportunities")
+}
+
+model RFQ {
+  id          String   @id @default(cuid())
+  rfqNumber   String   @unique
+  supplierId  String?
+  status      String   @default("pending") // pending, responded, accepted, rejected
+  description String
+  dueDate     DateTime
+  tenantId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  supplier Supplier? @relation(fields: [supplierId], references: [id])
+  tenant   Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("rfqs")
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  status      String    @default("pending") // pending, in_progress, completed, cancelled
+  priority    String    @default("medium") // low, medium, high, urgent
+  dueDate     DateTime?
+  assignedTo  String?
+  clientId    String?
+  dealId      String?
+  tenantId    String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  client   Customer?    @relation(fields: [clientId], references: [id])
+  deal     Opportunity? @relation(fields: [dealId], references: [id])
+  assignee User?        @relation("AssignedTasks", fields: [assignedTo], references: [id])
+  tenant   Tenant       @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([assignedTo])
+  @@index([dueDate])
+  @@map("tasks")
+}
+
+model Ticket {
+  id           String   @id @default(cuid())
+  ticketNumber String   @unique
+  subject      String
+  description  String
+  status       String   @default("open") // open, in_progress, resolved, closed
+  priority     String   @default("medium") // low, medium, high, urgent
+  clientId     String?
+  assignedTo   String?
+  tenantId     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  client   Customer? @relation(fields: [clientId], references: [id])
+  assignee User?     @relation("AssignedTickets", fields: [assignedTo], references: [id])
+  tenant   Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([assignedTo])
+  @@map("tickets")
+}
+
+model Activity {
+  id          String   @id @default(cuid())
+  type        String   // client_added, deal_created, task_completed, etc.
+  description String
+  userId      String
+  entityType  String?  // client, deal, task, ticket
+  entityId    String?
+  metadata    Json?
+  tenantId    String
+  createdAt   DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([entityType, entityId])
+  @@map("activities")
 }

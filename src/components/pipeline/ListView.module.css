@@ -1,0 +1,112 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.dealCard {
+    padding: var(--spacing-lg) !important;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.dealCard:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-lg);
+    border-left-color: var(--primary-500);
+}
+
+.dealHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-md);
+}
+
+.dealMain {
+    flex: 1;
+}
+
+.companySection {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.companySection svg {
+    color: var(--primary-600);
+}
+
+.company {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+.badges {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--success-600);
+}
+
+.dealInfo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.infoItem {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}
+
+.infoItem svg {
+    color: var(--gray-400);
+}
+
+.email {
+    color: var(--primary-600);
+}
+
+.viewButton {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: 0.5rem 1rem;
+    background: var(--primary-50);
+    border: 1px solid var(--primary-200);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary-700);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.viewButton:hover {
+    background: var(--primary-100);
+    border-color: var(--primary-300);
+}
+
+.empty {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--gray-500);
+}
+
+[data-theme="dark"] .dealCard {
+    background: var(--gray-800);
+}

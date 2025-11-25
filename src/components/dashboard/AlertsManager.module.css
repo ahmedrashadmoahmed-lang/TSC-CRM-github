@@ -1,0 +1,258 @@
+.container {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.titleSection {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.titleSection svg {
+    color: var(--primary-600);
+}
+
+.title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+.subtitle {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}
+
+/* Empty State */
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl);
+    text-align: center;
+}
+
+.emptyState svg {
+    margin-bottom: var(--spacing-lg);
+    color: var(--gray-400);
+}
+
+.emptyState h3 {
+    margin: 0 0 var(--spacing-sm) 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+.emptyState p {
+    margin: 0 0 var(--spacing-lg) 0;
+    color: var(--gray-600);
+}
+
+/* Alerts List */
+.alertsList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.alertCard {
+    padding: var(--spacing-lg) !important;
+    transition: all 0.3s ease;
+}
+
+.alertCard:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-md);
+}
+
+.alertInfo {
+    flex: 1;
+}
+
+.alertName {
+    margin: 0 0 var(--spacing-sm) 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+.condition {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 0.875rem;
+}
+
+.metric {
+    font-weight: 600;
+    color: var(--primary-600);
+}
+
+.operator {
+    font-weight: 700;
+    color: var(--gray-700);
+}
+
+.value {
+    font-weight: 700;
+    color: var(--success-600);
+}
+
+.cardBody {
+    padding: var(--spacing-md) 0;
+    border-top: 1px solid var(--gray-100);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.channels {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.channelsLabel {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gray-600);
+    text-transform: uppercase;
+}
+
+.lastTriggered {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+    font-size: 0.75rem;
+    color: var(--gray-600);
+}
+
+.cardFooter {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+}
+
+.actionButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--gray-100);
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--gray-700);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+    background: var(--gray-200);
+    color: var(--gray-900);
+}
+
+.actionButton.danger {
+    color: var(--danger-600);
+}
+
+.actionButton.danger:hover {
+    background: var(--danger-50);
+    color: var(--danger-700);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+}
+
+.modalOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.2s ease;
+}
+
+.modalContent {
+    position: relative;
+    z-index: 1001;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Dark Mode */
+[data-theme="dark"] .container {
+    background: var(--gray-800);
+}
+
+[data-theme="dark"] .alertCard {
+    background: var(--gray-700);
+}
+
+[data-theme="dark"] .cardBody {
+    border-top-color: var(--gray-600);
+    border-bottom-color: var(--gray-600);
+}
+
+[data-theme="dark"] .actionButton {
+    background: var(--gray-600);
+    color: var(--gray-200);
+}
+
+[data-theme="dark"] .actionButton:hover {
+    background: var(--gray-500);
+}

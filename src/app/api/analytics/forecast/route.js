@@ -5,13 +5,13 @@ export async function GET() {
     try {
         // Get all invoices with dates
         const invoices = await prisma.invoice.findMany({
-            orderBy: { date: 'asc' }
+            orderBy: { issueDate: 'asc' }
         });
 
         // Group by month
         const monthlyData = {};
         invoices.forEach(invoice => {
-            const date = new Date(invoice.date);
+            const date = new Date(invoice.issueDate);
             const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
 
             if (!monthlyData[monthKey]) {
