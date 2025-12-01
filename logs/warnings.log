@@ -96,3 +96,9 @@
 2025-12-01 10:17:33 [warn]: Email service not configured - missing SMTP credentials {"service":"erp-system"}
 2025-12-01 10:17:33 [warn]: AI service not configured - missing Gemini API key {"service":"erp-system"}
 2025-12-01 10:17:33 [warn]: WhatsApp service not configured - missing Twilio credentials {"service":"erp-system"}
+2025-12-01 10:24:27 [warn]: AI service not configured - missing Gemini API key {"service":"erp-system"}
+2025-12-01 10:24:27 [warn]: Email service not configured - missing SMTP credentials {"service":"erp-system"}
+2025-12-01 10:24:28 [warn]: WhatsApp service not configured - missing Twilio credentials {"service":"erp-system"}
+2025-12-01 10:24:33 [warn]: AI service not configured - missing Gemini API key {"service":"erp-system"}
+2025-12-01 10:24:33 [warn]: Email service not configured - missing SMTP credentials {"service":"erp-system"}
+2025-12-01 10:24:33 [warn]: WhatsApp service not configured - missing Twilio credentials {"service":"erp-system"}
