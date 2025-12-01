@@ -70,7 +70,7 @@ export default function Home() {
         {/* KPI Cards Grid */}
         <section aria-labelledby="kpi-heading" className={styles.kpiSection}>
           <h2 id="kpi-heading" className="visually-hidden">مؤشرات الأداء الرئيسية</h2>
-          <div className={styles.kpiGrid} role="list">
+          <div className={styles.kpiGrid}>
             <MetricCard
               icon="💰"
               label={kpis.revenueMTD?.label}
@@ -164,7 +164,7 @@ export default function Home() {
             ) : topCustomers.length > 0 ? (
               <div role="img" aria-label="رسم بياني يوضح أفضل 5 عملاء في الشهر الحالي">
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={topCustomers} aria-hidden="true">
+                  <BarChart data={topCustomers}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                     <XAxis
                       dataKey="name"
