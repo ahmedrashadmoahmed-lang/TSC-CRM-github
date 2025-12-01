@@ -44,7 +44,7 @@ export default function ProtectedRoute({
             return (
                 <div style={{ padding: '2rem', textAlign: 'center' }}>
                     <h1>Access Denied</h1>
-                    <p>You don't have permission to access this page.</p>
+                    <p>You don&apos;t have permission to access this page.</p>
                     <p>Required roles: {requiredRoles.join(', ')}</p>
                     <p>Your role: {userRole}</p>
                     <button onClick={() => router.push('/')}>Go to Dashboard</button>
@@ -64,7 +64,7 @@ export default function ProtectedRoute({
             return (
                 <div style={{ padding: '2rem', textAlign: 'center' }}>
                     <h1>Access Denied</h1>
-                    <p>You don't have the required permissions to access this page.</p>
+                    <p>You don&apos;t have the required permissions to access this page.</p>
                     <button onClick={() => router.push('/')}>Go to Dashboard</button>
                 </div>
             );
