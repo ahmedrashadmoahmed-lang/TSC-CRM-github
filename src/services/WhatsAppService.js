@@ -191,4 +191,5 @@ ${process.env.COMPANY_NAME || 'ERP System'}
     }
 }
 
-export default new WhatsAppService();
+const whatsAppService = new WhatsAppService();
+export default whatsAppService;

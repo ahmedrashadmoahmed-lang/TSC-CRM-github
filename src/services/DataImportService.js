@@ -419,4 +419,5 @@ class DataImportService {
     }
 }
 
-export default new DataImportService();
+const dataImportService = new DataImportService();
+export default dataImportService;

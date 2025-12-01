@@ -324,4 +324,5 @@ class EInvoiceService {
     }
 }
 
-export default new EInvoiceService();
+const eInvoiceService = new EInvoiceService();
+export default eInvoiceService;
