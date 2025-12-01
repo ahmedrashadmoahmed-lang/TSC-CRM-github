@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import Card from '@/components/Card';
 import DataTable from '@/components/DataTable';
@@ -26,11 +26,7 @@ export default function AuditLogsPage() {
         totalPages: 0,
     });
 
-    useEffect(() => {
-        loadAuditLogs();
-    }, [filters, pagination.currentPage]);
-
-    const loadAuditLogs = async () => {
+    const loadAuditLogs = useCallback(async () => {
         setLoading(true);
         try {
             const params = new URLSearchParams({
@@ -53,7 +49,11 @@ export default function AuditLogsPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [filters, pagination.currentPage, pagination.pageSize]);
+
+    useEffect(() => {
+        loadAuditLogs();
+    }, [loadAuditLogs]);
 
     const columns = [
         {

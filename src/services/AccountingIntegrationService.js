@@ -216,5 +216,3 @@ export async function generateExpenseEntry(expense) {
         throw error;
     }
 }
-
-export { generateInvoiceEntry, generateExpenseEntry };

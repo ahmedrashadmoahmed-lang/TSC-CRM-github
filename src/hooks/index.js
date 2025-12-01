@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // Hook for fetching data
 export function useFetch(url, options = {}) {
@@ -28,7 +28,8 @@ export function useFetch(url, options = {}) {
         };
 
         fetchData();
-    }, [url]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [url]); // options is intentionally excluded to prevent infinite fetch loops
 
     return { data, loading, error };
 }
@@ -147,7 +148,7 @@ export function useClickOutside(ref, handler) {
 
 // Hook for previous value
 export function usePrevious(value) {
-    const ref = useState();
+    const ref = useRef();
 
     useEffect(() => {
         ref.current = value;
@@ -241,7 +242,8 @@ export function useAsync(asyncFunction, immediate = true) {
         if (immediate) {
             execute();
         }
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // Run only on mount (componentDidMount pattern)
 
     return { execute, status, data, error, loading: status === 'pending' };
 }
@@ -276,7 +278,7 @@ export function usePagination(items, itemsPerPage = 10) {
 
 // Hook for interval
 export function useInterval(callback, delay) {
-    const savedCallback = useState();
+    const savedCallback = useRef();
 
     useEffect(() => {
         savedCallback.current = callback;

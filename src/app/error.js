@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
 import styles from './error.module.css';
 
 export default function Error({ error, reset }) {
@@ -18,7 +19,7 @@ export default function Error({ error, reset }) {
                 <div className={styles.icon}>⚠️</div>
                 <h1 className={styles.title}>Something went wrong!</h1>
                 <p className={styles.message}>
-                    We're sorry, but something unexpected happened. Our team has been notified and we're working on it.
+                    We&apos;re sorry, but something unexpected happened. Our team has been notified and we&apos;re working on it.
                 </p>
 
                 {process.env.NODE_ENV === 'development' && (
@@ -39,9 +40,9 @@ export default function Error({ error, reset }) {
                     >
                         Try Again
                     </button>
-                    <a href="/" className={styles.secondaryButton}>
+                    <Link href="/" className={styles.secondaryButton}>
                         Go to Dashboard
-                    </a>
+                    </Link>
                 </div>
 
                 <div className={styles.help}>

@@ -1,13 +1,37 @@
-// Optional Sentry integration - only load if installed
-let Sentry = null;
-try {
-    Sentry = require('@sentry/nextjs');
-} catch (e) {
-    console.log('ℹ️ Sentry not installed - monitoring will use console logging only');
+// Monitoring Configuration - Works with or without Sentry
+// If @sentry/nextjs is not installed, only console logging will be used
+
+let SentryModule = null;
+
+// Check if Sentry is available at module load time
+async function loadSentry() {
+    if (SentryModule !== null) return SentryModule;
+    
+    // Only try to load Sentry if the DSN is configured
+    if (!process.env.NEXT_PUBLIC_SENTRY_DSN) {
+        console.log('ℹ️ Sentry DSN not configured - using console logging only');
+        SentryModule = false;
+        return SentryModule;
+    }
+    
+    try {
+        // Dynamic import - wrapped in try-catch for when module doesn't exist
+        SentryModule = await import(/* webpackIgnore: true */ '@sentry/nextjs').catch(() => null);
+        if (!SentryModule) {
+            console.log('ℹ️ Sentry not installed - monitoring will use console logging only');
+            SentryModule = false;
+        }
+    } catch (e) {
+        console.log('ℹ️ Sentry not installed - monitoring will use console logging only');
+        SentryModule = false;
+    }
+    return SentryModule;
 }
 
 // Enhanced Monitoring Configuration
-export function initMonitoring() {
+export async function initMonitoring() {
+    const Sentry = await loadSentry();
+    
     if (process.env.NODE_ENV === 'production' && Sentry) {
         Sentry.init({
             dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
@@ -63,7 +87,7 @@ const ERROR_WINDOW = 60000; // 1 minute
 let errorCount = 0;
 let windowStart = Date.now();
 
-export function trackError(error, context = {}) {
+export async function trackError(error, context = {}) {
     // Count errors
     const now = Date.now();
     if (now - windowStart > ERROR_WINDOW) {
@@ -83,6 +107,7 @@ export function trackError(error, context = {}) {
     }
 
     // Send to Sentry if available, otherwise log to console
+    const Sentry = await loadSentry();
     if (Sentry) {
         Sentry.captureException(error, {
             contexts: {

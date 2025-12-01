@@ -55,9 +55,11 @@ export function useTranslation() {
     };
 }
 
-export default {
+const i18n = {
     t,
     setLocale,
     getLocale,
     useTranslation,
 };
+
+export default i18n;

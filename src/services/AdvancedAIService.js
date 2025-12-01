@@ -354,4 +354,5 @@ ${summary.monthlyTrends.map(m => `${m.month}: ${m.revenue} جنيه (${m.count} 
     }
 }
 
-export default new AdvancedAIService();
+const advancedAIService = new AdvancedAIService();
+export default advancedAIService;

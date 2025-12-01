@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Clock, User, TrendingUp, CheckCircle, AlertCircle } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import styles from './ActivityFeed.module.css';
@@ -24,11 +24,7 @@ export function ActivityFeed({ limit = 10 }: ActivityFeedProps) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        fetchActivities();
-    }, [limit]);
-
-    const fetchActivities = async () => {
+    const fetchActivities = useCallback(async () => {
         try {
             setLoading(true);
             const response = await fetch(`/api/dashboard/recent-activity?limit=${limit}`);
@@ -44,7 +40,11 @@ export function ActivityFeed({ limit = 10 }: ActivityFeedProps) {
         } finally {
             setLoading(false);
         }
-    };
+    }, [limit]);
+
+    useEffect(() => {
+        fetchActivities();
+    }, [fetchActivities]);
 
     const getIcon = (type: string) => {
         switch (type) {

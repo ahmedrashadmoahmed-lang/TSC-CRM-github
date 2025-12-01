@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { RefreshCw, Clock, Check } from 'lucide-react';
 import styles from './AutoRefresh.module.css';
 
@@ -10,6 +10,16 @@ export default function AutoRefresh({ onRefresh, intervals = [30, 60, 300], defa
     const [countdown, setCountdown] = useState(interval);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [lastRefresh, setLastRefresh] = useState(new Date());
+
+    const handleRefresh = useCallback(async () => {
+        setIsRefreshing(true);
+        try {
+            await onRefresh();
+            setLastRefresh(new Date());
+        } finally {
+            setIsRefreshing(false);
+        }
+    }, [onRefresh]);
 
     useEffect(() => {
         if (!isEnabled) return;
@@ -25,17 +35,7 @@ export default function AutoRefresh({ onRefresh, intervals = [30, 60, 300], defa
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [isEnabled, interval]);
-
-    const handleRefresh = async () => {
-        setIsRefreshing(true);
-        try {
-            await onRefresh();
-            setLastRefresh(new Date());
-        } finally {
-            setIsRefreshing(false);
-        }
-    };
+    }, [isEnabled, interval, handleRefresh]);
 
     const handleManualRefresh = () => {
         handleRefresh();

@@ -193,7 +193,7 @@ export default function SmartSearch() {
 
                     {results.length === 0 && suggestions.length === 0 && !loading && (
                         <div className={styles.empty}>
-                            لا توجد نتائج لـ "{query}"
+                            لا توجد نتائج لـ &quot;{query}&quot;
                         </div>
                     )}
                 </div>

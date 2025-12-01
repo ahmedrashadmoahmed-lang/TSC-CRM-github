@@ -26,7 +26,7 @@ export default function EnhancedDashboard() {
                 <div className={styles.header}>
                     <div className={styles.headerContent}>
                         <h1 className={styles.title}>Dashboard</h1>
-                        <p className={styles.subtitle}>Welcome back! Here's what's happening with your business today.</p>
+                        <p className={styles.subtitle}>Welcome back! Here&apos;s what&apos;s happening with your business today.</p>
                     </div>
                     <div className={styles.headerActions}>
                         <AlertsPanel

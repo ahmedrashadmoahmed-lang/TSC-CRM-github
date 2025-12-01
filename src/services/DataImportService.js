@@ -3,7 +3,7 @@
  * Import historical data from Excel/CSV files
  */
 
-import XLSX from 'xlsx';
+import * as XLSX from 'xlsx';
 import { prisma } from '@/lib/prisma';
 import logger from '@/lib/logger';
 import { z } from 'zod';
@@ -419,4 +419,5 @@ class DataImportService {
     }
 }
 
-export default new DataImportService();
+const dataImportService = new DataImportService();
+export default dataImportService;

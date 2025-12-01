@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 
 export default function Alert({
@@ -19,6 +19,13 @@ export default function Alert({
         setMounted(true);
     }, []);
 
+    const handleClose = useCallback(() => {
+        setIsVisible(false);
+        setTimeout(() => {
+            onClose?.();
+        }, 300);
+    }, [onClose]);
+
     useEffect(() => {
         if (autoClose && isVisible) {
             const timer = setTimeout(() => {
@@ -27,14 +34,7 @@ export default function Alert({
 
             return () => clearTimeout(timer);
         }
-    }, [autoClose, duration, isVisible]);
-
-    const handleClose = () => {
-        setIsVisible(false);
-        setTimeout(() => {
-            onClose?.();
-        }, 300);
-    };
+    }, [autoClose, duration, isVisible, handleClose]);
 
     const icons = {
         success: '✓',
