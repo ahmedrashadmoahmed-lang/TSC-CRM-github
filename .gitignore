@@ -25,6 +25,12 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# Logs
+*.log
+*-diagnostics.txt
+build-error.log
+/logs/
+
 # local env files
 .env*.local
 .env

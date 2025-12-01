@@ -17,7 +17,7 @@
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:seed": "node prisma/seed.js",
-    "db:backup": "node scripts/backup.bat",
+    "db:backup": "scripts/backup.bat",
     "setup": "npm install && prisma generate && prisma db push",
     "docker:build": "docker build -t erp-system:latest .",
     "docker:up": "docker-compose up -d",
