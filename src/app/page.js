@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import Header from '@/components/layout/Header';
 import MetricCard from '@/components/dashboard/MetricCard';
@@ -8,7 +7,7 @@ import TopDealsTable from '@/components/dashboard/TopDealsTable';
 import QuickActions from '@/components/dashboard/QuickActions';
 import useDashboardData from '@/hooks/useDashboardData';
 import {
-  AreaChart, Area, BarChart, Bar, XAxis, YAxis,
+  BarChart, Bar, XAxis, YAxis,
   CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
 import styles from './page.module.css';
@@ -19,13 +18,19 @@ export default function Home() {
   if (error) {
     return (
       <MainLayout>
-        <div className={styles.error}>
-          <h2>حدث خطأ في تحميل البيانات</h2>
-          <p>{error}</p>
-          <button onClick={refresh} className={styles.retryButton}>
-            إعادة المحاولة
-          </button>
-        </div>
+        <main id="main-content" role="main" aria-label="لوحة التحكم الرئيسية">
+          <div className={styles.error} role="alert" aria-live="assertive">
+            <h2>حدث خطأ في تحميل البيانات</h2>
+            <p>{error}</p>
+            <button 
+              onClick={refresh} 
+              className={styles.retryButton}
+              aria-label="إعادة محاولة تحميل البيانات"
+            >
+              إعادة المحاولة
+            </button>
+          </div>
+        </main>
       </MainLayout>
     );
   }
@@ -37,16 +42,16 @@ export default function Home() {
 
   return (
     <MainLayout>
-      <div className={styles.dashboard}>
+      <main id="main-content" role="main" aria-label="لوحة التحكم الرئيسية" className={styles.dashboard}>
         {/* Header with Refresh */}
-        <div className={styles.headerSection}>
+        <header className={styles.headerSection}>
           <Header
             title="لوحة التحكم"
             subtitle="نظرة شاملة على أداء الأعمال"
           />
           <div className={styles.headerActions}>
             {lastUpdated && (
-              <span className={styles.lastUpdated}>
+              <span className={styles.lastUpdated} aria-live="polite">
                 آخر تحديث: {lastUpdated.toLocaleTimeString('ar-EG')}
               </span>
             )}
@@ -54,201 +59,212 @@ export default function Home() {
               onClick={refresh}
               className={styles.refreshButton}
               disabled={loading}
+              aria-label={loading ? 'جاري التحديث' : 'تحديث البيانات'}
+              aria-busy={loading}
             >
               🔄 تحديث
             </button>
           </div>
-        </div>
+        </header>
 
         {/* KPI Cards Grid */}
-        <div className={styles.kpiGrid}>
-          <MetricCard
-            icon="💰"
-            label={kpis.revenueMTD?.label}
-            value={kpis.revenueMTD?.value}
-            unit="ج.م"
-            trend={kpis.revenueMTD?.trend}
-            action={kpis.revenueMTD?.action}
-            loading={loading}
-          />
+        <section aria-labelledby="kpi-heading" className={styles.kpiSection}>
+          <h2 id="kpi-heading" className="visually-hidden">مؤشرات الأداء الرئيسية</h2>
+          <div className={styles.kpiGrid} role="list">
+            <MetricCard
+              icon="💰"
+              label={kpis.revenueMTD?.label}
+              value={kpis.revenueMTD?.value}
+              unit="ج.م"
+              trend={kpis.revenueMTD?.trend}
+              action={kpis.revenueMTD?.action}
+              loading={loading}
+            />
 
-          <MetricCard
-            icon="🎯"
-            label={kpis.newOpportunities?.label}
-            value={kpis.newOpportunities?.value}
-            action={kpis.newOpportunities?.action}
-            loading={loading}
-          />
+            <MetricCard
+              icon="🎯"
+              label={kpis.newOpportunities?.label}
+              value={kpis.newOpportunities?.value}
+              action={kpis.newOpportunities?.action}
+              loading={loading}
+            />
 
-          <MetricCard
-            icon="🏆"
-            label={kpis.winRate?.label}
-            value={kpis.winRate?.value}
-            unit={kpis.winRate?.unit}
-            action={kpis.winRate?.action}
-            loading={loading}
-          />
+            <MetricCard
+              icon="🏆"
+              label={kpis.winRate?.label}
+              value={kpis.winRate?.value}
+              unit={kpis.winRate?.unit}
+              action={kpis.winRate?.action}
+              loading={loading}
+            />
 
-          <MetricCard
-            icon="⏱️"
-            label={kpis.avgSalesCycle?.label}
-            value={kpis.avgSalesCycle?.value}
-            unit={kpis.avgSalesCycle?.unit}
-            action={kpis.avgSalesCycle?.action}
-            loading={loading}
-          />
+            <MetricCard
+              icon="⏱️"
+              label={kpis.avgSalesCycle?.label}
+              value={kpis.avgSalesCycle?.value}
+              unit={kpis.avgSalesCycle?.unit}
+              action={kpis.avgSalesCycle?.action}
+              loading={loading}
+            />
 
-          <MetricCard
-            icon="⚠️"
-            label={kpis.overdueInvoices?.label}
-            count={kpis.overdueInvoices?.count}
-            total={kpis.overdueInvoices?.total}
-            status={kpis.overdueInvoices?.status}
-            action={kpis.overdueInvoices?.action}
-            loading={loading}
-          />
+            <MetricCard
+              icon="⚠️"
+              label={kpis.overdueInvoices?.label}
+              count={kpis.overdueInvoices?.count}
+              total={kpis.overdueInvoices?.total}
+              status={kpis.overdueInvoices?.status}
+              action={kpis.overdueInvoices?.action}
+              loading={loading}
+            />
 
-          <MetricCard
-            icon="📦"
-            label={kpis.lowStock?.label}
-            value={kpis.lowStock?.value}
-            status={kpis.lowStock?.status}
-            action={kpis.lowStock?.action}
-            loading={loading}
-          />
+            <MetricCard
+              icon="📦"
+              label={kpis.lowStock?.label}
+              value={kpis.lowStock?.value}
+              status={kpis.lowStock?.status}
+              action={kpis.lowStock?.action}
+              loading={loading}
+            />
 
-          <MetricCard
-            icon="💵"
-            label={kpis.cashCollections?.label}
-            value={kpis.cashCollections?.value}
-            unit="ج.م"
-            action={kpis.cashCollections?.action}
-            loading={loading}
-          />
+            <MetricCard
+              icon="💵"
+              label={kpis.cashCollections?.label}
+              value={kpis.cashCollections?.value}
+              unit="ج.م"
+              action={kpis.cashCollections?.action}
+              loading={loading}
+            />
 
-          <MetricCard
-            icon="📝"
-            label={kpis.pendingRFQs?.label}
-            value={kpis.pendingRFQs?.value}
-            status={kpis.pendingRFQs?.status}
-            action={kpis.pendingRFQs?.action}
-            loading={loading}
-          />
-        </div>
+            <MetricCard
+              icon="📝"
+              label={kpis.pendingRFQs?.label}
+              value={kpis.pendingRFQs?.value}
+              status={kpis.pendingRFQs?.status}
+              action={kpis.pendingRFQs?.action}
+              loading={loading}
+            />
+          </div>
+        </section>
 
         {/* Quick Actions */}
-        <div className={styles.section}>
+        <section aria-labelledby="quick-actions-heading" className={styles.section}>
+          <h2 id="quick-actions-heading" className="visually-hidden">الإجراءات السريعة</h2>
           <QuickActions />
-        </div>
+        </section>
 
         {/* Charts Section */}
-        <div className={styles.chartsGrid}>
+        <section aria-labelledby="charts-heading" className={styles.chartsGrid}>
+          <h2 id="charts-heading" className="visually-hidden">الرسوم البيانية والتحليلات</h2>
+          
           {/* Top Customers Chart */}
-          <div className={styles.chartCard}>
-            <h3 className={styles.chartTitle}>أفضل 5 عملاء (الشهر الحالي)</h3>
+          <article className={styles.chartCard} aria-labelledby="top-customers-title">
+            <h3 id="top-customers-title" className={styles.chartTitle}>أفضل 5 عملاء (الشهر الحالي)</h3>
             {loading ? (
-              <div className={styles.chartLoading}>جاري التحميل...</div>
+              <div className={styles.chartLoading} aria-live="polite" aria-busy="true">جاري التحميل...</div>
             ) : topCustomers.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={topCustomers}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                  <XAxis
-                    dataKey="name"
-                    stroke="#94a3b8"
-                    style={{ fontSize: '12px' }}
-                  />
-                  <YAxis
-                    stroke="#94a3b8"
-                    style={{ fontSize: '12px' }}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: '#1e293b',
-                      border: '1px solid #334155',
-                      borderRadius: '8px',
-                      color: '#f8fafc'
-                    }}
-                  />
-                  <Bar dataKey="value" fill="#3b82f6" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+              <div role="img" aria-label="رسم بياني يوضح أفضل 5 عملاء في الشهر الحالي">
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={topCustomers} aria-hidden="true">
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                    <XAxis
+                      dataKey="name"
+                      stroke="#94a3b8"
+                      style={{ fontSize: '12px' }}
+                    />
+                    <YAxis
+                      stroke="#94a3b8"
+                      style={{ fontSize: '12px' }}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: '#1e293b',
+                        border: '1px solid #334155',
+                        borderRadius: '8px',
+                        color: '#f8fafc'
+                      }}
+                    />
+                    <Bar dataKey="value" fill="#3b82f6" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             ) : (
-              <div className={styles.chartEmpty}>لا توجد بيانات</div>
+              <div className={styles.chartEmpty} role="status">لا توجد بيانات</div>
             )}
-          </div>
+          </article>
 
           {/* Activity Timeline */}
-          <div className={styles.chartCard}>
-            <h3 className={styles.chartTitle}>النشاط الأخير</h3>
+          <article className={styles.chartCard} aria-labelledby="activity-title">
+            <h3 id="activity-title" className={styles.chartTitle}>النشاط الأخير</h3>
             {loading ? (
-              <div className={styles.chartLoading}>جاري التحميل...</div>
+              <div className={styles.chartLoading} aria-live="polite" aria-busy="true">جاري التحميل...</div>
             ) : (
-              <div className={styles.activityList}>
+              <ul className={styles.activityList} aria-label="قائمة الأنشطة الأخيرة">
                 {activities.slice(0, 10).map((activity, index) => (
-                  <div key={index} className={styles.activityItem}>
-                    <div className={styles.activityIcon}>
+                  <li key={index} className={styles.activityItem}>
+                    <span className={styles.activityIcon} aria-hidden="true">
                       {activity.type === 'invoice' && '💰'}
                       {activity.type === 'opportunity' && '🎯'}
                       {activity.type === 'purchase_order' && '🛒'}
-                    </div>
+                    </span>
                     <div className={styles.activityContent}>
                       <p className={styles.activityDescription}>
                         {activity.description}
                       </p>
-                      <span className={styles.activityTime}>
+                      <time className={styles.activityTime} dateTime={activity.timestamp}>
                         {new Date(activity.timestamp).toLocaleString('ar-EG')}
-                      </span>
+                      </time>
                     </div>
                     {activity.amount && (
-                      <div className={styles.activityAmount}>
+                      <span className={styles.activityAmount}>
                         {activity.amount.toLocaleString('ar-EG')} ج.م
-                      </div>
+                      </span>
                     )}
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             )}
-          </div>
-        </div>
+          </article>
+        </section>
 
         {/* Top Deals Table */}
-        <div className={styles.section}>
+        <section aria-labelledby="deals-heading" className={styles.section}>
+          <h2 id="deals-heading" className="visually-hidden">أفضل الصفقات</h2>
           <TopDealsTable deals={topDeals} loading={loading} />
-        </div>
+        </section>
 
         {/* Alerts Section */}
         {data?.alerts && (data.alerts.lowStock || data.alerts.overdueInvoices || data.alerts.pendingRFQs) && (
-          <div className={styles.alertsSection}>
-            <h3 className={styles.alertsTitle}>تنبيهات مهمة</h3>
-            <div className={styles.alertsGrid}>
+          <section aria-labelledby="alerts-heading" className={styles.alertsSection} role="alert" aria-live="polite">
+            <h3 id="alerts-heading" className={styles.alertsTitle}>تنبيهات مهمة</h3>
+            <ul className={styles.alertsGrid} aria-label="قائمة التنبيهات">
               {data.alerts.lowStock && (
-                <div className={styles.alert}>
-                  <span className={styles.alertIcon}>⚠️</span>
+                <li className={styles.alert}>
+                  <span className={styles.alertIcon} aria-hidden="true">⚠️</span>
                   <span className={styles.alertText}>
                     يوجد منتجات منخفضة المخزون تحتاج إعادة طلب
                   </span>
-                </div>
+                </li>
               )}
               {data.alerts.overdueInvoices && (
-                <div className={styles.alert}>
-                  <span className={styles.alertIcon}>🔴</span>
+                <li className={styles.alert}>
+                  <span className={styles.alertIcon} aria-hidden="true">🔴</span>
                   <span className={styles.alertText}>
                     يوجد فواتير متأخرة تحتاج متابعة
                   </span>
-                </div>
+                </li>
               )}
               {data.alerts.pendingRFQs && (
-                <div className={styles.alert}>
-                  <span className={styles.alertIcon}>📝</span>
+                <li className={styles.alert}>
+                  <span className={styles.alertIcon} aria-hidden="true">📝</span>
                   <span className={styles.alertText}>
                     يوجد طلبات عروض معلقة تحتاج رد
                   </span>
-                </div>
+                </li>
               )}
-            </div>
-          </div>
+            </ul>
+          </section>
         )}
-      </div>
+      </main>
     </MainLayout>
   );
 }
