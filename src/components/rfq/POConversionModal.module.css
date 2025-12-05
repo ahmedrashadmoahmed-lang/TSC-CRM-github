@@ -1,0 +1,217 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal {
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 600px;
+    box-shadow: var(--shadow-2xl);
+    border: 1px solid var(--color-border);
+    animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.header {
+    padding: var(--spacing-xl);
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.titleGroup {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.icon {
+    color: var(--color-primary);
+}
+
+.header h2 {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+}
+
+.closeButton:hover {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+}
+
+.content {
+    padding: var(--spacing-xl);
+}
+
+.description {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xl);
+    line-height: 1.5;
+}
+
+.section {
+    margin-bottom: var(--spacing-xl);
+}
+
+.label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text-primary);
+}
+
+.quoteList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.quoteItem {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quoteItem:hover {
+    border-color: var(--color-primary);
+    background: var(--color-bg-secondary);
+}
+
+.quoteItem.selected {
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+    box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.quoteHeader {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+}
+
+.quoteDetails {
+    display: flex;
+    gap: var(--spacing-lg);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.summary {
+    background: var(--color-bg-secondary);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+}
+
+.summary h3 {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+}
+
+.summaryRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xs);
+}
+
+.summaryRow:last-child {
+    margin-bottom: 0;
+}
+
+.footer {
+    padding: var(--spacing-xl);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+}
+
+.cancelButton {
+    padding: var(--spacing-md) var(--spacing-xl);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: white;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.convertButton {
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.convertButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.error {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--color-danger);
+    background: var(--color-danger-light);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

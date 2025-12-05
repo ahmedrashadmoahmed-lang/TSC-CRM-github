@@ -1,130 +1,111 @@
+// Client-Safe Logger
+// Simple console-based logger that works everywhere
+
 /**
- * Winston Logger Configuration
- * Centralized logging for the application
+ * Log levels
  */
+const LogLevel = {
+  DEBUG: 0,
+  INFO: 1,
+  WARN: 2,
+  ERROR: 3,
+};
 
-import winston from 'winston';
-import path from 'path';
+const currentLevel = LogLevel[process.env.LOG_LEVEL?.toUpperCase()] || LogLevel.INFO;
 
-const { combine, timestamp, printf, colorize, errors } = winston.format;
-
-// Custom log format
-const logFormat = printf(({ level, message, timestamp, stack, ...metadata }) => {
-    let msg = `${timestamp} [${level}]: ${message}`;
-
-    // Add metadata if present
-    if (Object.keys(metadata).length > 0) {
-        msg += ` ${JSON.stringify(metadata)}`;
-    }
-
-    // Add stack trace for errors
-    if (stack) {
-        msg += `\n${stack}`;
-    }
-
-    return msg;
-});
-
-// Create logs directory if it doesn't exist
-const logsDir = path.join(process.cwd(), 'logs');
-
-// Logger configuration
-const logger = winston.createLogger({
-    level: process.env.LOG_LEVEL || 'info',
-    format: combine(
-        errors({ stack: true }),
-        timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        logFormat
-    ),
-    defaultMeta: { service: 'erp-system' },
-    transports: [
-        // Error logs
-        new winston.transports.File({
-            filename: path.join(logsDir, 'error.log'),
-            level: 'error',
-            maxsize: 5242880, // 5MB
-            maxFiles: 5,
-        }),
-
-        // Combined logs
-        new winston.transports.File({
-            filename: path.join(logsDir, 'combined.log'),
-            maxsize: 5242880, // 5MB
-            maxFiles: 5,
-        }),
-
-        // Separate file for warnings
-        new winston.transports.File({
-            filename: path.join(logsDir, 'warnings.log'),
-            level: 'warn',
-            maxsize: 5242880, // 5MB
-            maxFiles: 3,
-        }),
-    ],
-});
-
-// Add console transport in development
-if (process.env.NODE_ENV !== 'production') {
-    logger.add(
-        new winston.transports.Console({
-            format: combine(
-                colorize(),
-                timestamp({ format: 'HH:mm:ss' }),
-                logFormat
-            ),
-        })
-    );
+/**
+ * Format timestamp
+ */
+function getTimestamp() {
+  return new Date().toISOString();
 }
 
 /**
- * Log levels:
- * - error: Error messages
- * - warn: Warning messages
- * - info: Informational messages
- * - debug: Debug messages
+ * Logger class
  */
+class Logger {
+  info(message, metadata = {}) {
+    if (currentLevel <= LogLevel.INFO) {
+      console.log(`[${getTimestamp()}] [INFO]:`, message, metadata);
+    }
+  }
+
+  error(message, metadata = {}) {
+    if (currentLevel <= LogLevel.ERROR) {
+      console.error(`[${getTimestamp()}] [ERROR]:`, message, metadata);
+    }
+  }
+
+  warn(message, metadata = {}) {
+    if (currentLevel <= LogLevel.WARN) {
+      console.warn(`[${getTimestamp()}] [WARN]:`, message, metadata);
+    }
+  }
+
+  debug(message, metadata = {}) {
+    if (currentLevel <= LogLevel.DEBUG) {
+      console.debug(`[${getTimestamp()}] [DEBUG]:`, message, metadata);
+    }
+  }
+}
+
+const logger = new Logger();
+
+/**
+ * Log API request
+ */
+export function logRequest(req, res, duration) {
+  logger.info('API Request', {
+    method: req.method,
+    url: req.url,
+    status: res.statusCode,
+    duration: `${duration}ms`,
+  });
+}
+
+/**
+ * Log error
+ */
+export function logError(error, context = {}) {
+  logger.error(error.message, {
+    stack: error.stack,
+    ...context,
+  });
+}
+
+/**
+ * Log user activity
+ */
+export function logActivity(userId, action, details = {}) {
+  logger.info('User Activity', {
+    userId,
+    action,
+    ...details,
+  });
+}
+
+/**
+ * Log database query
+ */
+export function logQuery(query, duration) {
+  logger.debug('Database Query', {
+    query,
+    duration: `${duration}ms`,
+  });
+}
+
+/**
+ * Middleware for logging requests
+ */
+export function requestLogger(req, res, next) {
+  const start = Date.now();
+
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    logRequest(req, res, duration);
+  });
+
+  next();
+}
 
 export default logger;
-
-/**
- * Helper functions for common logging scenarios
- */
-
-export function logError(error, context = {}) {
-    logger.error(error.message, {
-        error: error.name,
-        stack: error.stack,
-        ...context,
-    });
-}
-
-export function logApiRequest(req, duration) {
-    logger.info('API Request', {
-        method: req.method,
-        url: req.url,
-        duration: `${duration}ms`,
-        userAgent: req.headers.get('user-agent'),
-    });
-}
-
-export function logDatabaseQuery(query, duration) {
-    logger.debug('Database Query', {
-        query,
-        duration: `${duration}ms`,
-    });
-}
-
-export function logAuth(action, userId, success = true) {
-    logger.info('Authentication', {
-        action,
-        userId,
-        success,
-    });
-}
-
-export function logSecurity(event, details = {}) {
-    logger.warn('Security Event', {
-        event,
-        ...details,
-    });
-}

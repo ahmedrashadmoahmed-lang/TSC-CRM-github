@@ -1,24 +1,27 @@
-import { Inter } from 'next/font/google';
-import "./globals.css";
-import '../styles/design-system.css';
-import '../styles/dark-mode.css';
 import { SessionProvider } from '@/components/SessionProvider';
+import { QueryProvider } from '@/providers/QueryProvider';
+import { Inter } from 'next/font/google';
+import './globals.css';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
 
 export const metadata = {
-  title: "Supply Chain ERP - Management System",
-  description: "Comprehensive Supply Chain ERP for managing sales, procurement, inventory, and fulfillment",
+  title: 'نظام محاسبي برو - Supply Chain ERP',
+  description: 'النظام المحاسبي المتكامل لإدارة المبيعات والمشتريات والمخزون',
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar" dir="rtl" className={inter.variable} suppressHydrationWarning>
       <body>
-        <SessionProvider>
-          {children}
-        </SessionProvider>
+        <QueryProvider>
+          <SessionProvider>{children}</SessionProvider>
+        </QueryProvider>
       </body>
     </html>
   );
 }
-
-

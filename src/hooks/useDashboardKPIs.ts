@@ -1,5 +1,6 @@
 'use client';
 
+// Custom hook for fetching and managing dashboard KPIs
 import { useState, useEffect, useCallback } from 'react';
 
 interface KPIData {

@@ -14,7 +14,7 @@ export default function Table({ columns, data, className = '' }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((row, rowIndex) => (
+                    {(Array.isArray(data) ? data : []).map((row, rowIndex) => (
                         <tr key={rowIndex} className={styles.tr}>
                             {columns.map((column, colIndex) => (
                                 <td key={colIndex} className={styles.td}>

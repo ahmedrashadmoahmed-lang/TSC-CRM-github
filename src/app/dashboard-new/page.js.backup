@@ -1,0 +1,754 @@
+'use client';
+
+import MainLayoutNew from '@/components/layout/MainLayoutNew';
+import useDashboardData from '@/hooks/useDashboardData';
+import useTheme from '@/hooks/useTheme';
+import {
+  ArcElement,
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from 'chart.js';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import { Bar, Doughnut, Line } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+);
+
+export default function Dashboard() {
+  const { data: session, status } = useSession();
+          case 'k':
+            e.preventDefault();
+            searchRef.current?.focus();
+            break;
+          case 'r':
+            e.preventDefault();
+            refresh();
+            break;
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [refresh]);
+
+  const kpis = data?.kpis || {};
+  const topCustomers = data?.topCustomers || [];
+  const topDeals = data?.topDeals || [];
+  const activities = data?.activities || [];
+
+  const chartColors = {
+    primary: '#3b82f6',
+    secondary: '#8b5cf6',
+    success: '#10b981',
+    warning: '#f59e0b',
+    grid: isDark ? '#374151' : '#e5e7eb',
+    text: isDark ? '#f3f4f6' : '#1f2937',
+  };
+
+  const workflowStages = [
+    {
+      name: 'عملاء محتملين',
+      count: 45,
+      icon: 'bi-person-plus',
+      color: 'from-blue-500 to-blue-600',
+    },
+    { name: 'فرص', count: 32, icon: 'bi-bullseye', color: 'from-purple-500 to-purple-600' },
+    {
+      name: 'عروض أسعار',
+      count: 18,
+      icon: 'bi-file-earmark-text',
+      color: 'from-indigo-500 to-indigo-600',
+    },
+    { name: 'صفقات', count: 12, icon: 'bi-handshake', color: 'from-green-500 to-green-600' },
+    { name: 'فواتير', count: 8, icon: 'bi-receipt', color: 'from-emerald-500 to-emerald-600' },
+  ];
+
+  const performanceTargets = [
+    {
+      title: 'الإيرادات الشهرية',
+      current: kpis.revenueMTD?.value || 0,
+      target: 500000,
+      unit: 'ج.م',
+      icon: 'bi-cash-stack',
+    },
+    { title: 'الصفقات المغلقة', current: 12, target: 20, unit: 'صفقة', icon: 'bi-check-circle' },
+    { title: 'العملاء الجدد', current: 45, target: 60, unit: 'عميل', icon: 'bi-people' },
+    {
+      title: 'معدل التحويل',
+      current: kpis.winRate?.value || 0,
+      target: 35,
+      unit: '%',
+      icon: 'bi-graph-up-arrow',
+    },
+  ];
+
+  const revenueTrendData = {
+    labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+    datasets: [
+      {
+        label: 'الإيرادات',
+        data: [120000, 150000, 180000, 160000, 200000, 220000],
+        borderColor: chartColors.primary,
+        backgroundColor: `${chartColors.primary}20`,
+        fill: true,
+        tension: 0.4,
+      },
+    ],
+  };
+
+  const salesFunnelData = {
+    labels: ['عملاء محتملين', 'فرص', 'عروض', 'صفقات', 'فواتير'],
+    datasets: [
+      {
+        label: 'عدد العناصر',
+        data: [45, 32, 18, 12, 8],
+        backgroundColor: [
+          chartColors.primary,
+          chartColors.secondary,
+          '#6366f1',
+          chartColors.success,
+          '#10b981',
+        ],
+      },
+    ],
+  };
+
+  const salesDistributionData = {
+    labels: ['مبيعات مباشرة', 'عملاء جدد', 'عملاء حاليين', 'شركاء'],
+    datasets: [
+      {
+        data: [35, 25, 30, 10],
+        backgroundColor: [
+          chartColors.primary,
+          chartColors.secondary,
+          chartColors.success,
+          chartColors.warning,
+        ],
+        borderWidth: 0,
+      },
+    ],
+  };
+
+  const salesCycleData = {
+    labels: ['Lead', 'Opportunity', 'Quote', 'Deal', 'Invoice'],
+    datasets: [
+      {
+        label: 'متوسط الأيام',
+        data: [3, 7, 5, 10, 2],
+        backgroundColor: chartColors.primary,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+        labels: { color: chartColors.text, padding: 15, font: { size: 12 } },
+      },
+      tooltip: {
+        backgroundColor: isDark ? '#1f2937' : '#ffffff',
+        titleColor: chartColors.text,
+        bodyColor: chartColors.text,
+        borderColor: chartColors.grid,
+        borderWidth: 1,
+        padding: 12,
+      },
+    },
+    scales: {
+      x: {
+        grid: { color: chartColors.grid, display: false },
+        ticks: { color: chartColors.text },
+      },
+      y: {
+        grid: { color: chartColors.grid },
+        ticks: { color: chartColors.text },
+      },
+    },
+  };
+
+  const headerActions = (
+    <div className="flex items-center gap-2">
+      <select
+        className="select select-bordered select-sm"
+        value={dateRange}
+        onChange={(e) => setDateRange(e.target.value)}
+      >
+        <option value="today">اليوم</option>
+        <option value="week">هذا الأسبوع</option>
+        <option value="month">هذا الشهر</option>
+        <option value="year">هذه السنة</option>
+      </select>
+      <button onClick={() => console.log('Export')} className="btn btn-ghost btn-sm" title="تصدير">
+        <i className="bi bi-download"></i>
+      </button>
+      <button onClick={refresh} className="btn btn-ghost btn-circle btn-sm" title="تحديث">
+              <div className="text-red-500 text-6xl mb-4 animate-bounce">
+                <i className="bi bi-exclamation-triangle-fill"></i>
+              </div>
+              <h2 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">
+                {error.includes('تسجيل الدخول') ? 'يجب تسجيل الدخول' : 'حدث خطأ'}
+              </h2>
+              <p className="opacity-70 mb-4">{error}</p>
+              {error.includes('تسجيل الدخول') ? (
+                <button onClick={() => router.push('/auth/signin')} className="btn btn-primary">
+                  <i className="bi bi-box-arrow-in-right ml-2"></i>
+                  تسجيل الدخول
+                </button>
+              ) : (
+                <button onClick={refresh} className="btn btn-primary">
+                  <i className="bi bi-arrow-clockwise ml-2"></i>
+                  إعادة المحاولة
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </MainLayoutNew>
+    );
+  }
+
+  return (
+    <MainLayoutNew
+      title="لوحة التحكم"
+      subtitle="نظرة شاملة على أداء الأعمال"
+      actions={headerActions}
+    >
+      <div className="space-y-6">
+        {/* Smart Search */}
+        <div className="card bg-white dark:bg-gray-800 shadow-lg">
+          <div className="card-body p-4">
+            <div className="relative">
+              <i className="bi bi-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+              <input
+                ref={searchRef}
+                type="text"
+                placeholder="بحث ذكي في كل البيانات... (Ctrl+K)"
+                className="input input-bordered w-full pr-10"
+              />
+              <kbd className="kbd kbd-sm absolute left-3 top-1/2 -translate-y-1/2">Ctrl+K</kbd>
+            </div>
+          </div>
+        </div>
+
+        {/* KPI Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="card bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+            <div className="card-body">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm opacity-90 mb-1">إيرادات الشهر</p>
+                  <h2 className="text-3xl font-bold">
+                    {loading ? (
+                      <span className="loading loading-spinner loading-sm"></span>
+                    ) : (
+                      (kpis.revenueMTD?.value || 0).toLocaleString('ar-EG')
+                    )}
+                  </h2>
+                  <p className="text-xs opacity-80 mt-1">ج.م</p>
+                </div>
+                <div className="text-5xl opacity-20">
+                  <i className="bi bi-cash-stack"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="card bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+            <div className="card-body">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm opacity-90 mb-1">فرص جديدة</p>
+                  <h2 className="text-3xl font-bold">
+                    {loading ? (
+                      <span className="loading loading-spinner loading-sm"></span>
+                    ) : (
+                      kpis.newOpportunities?.value || 0
+                    )}
+                  </h2>
+                  <p className="text-xs opacity-80 mt-1">هذا الشهر</p>
+                </div>
+                <div className="text-5xl opacity-20">
+                  <i className="bi bi-bullseye"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="card bg-gradient-to-br from-green-500 to-green-600 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+            <div className="card-body">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm opacity-90 mb-1">معدل الفوز</p>
+                  <h2 className="text-3xl font-bold">
+                    {loading ? (
+                      <span className="loading loading-spinner loading-sm"></span>
+                    ) : (
+                      (kpis.winRate?.value || 0).toFixed(1)
+                    )}
+                  </h2>
+                  <p className="text-xs opacity-80 mt-1">%</p>
+                </div>
+                <div className="text-5xl opacity-20">
+                  <i className="bi bi-trophy-fill"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="card bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+            <div className="card-body">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm opacity-90 mb-1">طلبات معلقة</p>
+                  <h2 className="text-3xl font-bold">
+                    {loading ? (
+                      <span className="loading loading-spinner loading-sm"></span>
+                    ) : (
+                      kpis.pendingRFQs?.value || 0
+                    )}
+                  </h2>
+                  <p className="text-xs opacity-80 mt-1">RFQ</p>
+                </div>
+                <div className="text-5xl opacity-20">
+                  <i className="bi bi-file-earmark-text-fill"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Workflow Tracker */}
+        <div className="card bg-white dark:bg-gray-800 shadow-xl">
+          <div className="card-body">
+            <h3 className="card-title text-lg mb-4">
+              <i className="bi bi-diagram-3 text-primary"></i>
+              مخطط سير العمل
+            </h3>
+            <div className="grid grid-cols-5 gap-2">
+              {workflowStages.map((stage, index) => (
+                <div key={index} className="relative">
+                  <div
+                    className={`card bg-gradient-to-br ${stage.color} text-white shadow-lg hover:shadow-xl transition-all cursor-pointer`}
+                  >
+                    <div className="card-body p-4 text-center">
+                      <i className={`bi ${stage.icon} text-3xl mb-2`}></i>
+                      <div className="text-2xl font-bold">{stage.count}</div>
+                      <div className="text-xs opacity-90 mt-1">{stage.name}</div>
+                    </div>
+                  </div>
+                  {index < workflowStages.length - 1 && (
+                    <div className="absolute top-1/2 -left-1 -translate-y-1/2 text-gray-400 dark:text-gray-600">
+                      <i className="bi bi-arrow-left text-2xl"></i>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 grid grid-cols-4 gap-4 text-center text-sm">
+              <div>
+                <div className="text-xs opacity-60">معدل التحويل</div>
+                <div className="font-bold text-green-500">71%</div>
+              </div>
+              <div>
+                <div className="text-xs opacity-60">متوسط الوقت</div>
+                <div className="font-bold">27 يوم</div>
+              </div>
+              <div>
+                <div className="text-xs opacity-60">أسرع صفقة</div>
+                <div className="font-bold text-blue-500">12 يوم</div>
+              </div>
+              <div>
+                <div className="text-xs opacity-60">أبطأ صفقة</div>
+                <div className="font-bold text-orange-500">45 يوم</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Performance Indicators */}
+        <div className="card bg-white dark:bg-gray-800 shadow-xl">
+          <div className="card-body">
+            <h3 className="card-title text-lg mb-4">
+              <i className="bi bi-target text-primary"></i>
+              مؤشرات الأداء والأهداف
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {performanceTargets.map((target, index) => {
+                const percentage = Math.min((target.current / target.target) * 100, 100);
+                const status =
+                  percentage >= 100 ? 'success' : percentage >= 70 ? 'warning' : 'error';
+                return (
+                  <div key={index} className="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                    <div className="flex items-center justify-between mb-2">
+                      <i className={`bi ${target.icon} text-2xl text-primary`}></i>
+                      <span className={`badge badge-${status} badge-sm`}>
+                        {percentage.toFixed(0)}%
+                      </span>
+                    </div>
+                    <div className="text-sm opacity-70 mb-1">{target.title}</div>
+                    <div className="text-2xl font-bold mb-2">
+                      {target.current.toLocaleString('ar-EG')}{' '}
+                      <span className="text-sm opacity-60">
+                        / {target.target.toLocaleString('ar-EG')}
+                      </span>
+                    </div>
+                    <progress
+                      className={`progress progress-${status} w-full`}
+                      value={percentage}
+                      max="100"
+                    ></progress>
+                    <div className="text-xs opacity-60 mt-1">{target.unit}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="card shadow-xl bg-white dark:bg-gray-800">
+            <div className="card-body">
+              <h3 className="card-title text-lg mb-4">
+                <i className="bi bi-graph-up text-primary"></i>
+                اتجاه الإيرادات
+              </h3>
+              <div className="h-64">
+                {loading ? (
+                  <div className="flex items-center justify-center h-full">
+                    <span className="loading loading-spinner loading-lg"></span>
+                  </div>
+                ) : (
+                  <Line data={revenueTrendData} options={chartOptions} />
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="card shadow-xl bg-white dark:bg-gray-800">
+            <div className="card-body">
+              <h3 className="card-title text-lg mb-4">
+                <i className="bi bi-funnel text-secondary"></i>
+                قمع المبيعات
+              </h3>
+              <div className="h-64">
+                {loading ? (
+                  <div className="flex items-center justify-center h-full">
+                    <span className="loading loading-spinner loading-lg"></span>
+                  </div>
+                ) : (
+                  <Bar data={salesFunnelData} options={chartOptions} />
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="card shadow-xl bg-white dark:bg-gray-800">
+            <div className="card-body">
+              <h3 className="card-title text-lg mb-4">
+                <i className="bi bi-pie-chart text-success"></i>
+                توزيع المبيعات
+              </h3>
+              <div className="h-64">
+                {loading ? (
+                  <div className="flex items-center justify-center h-full">
+                    <span className="loading loading-spinner loading-lg"></span>
+                  </div>
+                ) : (
+                  <Doughnut
+                    data={salesDistributionData}
+                    options={{ ...chartOptions, scales: undefined }}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="card shadow-xl bg-white dark:bg-gray-800">
+            <div className="card-body">
+              <h3 className="card-title text-lg mb-4">
+                <i className="bi bi-clock-history text-warning"></i>
+                دورة المبيعات
+              </h3>
+              <div className="h-64">
+                {loading ? (
+                  <div className="flex items-center justify-center h-full">
+                    <span className="loading loading-spinner loading-lg"></span>
+                  </div>
+                ) : (
+                  <Bar data={salesCycleData} options={chartOptions} />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* AI Insights */}
+        <div className="card bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 shadow-xl border-2 border-indigo-200 dark:border-indigo-800">
+          <div className="card-body">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="card-title text-lg">
+                <i className="bi bi-lightbulb text-yellow-500"></i>
+                رؤى ذكية مدعومة بالذكاء الاصطناعي
+              </h3>
+              <button
+                onClick={() => setShowAIInsights(!showAIInsights)}
+                className="btn btn-ghost btn-sm btn-circle"
+              >
+                <i className={`bi bi-chevron-${showAIInsights ? 'up' : 'down'}`}></i>
+              </button>
+            </div>
+            {showAIInsights && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+                  <div className="flex items-start gap-3">
+                    <i className="bi bi-graph-up-arrow text-2xl text-green-500"></i>
+                    <div>
+                      <div className="font-bold mb-1">فرصة نمو</div>
+                      <p className="text-sm opacity-70">
+                        العميل "شركة النور" لديه احتمالية عالية للشراء هذا الأسبوع
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+                  <div className="flex items-start gap-3">
+                    <i className="bi bi-exclamation-triangle text-2xl text-orange-500"></i>
+                    <div>
+                      <div className="font-bold mb-1">تحذير</div>
+                      <p className="text-sm opacity-70">
+                        3 صفقات في مرحلة العرض لأكثر من 10 أيام - تحتاج متابعة
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+                  <div className="flex items-start gap-3">
+                    <i className="bi bi-star text-2xl text-blue-500"></i>
+                    <div>
+                      <div className="font-bold mb-1">توصية</div>
+                      <p className="text-sm opacity-70">
+                        أفضل وقت للتواصل مع العملاء: الثلاثاء 10-12 صباحاً
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Data Tables */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="card shadow-xl bg-white dark:bg-gray-800">
+            <div className="card-body">
+              <h3 className="card-title text-lg mb-4">
+                <i className="bi bi-people-fill text-primary"></i>
+                أفضل 5 عملاء
+              </h3>
+              <div className="space-y-3">
+                {loading ? (
+                  <div className="flex justify-center py-8">
+                    <span className="loading loading-spinner loading-lg"></span>
+                  </div>
+                ) : topCustomers.length > 0 ? (
+                  topCustomers.slice(0, 5).map((customer, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                    >
+                      <div className="avatar placeholder">
+                        <div className="bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-full w-10 h-10 flex items-center justify-center">
+                          <span className="text-sm font-bold">{customer.name?.charAt(0)}</span>
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium">{customer.name}</div>
+                        <div className="text-sm text-green-500 font-bold">
+                          {customer.value?.toLocaleString('ar-EG')} ج.م
+                        </div>
+                      </div>
+                      <div className="badge badge-primary">#{index + 1}</div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8 opacity-60">
+                    <i className="bi bi-inbox text-4xl mb-2 block"></i>
+                    <p>لا توجد بيانات</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="card shadow-xl bg-white dark:bg-gray-800">
+            <div className="card-body">
+              <h3 className="card-title text-lg mb-4">
+                <i className="bi bi-trophy-fill text-yellow-500"></i>
+                أفضل الصفقات
+              </h3>
+              <div className="space-y-3">
+                {loading ? (
+                  <div className="flex justify-center py-8">
+                    <span className="loading loading-spinner loading-lg"></span>
+                  </div>
+                ) : topDeals.length > 0 ? (
+                  topDeals.slice(0, 5).map((deal, index) => (
+                    <div
+                      key={index}
+                      className="p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="font-medium truncate">{deal.title}</div>
+                        <span className="badge badge-primary badge-sm">{deal.stage}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="opacity-60 truncate">{deal.customer}</span>
+                        <span className="font-bold text-green-500 whitespace-nowrap">
+                          {deal.value?.toLocaleString('ar-EG')} ج.م
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8 opacity-60">
+                    <i className="bi bi-inbox text-4xl mb-2 block"></i>
+                    <p>لا توجد بيانات</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="card shadow-xl bg-white dark:bg-gray-800">
+            <div className="card-body">
+              <h3 className="card-title text-lg mb-4">
+                <i className="bi bi-clock-history text-blue-500"></i>
+                النشاط الأخير
+              </h3>
+              <div className="space-y-3 max-h-96 overflow-y-auto">
+                {loading ? (
+                  <div className="flex justify-center py-8">
+                    <span className="loading loading-spinner loading-lg"></span>
+                  </div>
+                ) : activities.length > 0 ? (
+                  activities.slice(0, 8).map((activity, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                    >
+                      <div className="avatar placeholder">
+                        <div className="bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center">
+                          <i className="bi bi-activity text-xs"></i>
+                        </div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">{activity.description}</p>
+                        <p className="text-xs opacity-60">
+                          {new Date(activity.timestamp).toLocaleString('ar-EG', {
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </p>
+                      </div>
+                      {activity.amount && (
+                        <div className="text-xs font-bold text-green-500 whitespace-nowrap">
+                          {activity.amount.toLocaleString('ar-EG')} ج.م
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8 opacity-60">
+                    <i className="bi bi-inbox text-4xl mb-2 block"></i>
+                    <p>لا يوجد نشاط</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions Button */}
+        <button
+          onClick={() => setShowQuickActions(!showQuickActions)}
+          className="btn btn-primary btn-circle btn-lg fixed bottom-6 left-6 shadow-2xl z-50"
+          title="إجراءات سريعة"
+        >
+          <i className="bi bi-plus-lg text-2xl"></i>
+        </button>
+
+        {/* Quick Actions Menu */}
+        {showQuickActions && (
+          <div className="fixed bottom-24 left-6 z-50">
+            <div className="card bg-white dark:bg-gray-800 shadow-2xl w-64">
+              <div className="card-body p-4">
+                <h4 className="font-bold mb-3">إجراءات سريعة</h4>
+                <div className="space-y-2">
+                  <button className="btn btn-sm w-full justify-start">
+                    <i className="bi bi-person-plus ml-2"></i>
+                    إضافة عميل جديد
+                  </button>
+                  <button className="btn btn-sm w-full justify-start">
+                    <i className="bi bi-file-earmark-plus ml-2"></i>
+                    إنشاء RFQ
+                  </button>
+                  <button className="btn btn-sm w-full justify-start">
+                    <i className="bi bi-receipt ml-2"></i>
+                    إنشاء فاتورة
+                  </button>
+                  <button className="btn btn-sm w-full justify-start">
+                    <i className="bi bi-cart-plus ml-2"></i>
+                    إنشاء أمر شراء
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Keyboard Shortcuts Help */}
+        <div className="card bg-gray-50 dark:bg-gray-800/50 shadow">
+          <div className="card-body p-4">
+            <div className="flex items-center justify-center gap-4 text-sm opacity-60">
+              <div className="flex items-center gap-2">
+                <kbd className="kbd kbd-sm">Ctrl</kbd>+<kbd className="kbd kbd-sm">K</kbd>
+                <span>بحث</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <kbd className="kbd kbd-sm">Ctrl</kbd>+<kbd className="kbd kbd-sm">R</kbd>
+                <span>تحديث</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </MainLayoutNew>
+  );
+}

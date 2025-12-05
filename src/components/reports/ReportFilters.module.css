@@ -1,0 +1,143 @@
+.container {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.rangeButtons {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.rangeButton {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.rangeButton:hover:not(:disabled) {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-primary);
+}
+
+.rangeButton.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.rangeButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.customRange {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.dateInput {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+}
+
+.dateSeparator {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.applyButton {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.applyButton:hover:not(:disabled) {
+    background: var(--color-primary-dark, #2563eb);
+}
+
+.applyButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-border);
+    flex-wrap: wrap;
+}
+
+.actionButton {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.actionButton:hover:not(:disabled) {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-primary);
+}
+
+.actionButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+    .rangeButtons,
+    .actions {
+        flex-direction: column;
+    }
+
+    .rangeButton,
+    .actionButton {
+        width: 100%;
+    }
+
+    .customRange {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .dateInput,
+    .applyButton {
+        width: 100%;
+    }
+}

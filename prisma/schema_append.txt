@@ -1,0 +1,28 @@
+
+model RFQTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  category    String   // equipment, supplies, services, raw_materials, etc.
+  
+  // Template Configuration
+  isDefault   Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  usageCount  Int      @default(0)
+  
+  // Fields Configuration
+  fields      Json     // Dynamic field definitions
+  
+  // Metadata
+  tenantId    String
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([category])
+  @@index([isDefault])
+  @@map("rfq_templates")
+}

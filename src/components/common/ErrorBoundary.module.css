@@ -1,0 +1,138 @@
+.errorContainer {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.errorCard {
+    background: #ffffff;
+    border-radius: 1rem;
+    padding: 3rem;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    text-align: center;
+}
+
+.iconContainer {
+    display: inline-flex;
+    padding: 1.5rem;
+    background: #fff5f5;
+    border-radius: 50%;
+    color: #dc3545;
+    margin-bottom: 1.5rem;
+}
+
+.title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #212529;
+    margin: 0 0 1rem 0;
+}
+
+.message {
+    font-size: 1rem;
+    color: #6c757d;
+    line-height: 1.6;
+    margin: 0 0 2rem 0;
+}
+
+.errorDetails {
+    text-align: right;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    border: 1px solid #dee2e6;
+}
+
+.errorDetails summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #495057;
+    padding: 0.5rem;
+    user-select: none;
+}
+
+.errorDetails summary:hover {
+    color: #212529;
+}
+
+.errorStack {
+    margin: 1rem 0 0 0;
+    padding: 1rem;
+    background: #ffffff;
+    border-radius: 0.25rem;
+    font-size: 0.8125rem;
+    color: #dc3545;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.primaryButton,
+.secondaryButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 150ms;
+    border: none;
+}
+
+.primaryButton {
+    background: #007bff;
+    color: #ffffff;
+}
+
+.primaryButton:hover {
+    background: #0056b3;
+}
+
+.secondaryButton {
+    background: #ffffff;
+    color: #007bff;
+    border: 2px solid #007bff;
+}
+
+.secondaryButton:hover {
+    background: #f8f9fa;
+}
+
+.primaryButton:active,
+.secondaryButton:active {
+    transform: scale(0.98);
+}
+
+@media (max-width: 768px) {
+    .errorCard {
+        padding: 2rem;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .primaryButton,
+    .secondaryButton {
+        width: 100%;
+        justify-content: center;
+    }
+}

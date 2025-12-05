@@ -1,9 +1,17 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 // GET Dashboard Summary with Real KPIs
 export async function GET(request) {
     try {
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+        }
+
+        const tenantId = session.user.tenantId;
         const now = new Date();
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
         const startOfYear = new Date(now.getFullYear(), 0, 1);
@@ -12,6 +20,7 @@ export async function GET(request) {
         // 1. Revenue MTD (إيرادات هذا الشهر)
         const invoicesMTD = await prisma.invoice.findMany({
             where: {
+                tenantId,
                 issueDate: { gte: startOfMonth },
                 status: { in: ['paid', 'partial'] },
             },
@@ -23,6 +32,7 @@ export async function GET(request) {
         const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
         const invoicesPrevMonth = await prisma.invoice.findMany({
             where: {
+                tenantId,
                 issueDate: { gte: prevMonthStart, lte: prevMonthEnd },
                 status: { in: ['paid', 'partial'] },
             },
@@ -33,22 +43,37 @@ export async function GET(request) {
             : 0;
 
         // 2. New Opportunities (This month)
-        // Note: Opportunity model not yet implemented in schema
-        const newOpportunities = 0;
+        const newOpportunities = await prisma.opportunity.count({
+            where: {
+                tenantId,
+                createdAt: { gte: startOfMonth },
+            },
+        });
 
-        // 3. Win Rate (%) — خلال 30 يوم
-        // Note: Opportunity model not yet implemented in schema
-        const winRate = 0;
+        // 3. Win Rate (%) — Last 30 days
+        const closedOpportunities = await prisma.opportunity.findMany({
+            where: {
+                tenantId,
+                updatedAt: { gte: thirtyDaysAgo },
+                stage: { in: ['won', 'lost'] },
+            },
+        });
+        const wonOpportunities = closedOpportunities.filter(op => op.stage === 'won').length;
+        const winRate = closedOpportunities.length > 0
+            ? (wonOpportunities / closedOpportunities.length) * 100
+            : 0;
 
         // 4. Avg Sales Cycle (days)
-        // Note: Opportunity model not yet implemented in schema
+        // For now, we'll use a placeholder calculation or 0 if no closed deals
+        // In a real scenario, we'd calculate difference between createdAt and closedDate
         const avgSalesCycle = 0;
 
         // 5. Overdue Invoices (count + total EGP)
         const overdueInvoices = await prisma.invoice.findMany({
             where: {
+                tenantId,
                 dueDate: { lt: now },
-                status: { in: ['pending', 'partial'] },
+                status: { in: ['pending', 'partial', 'overdue'] }, // Include 'overdue' status if used
             },
             include: {
                 customer: true,
@@ -60,6 +85,7 @@ export async function GET(request) {
         // 6. Low Stock SKUs (count)
         const lowStockProducts = await prisma.product.count({
             where: {
+                tenantId,
                 OR: [
                     { quantity: { lte: 10 } }, // Low stock threshold
                     { quantity: 0 }, // Out of stock
@@ -71,6 +97,7 @@ export async function GET(request) {
         const topCustomers = await prisma.invoice.groupBy({
             by: ['customerId'],
             where: {
+                tenantId,
                 issueDate: { gte: startOfMonth },
                 status: { in: ['paid', 'partial'] },
             },
@@ -91,20 +118,32 @@ export async function GET(request) {
                     where: { id: item.customerId },
                 });
                 return {
-                    id: customer.id,
-                    name: customer.name,
+                    id: customer?.id,
+                    name: customer?.name || 'Unknown',
                     value: item._sum.total,
                 };
             })
         );
 
         // 8. Top 5 Open Deals (value + stage)
-        // Note: Opportunity model not yet implemented in schema
-        const topDeals = [];
+        const topDeals = await prisma.opportunity.findMany({
+            where: {
+                tenantId,
+                stage: { notIn: ['won', 'lost'] },
+            },
+            orderBy: {
+                value: 'desc',
+            },
+            take: 5,
+            include: {
+                customer: true,
+            },
+        });
 
         // 9. Cash Collections (YTD)
         const cashCollections = await prisma.invoice.findMany({
             where: {
+                tenantId,
                 issueDate: { gte: startOfYear },
                 status: { in: ['paid', 'partial'] },
             },
@@ -112,20 +151,30 @@ export async function GET(request) {
         const cashCollectedYTD = cashCollections.reduce((sum, inv) => sum + inv.paidAmount, 0);
 
         // 10. RFQs Pending Response (count)
-        // Note: RFQ model not yet implemented in schema
-        const pendingRFQs = 0;
+        const pendingRFQs = await prisma.rFQ.count({
+            where: {
+                tenantId,
+                status: { in: ['pending', 'open'] },
+            },
+        });
 
         // Recent Activity (last 20 events)
         const recentInvoices = await prisma.invoice.findMany({
+            where: { tenantId },
             take: 5,
             orderBy: { createdAt: 'desc' },
             include: { customer: true },
         });
 
-        // Note: Opportunity model not yet implemented in schema
-        const recentOpportunities = [];
+        const recentOpportunities = await prisma.opportunity.findMany({
+            where: { tenantId },
+            take: 5,
+            orderBy: { createdAt: 'desc' },
+            include: { customer: true },
+        });
 
-        const recentPOs = await prisma.purchaseOrder.findMany({
+        const recentPOs = await prisma.advancedPurchaseOrder.findMany({
+            where: { tenantId },
             take: 5,
             orderBy: { createdAt: 'desc' },
             include: { supplier: true },
@@ -149,7 +198,7 @@ export async function GET(request) {
             ...recentPOs.map(po => ({
                 id: po.id,
                 type: 'purchase_order',
-                description: `أمر شراء #${po.poNumber} - ${po.supplier?.name}`,
+                description: `أمر شراء #${po.poNumber || po.id} - ${po.supplier?.name}`, // Fallback if poNumber is missing
                 timestamp: po.createdAt,
                 amount: po.total,
             })),

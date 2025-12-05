@@ -1,169 +1,84 @@
+// Error Boundary Component
 'use client';
 
-import React from 'react';
+import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 
-class ErrorBoundary extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { hasError: false, error: null, errorInfo: null };
-    }
+function ErrorFallback({ error, resetErrorBoundary }) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
+      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-12 h-12 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center">
+            <svg
+              className="w-6 h-6 text-red-600 dark:text-red-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">حدث خطأ غير متوقع</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400">نعتذر عن الإزعاج</p>
+          </div>
+        </div>
 
-    static getDerivedStateFromError(error) {
-        return { hasError: true };
-    }
+        <div className="bg-gray-50 dark:bg-gray-900 rounded p-4 mb-4">
+          <p className="text-sm font-mono text-gray-700 dark:text-gray-300 break-all">
+            {error.message}
+          </p>
+        </div>
 
-    componentDidCatch(error, errorInfo) {
-        console.error('Error caught by boundary:', error, errorInfo);
+        <div className="flex gap-3">
+          <button
+            onClick={resetErrorBoundary}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+          >
+            إعادة المحاولة
+          </button>
+          <button
+            onClick={() => (window.location.href = '/')}
+            className="flex-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white px-4 py-2 rounded-lg font-medium transition-colors"
+          >
+            الصفحة الرئيسية
+          </button>
+        </div>
 
-        this.setState({
-            error,
-            errorInfo,
-        });
-
-        // Log to error tracking service (e.g., Sentry)
-        if (typeof window !== 'undefined' && window.Sentry) {
-            window.Sentry.captureException(error, { extra: errorInfo });
-        }
-    }
-
-    render() {
-        if (this.state.hasError) {
-            return (
-                <div className="error-boundary">
-                    <div className="error-boundary-content">
-                        <div className="error-icon">⚠️</div>
-                        <h1>عذراً، حدث خطأ غير متوقع</h1>
-                        <p>نعتذر عن الإزعاج. يرجى تحديث الصفحة أو المحاولة لاحقاً.</p>
-
-                        {process.env.NODE_ENV === 'development' && this.state.error && (
-                            <details className="error-details">
-                                <summary>تفاصيل الخطأ (Development Only)</summary>
-                                <pre>{this.state.error.toString()}</pre>
-                                {this.state.errorInfo && (
-                                    <pre>{this.state.errorInfo.componentStack}</pre>
-                                )}
-                            </details>
-                        )}
-
-                        <div className="error-actions">
-                            <button
-                                onClick={() => window.location.reload()}
-                                className="btn btn-primary"
-                            >
-                                تحديث الصفحة
-                            </button>
-                            <button
-                                onClick={() => window.location.href = '/'}
-                                className="btn btn-secondary"
-                            >
-                                العودة للرئيسية
-                            </button>
-                        </div>
-                    </div>
-
-                    <style jsx>{`
-            .error-boundary {
-              min-height: 100vh;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              padding: 2rem;
-              background: var(--bg-primary);
-            }
-
-            .error-boundary-content {
-              max-width: 600px;
-              text-align: center;
-              padding: 3rem;
-              background: var(--card-bg);
-              border-radius: 12px;
-              box-shadow: var(--shadow-lg);
-            }
-
-            .error-icon {
-              font-size: 4rem;
-              margin-bottom: 1.5rem;
-            }
-
-            .error-boundary-content h1 {
-              font-size: 1.75rem;
-              color: var(--text-primary);
-              margin-bottom: 1rem;
-            }
-
-            .error-boundary-content p {
-              font-size: 1rem;
-              color: var(--text-secondary);
-              margin-bottom: 2rem;
-            }
-
-            .error-details {
-              text-align: right;
-              margin: 2rem 0;
-              padding: 1rem;
-              background: var(--bg-secondary);
-              border-radius: 8px;
-              border: 1px solid var(--border-color);
-            }
-
-            .error-details summary {
-              cursor: pointer;
-              font-weight: 600;
-              margin-bottom: 1rem;
-              color: var(--error-color);
-            }
-
-            .error-details pre {
-              white-space: pre-wrap;
-              word-wrap: break-word;
-              font-size: 0.875rem;
-              color: var(--text-secondary);
-              margin: 0.5rem 0;
-            }
-
-            .error-actions {
-              display: flex;
-              gap: 1rem;
-              justify-content: center;
-            }
-
-            .btn {
-              padding: 0.75rem 1.5rem;
-              border-radius: 8px;
-              font-weight: 600;
-              cursor: pointer;
-              transition: all 0.2s;
-              border: none;
-              font-size: 1rem;
-            }
-
-            .btn-primary {
-              background: var(--primary-color);
-              color: white;
-            }
-
-            .btn-primary:hover {
-              background: var(--primary-hover);
-              transform: translateY(-2px);
-            }
-
-            .btn-secondary {
-              background: var(--bg-secondary);
-              color: var(--text-primary);
-              border: 1px solid var(--border-color);
-            }
-
-            .btn-secondary:hover {
-              background: var(--bg-tertiary);
-              transform: translateY(-2px);
-            }
-          `}</style>
-                </div>
-            );
-        }
-
-        return this.props.children;
-    }
+        {process.env.NODE_ENV === 'development' && (
+          <details className="mt-4">
+            <summary className="cursor-pointer text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+              Stack Trace (Development Only)
+            </summary>
+            <pre className="mt-2 text-xs bg-gray-900 text-gray-100 p-4 rounded overflow-auto max-h-64">
+              {error.stack}
+            </pre>
+          </details>
+        )}
+      </div>
+    </div>
+  );
 }
 
-export default ErrorBoundary;
+export function ErrorBoundary({ children }) {
+  return (
+    <ReactErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onError={(error, errorInfo) => {
+        // Log to error reporting service (e.g., Sentry)
+        console.error('Error Boundary caught:', error, errorInfo);
+      }}
+      onReset={() => {
+        // Reset app state if needed
+        window.location.reload();
+      }}
+    >
+      {children}
+    </ReactErrorBoundary>
+  );
+}

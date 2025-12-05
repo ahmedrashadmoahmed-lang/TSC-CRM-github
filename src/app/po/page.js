@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import Header from '@/components/layout/Header';
 import Card from '@/components/ui/Card';
@@ -60,8 +60,13 @@ const supplierPerformance = [
 ];
 
 export default function PurchaseOrders() {
-    const [pos, setPos] = useState(mockPOs);
+    const [pos, setPos] = useState([]);
     const [activeTab, setActiveTab] = useState('list');
+
+    // Set data after mount to avoid hydration issues
+    useEffect(() => {
+        setPos(mockPOs);
+    }, []);
 
     const getStatusVariant = (status) => {
         switch (status) {
@@ -165,7 +170,7 @@ export default function PurchaseOrders() {
                                 <div className={styles.statCard}>
                                     <span className={styles.statIcon}>📦</span>
                                     <div>
-                                        <h3 className={styles.statValue}>{pos.length}</h3>
+                                        <h3 className={styles.statValue}>{Array.isArray(pos) ? pos.length : 0}</h3>
                                         <p className={styles.statLabel}>Total POs</p>
                                     </div>
                                 </div>
@@ -175,7 +180,7 @@ export default function PurchaseOrders() {
                                     <span className={styles.statIcon}>⏳</span>
                                     <div>
                                         <h3 className={styles.statValue}>
-                                            {pos.filter(po => po.status === 'pending').length}
+                                            {Array.isArray(pos) ? pos.filter(po => po.status === 'pending').length : 0}
                                         </h3>
                                         <p className={styles.statLabel}>Pending Approval</p>
                                     </div>
@@ -186,7 +191,7 @@ export default function PurchaseOrders() {
                                     <span className={styles.statIcon}>🚚</span>
                                     <div>
                                         <h3 className={styles.statValue}>
-                                            {pos.filter(po => po.status === 'shipped').length}
+                                            {Array.isArray(pos) ? pos.filter(po => po.status === 'shipped').length : 0}
                                         </h3>
                                         <p className={styles.statLabel}>In Transit</p>
                                     </div>
@@ -203,7 +208,7 @@ export default function PurchaseOrders() {
                             </Card>
                         </div>
 
-                        <Table columns={poColumns} data={pos} />
+                        <Table columns={poColumns} data={Array.isArray(pos) ? pos : []} />
                     </section>
                 )}
 

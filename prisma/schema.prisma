@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = "postgresql://postgres:Admin123@localhost:5433/erp_database?schema=public"
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 // ============================================
@@ -23,12 +23,12 @@ model Tenant {
   updatedAt DateTime @updatedAt
 
   // Relations
-  users               User[]
-  customers           Customer[]
-  suppliers           Supplier[]
-  products            Product[]
-  invoices            Invoice[]
-  purchaseOrders      PurchaseOrder[]
+  users     User[]
+  customers Customer[]
+  suppliers Supplier[]
+  products  Product[]
+  invoices  Invoice[]
+
   employees           Employee[]
   payroll             Payroll[]
   accounts            Account[]
@@ -50,9 +50,15 @@ model Tenant {
   budgets             Budget[]
   opportunities       Opportunity[]
   rfqs                RFQ[]
+  rfqTemplates        RFQTemplate[]
+  contracts           Contract[]
   tasks               Task[]
   tickets             Ticket[]
   activities          Activity[]
+  lostReasons         LostReason[]
+  advancedPOs         AdvancedPurchaseOrder[]
+  supplierPerformance SupplierPerformance[]
+  customerQuotes      CustomerQuote[]
 
   @@map("tenants")
 }
@@ -68,12 +74,16 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  tenant         Tenant         @relation(fields: [tenantId], references: [id])
-  auditLogs      AuditLog[]
-  notifications  Notification[]
-  assignedTasks  Task[]         @relation("AssignedTasks")
-  assignedTickets Ticket[]      @relation("AssignedTickets")
-  activities     Activity[]
+  tenant              Tenant                  @relation(fields: [tenantId], references: [id])
+  auditLogs           AuditLog[]
+  notifications       Notification[]
+  assignedTasks       Task[]                  @relation("AssignedTasks")
+  assignedTickets     Ticket[]                @relation("AssignedTickets")
+  activities          Activity[]
+  approvedRFQs        RFQ[]                   @relation("RFQApprover")
+  createdPOs          AdvancedPurchaseOrder[] @relation("POCreator")
+  qualityInspections  POQualityCheck[]        @relation("QualityInspector")
+  approvedInspections POQualityCheck[]        @relation("QualityApprover")
 
   @@index([tenantId])
   @@map("users")
@@ -91,33 +101,36 @@ model Customer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  tenant        Tenant        @relation(fields: [tenantId], references: [id])
+  tenant        Tenant          @relation(fields: [tenantId], references: [id])
   invoices      Invoice[]
   opportunities Opportunity[]
   tasks         Task[]
   tickets       Ticket[]
+  quotes        CustomerQuote[]
 
   @@index([tenantId])
   @@map("customers")
 }
 
 model Supplier {
-  id              String   @id @default(cuid())
-  name            String
-  email           String?
-  phone           String?
-  address         String?
-  taxNumber       String?
-  rating          Float?
-  onTimeDelivery  Float?
-  status          String   @default("active")
-  tenantId        String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id           String   @id @default(cuid())
+  name         String
+  email        String?
+  phone        String?
+  address      String?
+  taxNumber    String?
+  paymentTerms String?
+  status       String   @default("active")
+  tenantId     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  tenant         Tenant          @relation(fields: [tenantId], references: [id])
-  purchaseOrders PurchaseOrder[]
-  rfqs           RFQ[]
+  tenant       Tenant                  @relation(fields: [tenantId], references: [id])
+  rfqSuppliers RFQSupplier[]
+  quotes       SupplierQuote[]
+  contracts    Contract[]
+  advancedPOs  AdvancedPurchaseOrder[]
+  performance  SupplierPerformance[]
 
   @@index([tenantId])
   @@map("suppliers")
@@ -139,10 +152,11 @@ model Product {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  tenant              Tenant                @relation(fields: [tenantId], references: [id])
-  invoiceItems        InvoiceItem[]
-  purchaseOrderItems  PurchaseOrderItem[]
-  inventoryMovements  InventoryMovement[]
+  tenant             Tenant              @relation(fields: [tenantId], references: [id])
+  invoiceItems       InvoiceItem[]
+  inventoryMovements InventoryMovement[]
+  poItems            POItem[]
+  quoteItems         CustomerQuoteItem[]
 
   @@index([tenantId])
   @@map("products")
@@ -199,66 +213,23 @@ model InvoiceItem {
   @@map("invoice_items")
 }
 
-model PurchaseOrder {
-  id              String   @id @default(cuid())
-  orderNumber     String   @unique
-  supplierId      String
-  orderDate       DateTime
-  expectedDate    DateTime
-  subtotal        Float
-  tax             Float
-  total           Float
-  status          String   @default("pending") // pending, approved, received, cancelled
-  notes           String?
-  tenantId        String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  supplier Supplier            @relation(fields: [supplierId], references: [id])
-  tenant   Tenant              @relation(fields: [tenantId], references: [id])
-  items    PurchaseOrderItem[]
-
-  @@index([supplierId])
-  @@index([tenantId])
-  @@index([status])
-  @@map("purchase_orders")
-}
-
-model PurchaseOrderItem {
-  id              String   @id @default(cuid())
-  purchaseOrderId String
-  productId       String
-  description     String
-  quantity        Float
-  unitPrice       Float
-  tax             Float
-  total           Float
-  createdAt       DateTime @default(now())
-
-  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
-  product       Product       @relation(fields: [productId], references: [id])
-
-  @@index([purchaseOrderId])
-  @@map("purchase_order_items")
-}
-
 // ============================================
 // HR MODELS
 // ============================================
 
 model Employee {
-  id          String   @id @default(cuid())
-  name        String
-  email       String?
-  phone       String?
-  position    String
-  department  String?
-  salary      Float
-  hireDate    DateTime
-  status      String   @default("active")
-  tenantId    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(cuid())
+  name       String
+  email      String?
+  phone      String?
+  position   String
+  department String?
+  salary     Float
+  hireDate   DateTime
+  status     String   @default("active")
+  tenantId   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   tenant  Tenant    @relation(fields: [tenantId], references: [id])
   payroll Payroll[]
@@ -268,19 +239,19 @@ model Employee {
 }
 
 model Payroll {
-  id            String   @id @default(cuid())
-  employeeId    String
-  month         String
-  year          Int
-  basicSalary   Float
-  allowances    Float    @default(0)
-  deductions    Float    @default(0)
-  netSalary     Float
-  status        String   @default("pending") // pending, paid
-  paymentDate   DateTime?
-  tenantId      String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id          String    @id @default(cuid())
+  employeeId  String
+  month       String
+  year        Int
+  basicSalary Float
+  allowances  Float     @default(0)
+  deductions  Float     @default(0)
+  netSalary   Float
+  status      String    @default("pending") // pending, paid
+  paymentDate DateTime?
+  tenantId    String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   employee Employee @relation(fields: [employeeId], references: [id])
   tenant   Tenant   @relation(fields: [tenantId], references: [id])
@@ -295,31 +266,31 @@ model Payroll {
 // ============================================
 
 model Account {
-  id           String   @id @default(cuid())
-  code         String
-  name         String
-  type         String   // asset, liability, equity, revenue, expense
-  parentId     String?
-  level        Int      @default(0)
-  balance      Float    @default(0)
-  currencyId   String?
-  taxRateId    String?
-  isActive     Boolean  @default(true)
-  tenantId     String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id         String   @id @default(cuid())
+  code       String
+  name       String
+  type       String // asset, liability, equity, revenue, expense
+  parentId   String?
+  level      Int      @default(0)
+  balance    Float    @default(0)
+  currencyId String?
+  taxRateId  String?
+  isActive   Boolean  @default(true)
+  tenantId   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  tenant              Tenant        @relation(fields: [tenantId], references: [id])
-  parent              Account?      @relation("AccountHierarchy", fields: [parentId], references: [id])
-  children            Account[]     @relation("AccountHierarchy")
-  currency            Currency?     @relation(fields: [currencyId], references: [id])
-  taxRate             TaxRate?      @relation("AccountTaxRate", fields: [taxRateId], references: [id])
-  journalLines        JournalLine[]
-  taxRates            TaxRate[]     @relation("TaxLiabilityAccount")
-  bankAccounts        BankAccount[]
-  fixedAssetsAsset    FixedAsset[]  @relation("AssetAccount")
-  fixedAssetsDepr     FixedAsset[]  @relation("DepreciationAccount")
-  budgets             Budget[]
+  tenant           Tenant        @relation(fields: [tenantId], references: [id])
+  parent           Account?      @relation("AccountHierarchy", fields: [parentId], references: [id])
+  children         Account[]     @relation("AccountHierarchy")
+  currency         Currency?     @relation(fields: [currencyId], references: [id])
+  taxRate          TaxRate?      @relation("AccountTaxRate", fields: [taxRateId], references: [id])
+  journalLines     JournalLine[]
+  taxRates         TaxRate[]     @relation("TaxLiabilityAccount")
+  bankAccounts     BankAccount[]
+  fixedAssetsAsset FixedAsset[]  @relation("AssetAccount")
+  fixedAssetsDepr  FixedAsset[]  @relation("DepreciationAccount")
+  budgets          Budget[]
 
   @@unique([code, tenantId])
   @@index([tenantId])
@@ -377,14 +348,14 @@ model JournalLine {
 // ============================================
 
 model InventoryMovement {
-  id          String   @id @default(cuid())
-  productId   String
-  type        String   // in, out, adjustment
-  quantity    Float
-  reference   String?
-  notes       String?
-  tenantId    String
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  productId String
+  type      String // in, out, adjustment
+  quantity  Float
+  reference String?
+  notes     String?
+  tenantId  String
+  createdAt DateTime @default(now())
 
   product Product @relation(fields: [productId], references: [id])
   tenant  Tenant  @relation(fields: [tenantId], references: [id])
@@ -403,7 +374,7 @@ model Notification {
   userId    String
   title     String
   message   String
-  type      String   // info, success, warning, error
+  type      String // info, success, warning, error
   read      Boolean  @default(false)
   tenantId  String
   createdAt DateTime @default(now())
@@ -417,19 +388,19 @@ model Notification {
 }
 
 model AuditLog {
-  id         String   @id @default(cuid())
-  userId     String
-  userName   String
-  userEmail  String
-  action     String   // CREATE, UPDATE, DELETE, LOGIN, LOGOUT
-  entity     String   // Invoice, Customer, Product, etc.
-  entityId   String?
-  oldData    Json?
-  newData    Json?
-  ipAddress  String?
-  userAgent  String?
-  tenantId   String
-  createdAt  DateTime @default(now())
+  id        String   @id @default(cuid())
+  userId    String
+  userName  String
+  userEmail String
+  action    String // CREATE, UPDATE, DELETE, LOGIN, LOGOUT
+  entity    String // Invoice, Customer, Product, etc.
+  entityId  String?
+  oldData   String? // JSON string for SQLite
+  newData   String? // JSON string for SQLite
+  ipAddress String?
+  userAgent String?
+  tenantId  String
+  createdAt DateTime @default(now())
 
   user   User   @relation(fields: [userId], references: [id])
   tenant Tenant @relation(fields: [tenantId], references: [id])
@@ -469,7 +440,7 @@ model EInvoiceSubmission {
   submissionUUID String    @unique
   internalId     String
   status         String // pending, submitted, accepted, rejected
-  etaResponse    Json?
+  etaResponse    String? // JSON string for SQLite
   errorMessage   String?
   submittedAt    DateTime?
   acceptedAt     DateTime?
@@ -491,16 +462,16 @@ model EInvoiceSubmission {
 // ============================================
 
 model Currency {
-  id           String   @id @default(cuid())
-  code         String   @unique // USD, EUR, EGP
-  name         String
-  symbol       String
-  rate         Float    @default(1) // Exchange rate to base currency
-  isBase       Boolean  @default(false)
-  isActive     Boolean  @default(true)
-  tenantId     String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id        String   @id @default(cuid())
+  code      String   @unique // USD, EUR, EGP
+  name      String
+  symbol    String
+  rate      Float    @default(1) // Exchange rate to base currency
+  isBase    Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  tenantId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   tenant       Tenant        @relation(fields: [tenantId], references: [id])
   accounts     Account[]
@@ -514,8 +485,8 @@ model TaxRate {
   id        String   @id @default(cuid())
   name      String
   rate      Float
-  type      String   // VAT, Sales Tax, Withholding
-  accountId String   // Tax liability account
+  type      String // VAT, Sales Tax, Withholding
+  accountId String // Tax liability account
   isActive  Boolean  @default(true)
   tenantId  String
   createdAt DateTime @default(now())
@@ -530,15 +501,15 @@ model TaxRate {
 }
 
 model CostCenter {
-  id           String   @id @default(cuid())
-  code         String
-  name         String
-  description  String?
-  parentId     String?
-  isActive     Boolean  @default(true)
-  tenantId     String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id          String   @id @default(cuid())
+  code        String
+  name        String
+  description String?
+  parentId    String?
+  isActive    Boolean  @default(true)
+  tenantId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   tenant       Tenant        @relation(fields: [tenantId], references: [id])
   parent       CostCenter?   @relation("CostCenterHierarchy", fields: [parentId], references: [id])
@@ -572,7 +543,7 @@ model Budget {
 
 model BankAccount {
   id             String    @id @default(cuid())
-  accountId      String    // Link to GL account
+  accountId      String // Link to GL account
   bankName       String
   accountNumber  String
   iban           String?
@@ -592,18 +563,18 @@ model BankAccount {
 }
 
 model BankTransaction {
-  id             String        @id @default(cuid())
+  id             String   @id @default(cuid())
   bankAccountId  String
   date           DateTime
   description    String
   reference      String?
-  debit          Float         @default(0)
-  credit         Float         @default(0)
+  debit          Float    @default(0)
+  credit         Float    @default(0)
   balance        Float
-  isReconciled   Boolean       @default(false)
+  isReconciled   Boolean  @default(false)
   journalEntryId String?
   tenantId       String
-  createdAt      DateTime      @default(now())
+  createdAt      DateTime @default(now())
 
   bankAccount  BankAccount   @relation(fields: [bankAccountId], references: [id])
   journalEntry JournalEntry? @relation(fields: [journalEntryId], references: [id])
@@ -623,8 +594,8 @@ model FixedAsset {
   purchaseDate          DateTime
   purchasePrice         Float
   salvageValue          Float    @default(0)
-  usefulLife            Int      // in months
-  depreciationMethod    String   // Straight-line, Declining balance
+  usefulLife            Int // in months
+  depreciationMethod    String // Straight-line, Declining balance
   accumulatedDepr       Float    @default(0)
   bookValue             Float
   isActive              Boolean  @default(true)
@@ -662,11 +633,11 @@ model DepreciationEntry {
 model RecurringEntry {
   id            String    @id @default(cuid())
   description   String
-  frequency     String    // Daily, Weekly, Monthly, Yearly
+  frequency     String // Daily, Weekly, Monthly, Yearly
   startDate     DateTime
   endDate       DateTime?
   nextDate      DateTime
-  templateLines Json      // Array of debit/credit lines
+  templateLines String // JSON string for SQLite - Array of debit/credit lines
   isActive      Boolean   @default(true)
   lastGenerated DateTime?
   tenantId      String
@@ -710,37 +681,257 @@ model Opportunity {
   stage       String    @default("lead") // lead, qualified, proposal, negotiation, won, lost
   probability Int       @default(0)
   closedDate  DateTime?
-  tenantId    String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
 
-  customer Customer @relation(fields: [customerId], references: [id])
-  tenant   Tenant   @relation(fields: [tenantId], references: [id])
-  tasks    Task[]
+  // Pipeline Hygiene & Health
+  lastActivityDate DateTime?
+  isArchived       Boolean   @default(false)
+  archivedAt       DateTime?
+  archivedReason   String?
+  healthScore      Int? // 0-100
+  velocityScore    Float? // Days per stage
+
+  tenantId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  customer     Customer        @relation(fields: [customerId], references: [id])
+  tenant       Tenant          @relation(fields: [tenantId], references: [id])
+  tasks        Task[]
+  stageHistory StageHistory[]
+  lostReasons  LostReason[]
+  quotes       CustomerQuote[]
+  rfqs         RFQ[]
 
   @@index([tenantId])
   @@index([stage])
   @@index([customerId])
+  @@index([lastActivityDate])
+  @@index([isArchived])
+  @@index([healthScore])
   @@map("opportunities")
 }
 
 model RFQ {
-  id          String   @id @default(cuid())
-  rfqNumber   String   @unique
-  supplierId  String?
-  status      String   @default("pending") // pending, responded, accepted, rejected
-  description String
-  dueDate     DateTime
-  tenantId    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String  @id @default(cuid())
+  rfqNumber   String  @unique
+  title       String
+  description String?
 
-  supplier Supplier? @relation(fields: [supplierId], references: [id])
-  tenant   Tenant    @relation(fields: [tenantId], references: [id])
+  // Workflow & Status
+  stage    String @default("draft") // draft, sent, waiting, comparing, selected, po_created, closed
+  status   String @default("active") // active, cancelled, archived
+  priority String @default("medium") // low, medium, high, urgent
+
+  // Dates
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  sentAt    DateTime?
+  deadline  DateTime?
+  closedAt  DateTime?
+
+  // Financial
+  budget        Float?
+  currency      String @default("EGP")
+  estimatedCost Float?
+
+  // Metadata
+  template  String?
+  notes     String?
+  createdBy String
+
+  // Approval
+  approvalStatus String  @default("not_required") // pending, approved, rejected, not_required
+  approverId     String?
+  approver       User?   @relation("RFQApprover", fields: [approverId], references: [id])
+
+  // Relations
+  tenantId        String
+  tenant          Tenant          @relation(fields: [tenantId], references: [id])
+  opportunityId   String?
+  opportunity     Opportunity?    @relation(fields: [opportunityId], references: [id])
+  selectedQuoteId String?         @unique
+  selectedQuote   SupplierQuote?  @relation("SelectedQuote", fields: [selectedQuoteId], references: [id])
+  items           RFQItem[]
+  suppliers       RFQSupplier[]
+  quotes          SupplierQuote[] @relation("RFQQuotes")
+  timeline        RFQTimeline[]
+  attachments     RFQAttachment[]
+  contracts       Contract[]
 
   @@index([tenantId])
+  @@index([stage])
   @@index([status])
+  @@index([deadline])
+  @@index([createdAt])
   @@map("rfqs")
+}
+
+model RFQItem {
+  id    String @id @default(cuid())
+  rfqId String
+  rfq   RFQ    @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+
+  // Product Info
+  productName String
+  description String?
+  quantity    Float
+  unit        String  @default("pcs")
+
+  // Specifications
+  specifications String? // JSON string for SQLite
+  technicalSpecs String?
+
+  // Terms
+  deliveryTerms    String?
+  warrantyTerms    String?
+  qualityStandards String?
+  notes            String?
+
+  // Pricing
+  estimatedPrice Float?
+
+  createdAt DateTime @default(now())
+
+  @@index([rfqId])
+  @@map("rfq_items")
+}
+
+model RFQSupplier {
+  id         String   @id @default(cuid())
+  rfqId      String
+  rfq        RFQ      @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  supplierId String
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
+
+  // Status
+  status      String    @default("invited") // invited, viewed, responded, declined
+  invitedAt   DateTime  @default(now())
+  viewedAt    DateTime?
+  respondedAt DateTime?
+
+  // Notifications
+  emailSent    Boolean @default(false)
+  reminderSent Boolean @default(false)
+
+  @@unique([rfqId, supplierId])
+  @@index([rfqId])
+  @@index([supplierId])
+  @@map("rfq_suppliers")
+}
+
+model SupplierQuote {
+  id         String   @id @default(cuid())
+  rfqId      String
+  rfq        RFQ      @relation("RFQQuotes", fields: [rfqId], references: [id], onDelete: Cascade)
+  supplierId String
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
+
+  // Status tracking
+  status      String    @default("pending") // pending, submitted, selected, rejected
+  respondedAt DateTime?
+
+  // Quote Details
+  quoteNumber  String?
+  totalPrice   Float
+  currency     String    @default("EGP")
+  deliveryTime Int // days
+  paymentTerms String?
+  validUntil   DateTime?
+
+  // Evaluation
+  score           Float?
+  rank            Int?
+  isSelected      Boolean @default(false)
+  rejectionReason String?
+
+  // Additional Info
+  notes           String?
+  termsConditions String?
+
+  // Items
+  items         QuoteItem[]
+  attachments   QuoteAttachment[]
+  contracts     Contract[]
+  selectedByRFQ RFQ?              @relation("SelectedQuote")
+
+  // Timestamps
+  submittedAt DateTime  @default(now())
+  evaluatedAt DateTime?
+  selectedAt  DateTime?
+
+  @@index([rfqId])
+  @@index([supplierId])
+  @@index([isSelected])
+  @@map("supplier_quotes")
+}
+
+model QuoteItem {
+  id      String        @id @default(cuid())
+  quoteId String
+  quote   SupplierQuote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  productName String
+  description String?
+  quantity    Float
+  unitPrice   Float
+  tax         Float   @default(0)
+  total       Float
+
+  deliveryTime Int? // days for this specific item
+  notes        String?
+
+  @@index([quoteId])
+  @@map("quote_items")
+}
+
+model RFQTimeline {
+  id    String @id @default(cuid())
+  rfqId String
+  rfq   RFQ    @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+
+  action      String // created, sent, quote_received, evaluated, selected, etc.
+  description String
+  userId      String?
+  metadata    String? // JSON string for SQLite
+
+  createdAt DateTime @default(now())
+
+  @@index([rfqId])
+  @@index([createdAt])
+  @@map("rfq_timeline")
+}
+
+model RFQAttachment {
+  id    String @id @default(cuid())
+  rfqId String
+  rfq   RFQ    @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+
+  fileName   String
+  fileUrl    String
+  fileType   String
+  fileSize   Int
+  uploadedBy String
+
+  createdAt DateTime @default(now())
+
+  @@index([rfqId])
+  @@map("rfq_attachments")
+}
+
+model QuoteAttachment {
+  id      String        @id @default(cuid())
+  quoteId String
+  quote   SupplierQuote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  fileName String
+  fileUrl  String
+  fileType String
+  fileSize Int
+
+  createdAt DateTime @default(now())
+
+  @@index([quoteId])
+  @@map("quote_attachments")
 }
 
 model Task {
@@ -794,12 +985,12 @@ model Ticket {
 
 model Activity {
   id          String   @id @default(cuid())
-  type        String   // client_added, deal_created, task_completed, etc.
+  type        String // client_added, deal_created, task_completed, etc.
   description String
   userId      String
-  entityType  String?  // client, deal, task, ticket
+  entityType  String? // client, deal, task, ticket
   entityId    String?
-  metadata    Json?
+  metadata    String? // JSON string for SQLite
   tenantId    String
   createdAt   DateTime @default(now())
 
@@ -811,4 +1002,528 @@ model Activity {
   @@index([createdAt])
   @@index([entityType, entityId])
   @@map("activities")
+}
+
+// ============================================
+// SALES CYCLE TRACKING
+// ============================================
+
+model StageHistory {
+  id            String   @id @default(cuid())
+  opportunityId String
+  stage         String
+  changedAt     DateTime @default(now())
+  changedBy     String?
+  previousStage String?
+  notes         String?
+  createdAt     DateTime @default(now())
+
+  opportunity Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+
+  @@index([opportunityId])
+  @@index([stage])
+  @@index([changedAt])
+  @@map("stage_history")
+}
+
+// ============================================
+// LOST REASONS TRACKING
+// ============================================
+
+model LostReason {
+  id          String  @id @default(cuid())
+  category    String // Competitor, Price, Timing, No Interest, Budget, Other
+  subcategory String? // More specific reason
+  description String?
+
+  // Competitor Analysis
+  competitorName  String?
+  competitorPrice Float?
+
+  // Relations
+  opportunityId String
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id])
+
+  // Metadata
+  createdBy String?
+  createdAt DateTime @default(now())
+
+  @@index([category])
+  @@index([opportunityId])
+  @@index([tenantId])
+  @@index([createdAt])
+  @@index([competitorName])
+  @@map("lost_reasons")
+}
+
+model RFQTemplate {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  category    String // equipment, supplies, services, raw_materials, etc.
+
+  // Template Configuration
+  isDefault  Boolean @default(false)
+  isActive   Boolean @default(true)
+  usageCount Int     @default(0)
+
+  // Fields Configuration
+  fields String // JSON string for SQLite - Dynamic field definitions
+
+  // Metadata
+  tenantId  String
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([category])
+  @@index([isDefault])
+  @@map("rfq_templates")
+}
+
+// Contract Model for auto-generated contracts from RFQs
+model Contract {
+  id             String @id @default(cuid())
+  contractNumber String @unique
+  title          String
+  content        String // JSON stringified contract data
+  status         String @default("draft") // draft, pending_approval, approved, signed, active, completed, terminated
+
+  // Relations
+  rfqId      String
+  quoteId    String
+  supplierId String
+
+  // Financial
+  totalAmount Float
+  currency    String
+
+  // Metadata
+  tenantId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant   Tenant        @relation(fields: [tenantId], references: [id])
+  rfq      RFQ           @relation(fields: [rfqId], references: [id])
+  quote    SupplierQuote @relation(fields: [quoteId], references: [id])
+  supplier Supplier      @relation(fields: [supplierId], references: [id])
+
+  @@index([tenantId])
+  @@index([rfqId])
+  @@index([status])
+  @@index([contractNumber])
+  @@map("contracts")
+}
+
+// ============================================
+// ADVANCED PURCHASE ORDER SYSTEM
+// ============================================
+
+model AdvancedPurchaseOrder {
+  id          String  @id @default(cuid())
+  poNumber    String  @unique
+  rfqId       String?
+  supplierId  String
+  status      String  @default("draft") // draft, pending_approval, approved, ordered, shipped, delivered, closed, cancelled
+  totalAmount Float
+  currency    String  @default("EGP")
+
+  // Dates
+  orderDate        DateTime  @default(now())
+  expectedDelivery DateTime?
+  actualDelivery   DateTime?
+
+  // Budget & Cost
+  budgetId       String?
+  budgetExceeded Boolean @default(false)
+  estimatedCost  Float?
+  landedCost     Float? // Total cost including shipping, taxes, duties
+
+  // Approval
+  approvalStatus  String? @default("pending") // pending, approved, rejected
+  approvalLevel   Int     @default(1)
+  currentApprover String?
+
+  // Delivery
+  warehouseId     String?
+  deliveryAddress String?
+  shippingMethod  String?
+
+  // Financial
+  paymentTerms   String? // advance, cod, credit_30, credit_60, installments
+  paymentStatus  String? @default("pending") // pending, partial, paid
+  advancePayment Float?
+
+  // Quality
+  qualityStatus      String? @default("pending") // pending, passed, failed, partial
+  inspectionRequired Boolean @default(true)
+
+  // Tracking
+  trackingEnabled Boolean @default(true)
+  carrier         String?
+  trackingNumber  String?
+
+  // Risk Assessment
+  supplierRisk Int? // 0-100
+  deliveryRisk Int? // 0-100
+  overallRisk  String? // low, medium, high, critical
+
+  // Notes
+  notes         String?
+  internalNotes String?
+
+  // Relations
+  supplier      Supplier         @relation(fields: [supplierId], references: [id])
+  items         POItem[]
+  shipments     POShipment[]
+  documents     PODocument[]
+  approvals     POApproval[]
+  payments      POPayment[]
+  qualityChecks POQualityCheck[]
+
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  createdBy String
+  creator   User     @relation("POCreator", fields: [createdBy], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([supplierId])
+  @@index([status])
+  @@index([poNumber])
+  @@index([rfqId])
+  @@map("advanced_purchase_orders")
+}
+
+model POItem {
+  id          String  @id @default(cuid())
+  poId        String
+  productId   String?
+  productName String
+  description String?
+  quantity    Int
+  unitPrice   Float
+  totalPrice  Float
+
+  // Delivery tracking
+  quantityReceived Int @default(0)
+  quantityPending  Int
+  quantityRejected Int @default(0)
+
+  // Cost breakdown
+  shippingCost      Float?
+  taxAmount         Float?
+  customsDuty       Float?
+  otherCosts        Float?
+  landedCostPerUnit Float?
+
+  // Serial/Batch tracking
+  serialNumbers String? // JSON array
+  batchNumbers  String? // JSON array
+  expiryDate    DateTime?
+
+  // Specifications
+  specifications String? // JSON
+
+  po      AdvancedPurchaseOrder @relation(fields: [poId], references: [id], onDelete: Cascade)
+  product Product?              @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([poId])
+  @@index([productId])
+  @@map("po_items")
+}
+
+model POShipment {
+  id             String @id @default(cuid())
+  poId           String
+  shipmentNumber String @unique
+  type           String @default("full") // full, partial
+  status         String @default("pending") // pending, shipped, in_transit, delivered, delayed, cancelled
+
+  // Carrier info
+  carrier        String?
+  trackingNumber String?
+  trackingUrl    String?
+
+  // Dates
+  shippedDate     DateTime?
+  expectedArrival DateTime?
+  actualArrival   DateTime?
+
+  // Location
+  origin          String?
+  destination     String?
+  currentLocation String?
+
+  // Items in this shipment
+  items String? // JSON array of {itemId, quantity}
+
+  // Notes
+  notes String?
+
+  po AdvancedPurchaseOrder @relation(fields: [poId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([poId])
+  @@index([status])
+  @@index([shipmentNumber])
+  @@map("po_shipments")
+}
+
+model PODocument {
+  id       String  @id @default(cuid())
+  poId     String
+  type     String // contract, invoice, specs, certificate, quality_report, shipping_doc
+  title    String
+  filename String
+  filepath String
+  filesize Int
+  mimeType String?
+
+  // Access control
+  accessLevel String @default("internal") // public, internal, restricted
+
+  // Metadata
+  uploadedBy  String
+  description String?
+
+  po AdvancedPurchaseOrder @relation(fields: [poId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([poId])
+  @@index([type])
+  @@map("po_documents")
+}
+
+model POApproval {
+  id           String  @id @default(cuid())
+  poId         String
+  level        Int // 1, 2, 3 (based on amount)
+  approverId   String
+  approverName String
+  approverRole String
+  status       String  @default("pending") // pending, approved, rejected
+  comments     String?
+  signature    String? // Digital signature or approval code
+
+  // Approval rules
+  amountThreshold Float?
+  requiredRole    String?
+
+  po AdvancedPurchaseOrder @relation(fields: [poId], references: [id], onDelete: Cascade)
+
+  approvedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([poId])
+  @@index([approverId])
+  @@index([status])
+  @@map("po_approvals")
+}
+
+model POPayment {
+  id            String @id @default(cuid())
+  poId          String
+  paymentNumber String @unique
+  type          String // advance, installment, final, full
+  amount        Float
+  currency      String @default("EGP")
+  status        String @default("pending") // pending, processing, paid, failed
+
+  // Payment details
+  paymentMethod String? // bank_transfer, check, cash, credit
+  paymentDate   DateTime?
+  dueDate       DateTime?
+
+  // Bank details
+  bankReference String?
+  transactionId String?
+
+  // Notes
+  notes String?
+
+  po AdvancedPurchaseOrder @relation(fields: [poId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([poId])
+  @@index([status])
+  @@index([paymentNumber])
+  @@map("po_payments")
+}
+
+model POQualityCheck {
+  id               String @id @default(cuid())
+  poId             String
+  inspectionNumber String @unique
+  inspectorId      String
+  inspectorUser    User   @relation("QualityInspector", fields: [inspectorId], references: [id])
+  inspectorName    String
+  status           String @default("pending") // pending, in_progress, passed, failed, partial
+
+  approverId   String?
+  approverUser User?   @relation("QualityApprover", fields: [approverId], references: [id])
+
+  // Inspection details
+  inspectionDate DateTime?
+  location       String?
+
+  // Results
+  overallScore Int? // 0-100
+  passedItems  Int  @default(0)
+  failedItems  Int  @default(0)
+  partialItems Int  @default(0)
+
+  // Defects
+  defects     String? // JSON array of defects
+  defectCount Int     @default(0)
+
+  // Actions
+  actionTaken String? // accept, reject, partial_accept, rework
+
+  // Notes
+  notes           String?
+  recommendations String?
+
+  // Attachments
+  photos  String? // JSON array of photo URLs
+  reports String? // JSON array of report URLs
+
+  po AdvancedPurchaseOrder @relation(fields: [poId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([poId])
+  @@index([inspectorId])
+  @@index([status])
+  @@index([inspectionNumber])
+  @@map("po_quality_checks")
+}
+
+model SupplierPerformance {
+  id               String  @id @default(cuid())
+  supplierId       String
+  poId             String?
+  evaluationPeriod String? // monthly, quarterly, yearly
+
+  // Performance scores (0-100)
+  deliveryScore   Int @default(0)
+  qualityScore    Int @default(0)
+  complianceScore Int @default(0)
+  responseScore   Int @default(0)
+  pricingScore    Int @default(0)
+  overallScore    Int @default(0)
+
+  // Metrics
+  onTimeDeliveries Int   @default(0)
+  totalDeliveries  Int   @default(0)
+  defectRate       Float @default(0)
+  returnRate       Float @default(0)
+  avgResponseTime  Int? // hours
+
+  // Risk assessment
+  riskLevel   String? // low, medium, high, critical
+  riskFactors String? // JSON array
+
+  // Evaluation
+  evaluatedBy     String
+  evaluatorName   String
+  comments        String?
+  recommendations String?
+
+  supplier Supplier @relation(fields: [supplierId], references: [id])
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([supplierId])
+  @@index([tenantId])
+  @@index([evaluationPeriod])
+  @@map("supplier_performance")
+}
+
+// ============================================
+// CUSTOMER QUOTES
+// ============================================
+
+model CustomerQuote {
+  id            String @id @default(cuid())
+  quoteNumber   String @unique
+  opportunityId String
+  customerId    String
+
+  // Status & Dates
+  status     String   @default("draft") // draft, sent, accepted, rejected, expired
+  issueDate  DateTime @default(now())
+  validUntil DateTime
+
+  // Financials
+  subtotal Float
+  tax      Float
+  discount Float  @default(0)
+  total    Float
+  currency String @default("EGP")
+
+  // Terms & Notes
+  terms String?
+  notes String?
+
+  // Metadata
+  tenantId  String
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  opportunity Opportunity         @relation(fields: [opportunityId], references: [id])
+  customer    Customer            @relation(fields: [customerId], references: [id])
+  tenant      Tenant              @relation(fields: [tenantId], references: [id])
+  items       CustomerQuoteItem[]
+
+  @@index([tenantId])
+  @@index([opportunityId])
+  @@index([customerId])
+  @@index([status])
+  @@map("customer_quotes")
+}
+
+model CustomerQuoteItem {
+  id          String  @id @default(cuid())
+  quoteId     String
+  productId   String?
+  description String
+  quantity    Float
+  unitPrice   Float
+  cost        Float   @default(0) // For profit margin calculation
+  tax         Float   @default(0)
+  discount    Float   @default(0)
+  total       Float
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  quote   CustomerQuote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  product Product?      @relation(fields: [productId], references: [id])
+
+  @@index([quoteId])
+  @@index([productId])
+  @@map("customer_quote_items")
 }

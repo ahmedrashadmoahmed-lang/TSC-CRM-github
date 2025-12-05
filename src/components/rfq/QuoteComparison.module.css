@@ -1,0 +1,226 @@
+.comparison {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.header h2 {
+    margin: 0 0 4px 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.header p {
+    margin: 0;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.exportBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.exportBtn:hover {
+    background: #2563eb;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.summaryCard {
+    padding: 16px;
+    background: #f9fafb;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+}
+
+.value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.tableWrapper {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table thead th {
+    padding: 12px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    border-bottom: 2px solid #e5e7eb;
+    cursor: pointer;
+}
+
+.table thead th:hover {
+    background: #f9fafb;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+    transition: all 0.2s;
+}
+
+.table tbody tr:hover {
+    background: #f9fafb;
+}
+
+.table tbody tr.winner {
+    background: #f0fdf4;
+    border-left: 4px solid #10b981;
+}
+
+.table tbody td {
+    padding: 16px 12px;
+}
+
+.rank {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.rank svg {
+    color: #f59e0b;
+}
+
+.supplier {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.name {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.rating {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.price {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.amount {
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.diff {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #ef4444;
+}
+
+.lowest {
+    font-size: 12px;
+    color: #10b981;
+    font-weight: 600;
+}
+
+.delivery {
+    font-weight: 500;
+}
+
+.terms {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.scoreCell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.scoreBar {
+    flex: 1;
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.scoreFill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+    border-radius: 4px;
+    transition: width 0.3s;
+}
+
+.scoreValue {
+    font-weight: 700;
+    color: #1f2937;
+    min-width: 40px;
+}
+
+.selectBtn {
+    padding: 8px 16px;
+    background: white;
+    border: 2px solid #3b82f6;
+    border-radius: 6px;
+    color: #3b82f6;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.selectBtn:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+.empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #9ca3af;
+}

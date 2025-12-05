@@ -1,21 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { toast } from 'react-hot-toast';
 
-// Hook for fetching data
+// Hook for data fetching
 export function useFetch(url, options = {}) {
     const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch(url, options);
+        if (!url) return;
 
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch(url, options);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
                 const result = await response.json();
                 setData(result);
                 setError(null);
@@ -147,7 +148,7 @@ export function useClickOutside(ref, handler) {
 
 // Hook for previous value
 export function usePrevious(value) {
-    const ref = useState();
+    const ref = useRef();
 
     useEffect(() => {
         ref.current = value;
@@ -276,7 +277,7 @@ export function usePagination(items, itemsPerPage = 10) {
 
 // Hook for interval
 export function useInterval(callback, delay) {
-    const savedCallback = useState();
+    const savedCallback = useRef();
 
     useEffect(() => {
         savedCallback.current = callback;
@@ -313,9 +314,6 @@ export function useCopyToClipboard() {
 
     return [copiedText, copy];
 }
-
-// Hook for toast notifications
-import { toast } from 'react-hot-toast';
 
 export function useToast() {
     return {

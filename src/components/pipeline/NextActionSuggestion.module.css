@@ -1,0 +1,163 @@
+.suggestionCard {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 1px solid #bae6fd;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.aiIcon {
+    color: #3b82f6;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+}
+
+.label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #3b82f6;
+    letter-spacing: 0.5px;
+}
+
+.suggestion {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.actionIcon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #3b82f6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+    flex: 1;
+}
+
+.title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0 0 4px 0;
+}
+
+.description {
+    font-size: 13px;
+    color: #4b5563;
+    margin: 0 0 6px 0;
+    line-height: 1.5;
+}
+
+.reasoning {
+    font-size: 12px;
+    color: #6b7280;
+    margin: 0;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 6px;
+}
+
+.reasoning strong {
+    color: #3b82f6;
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.confidence {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.confidenceLabel {
+    font-size: 11px;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.confidenceBar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.confidenceFill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.confidenceValue {
+    font-size: 12px;
+    font-weight: 700;
+    color: #3b82f6;
+}
+
+.actionButton {
+    padding: 8px 16px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.actionButton:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.sparkle {
+    animation: sparkle 1.5s ease-in-out infinite;
+}

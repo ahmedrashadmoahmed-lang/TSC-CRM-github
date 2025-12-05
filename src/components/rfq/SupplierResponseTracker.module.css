@@ -1,0 +1,115 @@
+.container {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin: 0;
+}
+
+.stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.statItem {
+    font-size: 0.875rem;
+    color: #94a3b8;
+}
+
+.supplierList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.supplierCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+}
+
+.supplierCard:hover {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.supplierInfo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.iconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.iconSuccess {
+    color: #22c55e;
+}
+
+.iconError {
+    color: #ef4444;
+}
+
+.iconWarning {
+    color: #f59e0b;
+}
+
+.iconPending {
+    color: #64748b;
+}
+
+.details {
+    flex: 1;
+}
+
+.supplierName {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin: 0 0 0.25rem 0;
+}
+
+.supplierMeta {
+    font-size: 0.8125rem;
+    color: #64748b;
+    margin: 0;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.loading,
+.empty {
+    text-align: center;
+    padding: 2rem;
+    color: #94a3b8;
+}

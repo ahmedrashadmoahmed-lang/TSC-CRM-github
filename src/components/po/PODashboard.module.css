@@ -1,0 +1,184 @@
+.dashboard {
+    padding: var(--spacing-6);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-6);
+}
+
+.header h2 {
+    font-size: 1.75rem;
+    margin: 0;
+}
+
+.periodSelector {
+    display: flex;
+    gap: var(--spacing-2);
+    background: var(--color-surface);
+    padding: var(--spacing-1);
+    border-radius: var(--radius-md);
+}
+
+.periodSelector button {
+    padding: var(--spacing-2) var(--spacing-4);
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+}
+
+.periodSelector button:hover {
+    background: var(--color-background);
+}
+
+.periodSelector button.active {
+    background: var(--color-primary);
+    color: white;
+}
+
+.kpiGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+}
+
+.kpiCard {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-4);
+}
+
+.kpiIcon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.kpiContent {
+    flex: 1;
+}
+
+.kpiContent h3 {
+    font-size: 1.75rem;
+    margin: 0 0 var(--spacing-1) 0;
+    color: var(--color-primary);
+}
+
+.kpiContent p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}
+
+.metricsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-4);
+}
+
+.metric {
+    text-align: center;
+}
+
+.metricValue {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-2);
+}
+
+.metricLabel {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-2);
+}
+
+.metricBar {
+    height: 8px;
+    background: var(--color-background);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.metricBarFill {
+    height: 100%;
+    background: var(--color-primary);
+    transition: width 0.3s ease;
+}
+
+.paymentGrid {
+    display: flex;
+    justify-content: space-around;
+    gap: var(--spacing-4);
+}
+
+.paymentItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.paymentItem span {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.statusGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--spacing-3);
+}
+
+.statusItem {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-3);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+}
+
+.statusLabel {
+    color: var(--color-text);
+    font-size: 0.9rem;
+}
+
+.statusCount {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 1.1rem;
+}
+
+.loading,
+.error {
+    text-align: center;
+    padding: var(--spacing-8);
+    color: var(--color-text-secondary);
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: var(--spacing-4);
+        align-items: flex-start;
+    }
+
+    .kpiGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .metricsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .paymentGrid {
+        flex-direction: column;
+    }
+}

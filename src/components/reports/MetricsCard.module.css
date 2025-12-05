@@ -1,0 +1,104 @@
+.card {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.icon {
+    font-size: var(--font-size-xl);
+}
+
+.title {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.value {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--spacing-md);
+}
+
+.changeContainer {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--color-border);
+}
+
+.change {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.change.positive {
+    color: var(--color-success);
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.change.negative {
+    color: var(--color-danger);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.change.neutral {
+    color: var(--color-text-secondary);
+    background: var(--color-bg-tertiary);
+}
+
+.changeLabel {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+}
+
+/* Color themes */
+.card.primary {
+    border-left: 4px solid var(--color-primary);
+}
+
+.card.success {
+    border-left: 4px solid var(--color-success);
+}
+
+.card.warning {
+    border-left: 4px solid var(--color-warning);
+}
+
+.card.danger {
+    border-left: 4px solid var(--color-danger);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .value {
+        font-size: var(--font-size-2xl);
+    }
+}

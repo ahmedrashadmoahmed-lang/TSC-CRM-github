@@ -1,0 +1,92 @@
+.container {
+    margin-top: var(--spacing-4);
+}
+
+.uploadSection {
+    margin-bottom: var(--spacing-4);
+}
+
+.fileInput {
+    display: none;
+}
+
+.uploadBtn {
+    cursor: pointer;
+}
+
+.empty {
+    text-align: center;
+    padding: var(--spacing-6);
+    color: var(--color-text-secondary);
+}
+
+.documentsList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.document {
+    display: flex;
+    gap: var(--spacing-3);
+    padding: var(--spacing-4);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    transition: all 0.2s;
+}
+
+.document:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.docIcon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.docInfo {
+    flex: 1;
+}
+
+.docInfo h4 {
+    margin: 0 0 var(--spacing-2) 0;
+    color: var(--color-text);
+}
+
+.docMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-2);
+}
+
+.docDescription {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin: var(--spacing-2) 0 0 0;
+}
+
+.docActions {
+    display: flex;
+    gap: var(--spacing-2);
+    align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+    .document {
+        flex-direction: column;
+    }
+
+    .docActions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .docActions button {
+        width: 100%;
+    }
+}

@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { useOpportunities } from '@/hooks/useOpportunities';
 import MainLayout from '@/components/layout/MainLayout';
 import Header from '@/components/layout/Header';
 import Card from '@/components/ui/Card';
@@ -27,35 +28,68 @@ const DragDropKanban = dynamic(() => import('@/components/pipeline/DragDropKanba
     loading: () => <div className={styles.loading}>Loading Kanban...</div>
 });
 
-const initialDeals = {
-    leads: [
-        { id: 1, company: 'ABC Corporation', contact: 'John Smith', value: 150000, priority: 'high', date: '2025-11-18', email: 'john@abc.com', phone: '+20 123 456 7890' },
-        { id: 2, company: 'Tech Solutions Ltd', contact: 'Sarah Johnson', value: 85000, priority: 'medium', date: '2025-11-19', email: 'sarah@techsol.com', phone: '+20 123 456 7891' },
-        { id: 3, company: 'Global Industries', contact: 'Mike Chen', value: 220000, priority: 'high', date: '2025-11-20', email: 'mike@global.com', phone: '+20 123 456 7892' },
-    ],
-    quotes: [
-        { id: 4, company: 'XYZ Enterprises', contact: 'Emily Davis', value: 95000, priority: 'medium', date: '2025-11-15', email: 'emily@xyz.com', phone: '+20 123 456 7893' },
-        { id: 5, company: 'Innovation Hub', contact: 'David Lee', value: 180000, priority: 'high', date: '2025-11-16', email: 'david@innohub.com', phone: '+20 123 456 7894' },
-    ],
-    negotiations: [
-        { id: 6, company: 'Prime Manufacturing', contact: 'Lisa Anderson', value: 320000, priority: 'high', date: '2025-11-12', email: 'lisa@prime.com', phone: '+20 123 456 7895' },
-        { id: 7, company: 'Metro Supplies', contact: 'Robert Wilson', value: 65000, priority: 'low', date: '2025-11-14', email: 'robert@metro.com', phone: '+20 123 456 7896' },
-    ],
-    won: [
-        { id: 8, company: 'Elite Systems', contact: 'Jennifer Brown', value: 275000, priority: 'high', date: '2025-11-10', email: 'jennifer@elite.com', phone: '+20 123 456 7897' },
-        { id: 9, company: 'Smart Tech Co', contact: 'Thomas Garcia', value: 140000, priority: 'medium', date: '2025-11-11', email: 'thomas@smarttech.com', phone: '+20 123 456 7898' },
-    ],
+// Stage mapping for Kanban columns
+const stageMapping = {
+    'leads': 'leads',
+    'qualified': 'quotes',
+    'proposal': 'quotes',
+    'negotiation': 'negotiations',
+    'won': 'won',
+    'lost': 'lost'
 };
 
 const columns = [
-    { id: 'leads', title: 'Leads', color: 'info', icon: Target, count: 3 },
-    { id: 'quotes', title: 'Quotes Sent', color: 'primary', icon: BarChart3, count: 2 },
-    { id: 'negotiations', title: 'Negotiations', color: 'warning', icon: Clock, count: 2 },
-    { id: 'won', title: 'Won', color: 'success', icon: CheckCircle2, count: 2 },
+    { id: 'leads', title: 'عملاء محتملون', color: 'info', icon: Target, count: 3 },
+    { id: 'quotes', title: 'عروض مرسلة', color: 'primary', icon: BarChart3, count: 2 },
+    { id: 'negotiations', title: 'مفاوضات', color: 'warning', icon: Clock, count: 2 },
+    { id: 'won', title: 'صفقات مكتملة', color: 'success', icon: CheckCircle2, count: 2 },
 ];
 
 export default function Pipeline() {
-    const [deals, setDeals] = useState(initialDeals);
+    // Fetch opportunities from database
+    const { data: opportunitiesData, loading, error, createOpportunity, updateOpportunity } = useOpportunities();
+    const [deals, setDeals] = useState({
+        leads: [],
+        quotes: [],
+        negotiations: [],
+        won: [],
+        lost: []
+    });
+
+    // Transform opportunities data to deals format
+    useEffect(() => {
+        if (opportunitiesData && Array.isArray(opportunitiesData)) {
+            const grouped = {
+                leads: [],
+                quotes: [],
+                negotiations: [],
+                won: [],
+                lost: []
+            };
+
+            opportunitiesData.forEach(opp => {
+                const deal = {
+                    id: opp.id,
+                    company: opp.customer?.name || opp.title,
+                    contact: opp.customer?.name || '',
+                    value: opp.value,
+                    priority: opp.probability > 70 ? 'high' : opp.probability > 40 ? 'medium' : 'low',
+                    date: new Date(opp.createdAt).toISOString().split('T')[0],
+                    email: opp.customer?.email || '',
+                    phone: opp.customer?.phone || '',
+                    stage: opp.stage
+                };
+
+                const mappedStage = stageMapping[opp.stage] || 'leads';
+                if (grouped[mappedStage]) {
+                    grouped[mappedStage].push(deal);
+                }
+            });
+
+            setDeals(grouped);
+        }
+    }, [opportunitiesData]);
+
     const [filter, setFilter] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [showNewDealForm, setShowNewDealForm] = useState(false);
@@ -223,8 +257,8 @@ export default function Pipeline() {
     return (
         <MainLayout>
             <Header
-                title="Sales Pipeline"
-                subtitle="Manage your deals from lead to close"
+                title="مسار المبيعات"
+                subtitle="إدارة الصفقات من العميل المحتمل حتى الإغلاق"
                 actions={headerActions}
             />
 
@@ -236,7 +270,7 @@ export default function Pipeline() {
                             <DollarSign size={24} />
                         </div>
                         <div className={styles.metricContent}>
-                            <p className={styles.metricLabel}>Total Pipeline Value</p>
+                            <p className={styles.metricLabel}>إجمالي قيمة المبيعات</p>
                             <h3 className={styles.metricValue}>{formatCurrency(metrics.totalValue)}</h3>
                         </div>
                     </Card>
@@ -246,7 +280,7 @@ export default function Pipeline() {
                             <Target size={24} />
                         </div>
                         <div className={styles.metricContent}>
-                            <p className={styles.metricLabel}>Total Deals</p>
+                            <p className={styles.metricLabel}>إجمالي الصفقات</p>
                             <h3 className={styles.metricValue}>{metrics.totalDeals}</h3>
                         </div>
                     </Card>
@@ -256,7 +290,7 @@ export default function Pipeline() {
                             <Percent size={24} />
                         </div>
                         <div className={styles.metricContent}>
-                            <p className={styles.metricLabel}>Win Rate</p>
+                            <p className={styles.metricLabel}>معدل النجاح</p>
                             <h3 className={styles.metricValue}>{metrics.winRate}%</h3>
                         </div>
                     </Card>

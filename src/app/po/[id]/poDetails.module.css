@@ -1,0 +1,235 @@
+.container {
+    padding: var(--spacing-6);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.loading,
+.error {
+    text-align: center;
+    padding: var(--spacing-8);
+    color: var(--color-text-secondary);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-6);
+}
+
+.header h1 {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-2);
+}
+
+.header p {
+    color: var(--color-text-secondary);
+}
+
+.headerActions {
+    display: flex;
+    gap: var(--spacing-3);
+}
+
+.tabs {
+    display: flex;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-6);
+    border-bottom: 2px solid var(--color-border);
+}
+
+.tab {
+    padding: var(--spacing-3) var(--spacing-4);
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+}
+
+.tab:hover {
+    color: var(--color-text);
+}
+
+.tab.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+    font-weight: 600;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-4);
+}
+
+.infoGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-3);
+}
+
+.infoItem {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.label {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.value {
+    font-size: 1rem;
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.notes {
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+.itemsList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.item {
+    display: flex;
+    gap: var(--spacing-3);
+    padding: var(--spacing-4);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+}
+
+.itemNumber {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.itemDetails {
+    flex: 1;
+}
+
+.itemDetails h3 {
+    margin-bottom: var(--spacing-2);
+}
+
+.itemDetails p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-2);
+}
+
+.itemMeta,
+.itemProgress {
+    display: flex;
+    gap: var(--spacing-4);
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.itemProgress {
+    margin-top: var(--spacing-2);
+}
+
+.rejected {
+    color: var(--color-error);
+}
+
+.shipmentsList,
+.approvalsList,
+.qualityList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.shipment,
+.approval,
+.qualityCheck {
+    padding: var(--spacing-4);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+}
+
+.shipmentHeader,
+.approvalHeader,
+.qualityHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-2);
+}
+
+.approvalRole,
+.approvalComments,
+.approvalDate {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-top: var(--spacing-1);
+}
+
+.qualityResults {
+    display: flex;
+    gap: var(--spacing-4);
+    margin-top: var(--spacing-2);
+    font-size: 0.9rem;
+}
+
+.empty {
+    text-align: center;
+    padding: var(--spacing-6);
+    color: var(--color-text-secondary);
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .infoGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: var(--spacing-4);
+    }
+
+    .tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+}

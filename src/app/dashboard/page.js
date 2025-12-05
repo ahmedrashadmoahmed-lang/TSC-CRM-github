@@ -10,6 +10,8 @@ import { AIInsightsPanel } from '@/components/dashboard/AIInsightsPanel';
 import { ActivityFeed } from '@/components/dashboard/ActivityFeed';
 import QuickActions from '@/components/dashboard/QuickActions';
 import SalesFunnelChart from '@/components/dashboard/SalesFunnelChart';
+import SalesCycleChart from '@/components/dashboard/SalesCycleChart';
+import CycleMetrics from '@/components/dashboard/CycleMetrics';
 import AlertsPanel from '@/components/dashboard/AlertsPanel';
 import TopDealsTable from '@/components/dashboard/TopDealsTable';
 import DateRangePicker from '@/components/dashboard/DateRangePicker';
@@ -56,7 +58,7 @@ export default function ComprehensiveDashboard() {
     const kpis = originalData?.kpis || {};
     const topCustomers = originalData?.topCustomers || [];
     const topDeals = originalData?.topDeals || [];
-    const activities = originalData?.activities || {};
+    const activities = originalData?.activities || [];
 
     const handleRefresh = () => {
         refreshKPIs();
@@ -215,14 +217,6 @@ export default function ComprehensiveDashboard() {
                     </div>
                 )}
 
-                {/* Error Display */}
-                {kpisError && (
-                    <div className={styles.errorBanner}>
-                        <AlertCircle size={20} />
-                        <span>خطأ في تحميل بعض البيانات: {kpisError}</span>
-                    </div>
-                )}
-
                 {/* Enhanced KPI Cards with Sparklines */}
                 <div className={styles.enhancedKpiGrid}>
                     <KPICard
@@ -374,6 +368,12 @@ export default function ComprehensiveDashboard() {
                         ) : (
                             <SalesFunnelChart data={funnelData} />
                         )}
+                    </div>
+
+                    {/* Sales Cycle Analysis */}
+                    <div className={styles.chartCard} style={{ gridColumn: '1 / -1' }}>
+                        <h3 className={styles.chartTitle}>تحليل دورة المبيعات</h3>
+                        <SalesCycleChart />
                     </div>
 
                     {/* Top Customers Chart */}

@@ -2,14 +2,10 @@ import { PrismaClient } from '@prisma/client';
 
 const globalForPrisma = global;
 
-// Hardcoded for debugging
+// Using DATABASE_URL from environment (SQLite for development)
 const prismaClientSingleton = () => {
     return new PrismaClient({
-        datasources: {
-            db: {
-                url: "postgresql://postgres:Admin123@localhost:5433/erp_database?schema=public",
-            },
-        },
+        log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
     });
 };
 

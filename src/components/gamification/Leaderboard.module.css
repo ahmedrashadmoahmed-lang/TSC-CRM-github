@@ -1,0 +1,139 @@
+.leaderboard {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #f3f4f6;
+}
+
+.header h3 {
+    flex: 1;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.periodSelect {
+    padding: 6px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.userCard {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    background: #f9fafb;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.userCard:hover {
+    background: #f3f4f6;
+    transform: translateX(4px);
+}
+
+.rank {
+    width: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.gold {
+    color: #f59e0b;
+}
+
+.silver {
+    color: #9ca3af;
+}
+
+.bronze {
+    color: #d97706;
+}
+
+.rankNumber {
+    font-size: 16px;
+    font-weight: 700;
+    color: #6b7280;
+}
+
+.userInfo {
+    flex: 1;
+}
+
+.name {
+    display: block;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.badges {
+    display: flex;
+    gap: 4px;
+}
+
+.badge {
+    font-size: 16px;
+}
+
+.stats {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.points {
+    text-align: right;
+}
+
+.pointsValue {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    color: #3b82f6;
+}
+
+.pointsLabel {
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.trend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.up {
+    color: #10b981;
+}
+
+.down {
+    color: #ef4444;
+}
+
+.loading {
+    padding: 20px;
+    text-align: center;
+    color: #9ca3af;
+}

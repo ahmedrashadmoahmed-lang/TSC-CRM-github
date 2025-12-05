@@ -1,0 +1,90 @@
+.container {
+    padding: var(--spacing-4);
+}
+
+.startSection {
+    text-align: center;
+    padding: var(--spacing-6);
+}
+
+.startSection p {
+    margin-bottom: var(--spacing-4);
+    color: var(--color-text-secondary);
+}
+
+.scannerSection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+    align-items: center;
+}
+
+.reader {
+    width: 100%;
+    max-width: 500px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.resultSection {
+    padding: var(--spacing-4);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--color-success);
+}
+
+.resultHeader {
+    margin-bottom: var(--spacing-4);
+    text-align: center;
+}
+
+.resultData {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
+}
+
+.resultItem {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-2);
+    background: var(--color-surface);
+    border-radius: var(--radius-sm);
+}
+
+.resultItem span:first-child {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.resultValue {
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.link {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.resultActions {
+    display: flex;
+    gap: var(--spacing-2);
+    justify-content: center;
+}
+
+.error {
+    text-align: center;
+    padding: var(--spacing-6);
+    color: var(--color-error);
+}
+
+.error p {
+    margin-bottom: var(--spacing-4);
+}

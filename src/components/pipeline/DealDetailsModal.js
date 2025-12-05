@@ -6,6 +6,7 @@ import {
     X, Clock, MessageSquare, Paperclip, TrendingUp
 } from 'lucide-react';
 import styles from './DealDetailsModal.module.css';
+import DealTimeline from './DealTimeline';
 
 export default function DealDetailsModal({ deal, onClose, onUpdate }) {
     const [activeTab, setActiveTab] = useState('details');
@@ -15,11 +16,29 @@ export default function DealDetailsModal({ deal, onClose, onUpdate }) {
     ]);
     const [newNote, setNewNote] = useState('');
 
-    const activities = [
-        { id: 1, type: 'created', description: 'Deal created', date: '2025-11-18 10:30', user: 'Ahmed' },
-        { id: 2, type: 'moved', description: 'Moved to Quotes', date: '2025-11-19 14:20', user: 'Sarah' },
-        { id: 3, type: 'note', description: 'Added note', date: '2025-11-20 09:15', user: 'Ahmed' },
-    ];
+    const [stageHistory, setStageHistory] = useState([]);
+    const [loadingHistory, setLoadingHistory] = useState(false);
+
+    // Fetch history when activity tab is active
+    useEffect(() => {
+        if (activeTab === 'activity' && deal.id) {
+            const fetchHistory = async () => {
+                setLoadingHistory(true);
+                try {
+                    const res = await fetch(`/api/pipeline/${deal.id}/history`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        setStageHistory(data);
+                    }
+                } catch (error) {
+                    console.error('Error fetching history:', error);
+                } finally {
+                    setLoadingHistory(false);
+                }
+            };
+            fetchHistory();
+        }
+    }, [activeTab, deal.id]);
 
     const handleAddNote = () => {
         if (!newNote.trim()) return;
@@ -56,6 +75,13 @@ export default function DealDetailsModal({ deal, onClose, onUpdate }) {
                     </div>
                     <button className={styles.closeButton} onClick={onClose}>
                         <X size={20} />
+                    </button>
+                    <button
+                        className={styles.actionButton}
+                        onClick={() => window.location.href = `/rfq/create?opportunityId=${deal.id}`}
+                        title="Create RFQ from this opportunity"
+                    >
+                        Create RFQ
                     </button>
                 </div>
 
@@ -127,19 +153,11 @@ export default function DealDetailsModal({ deal, onClose, onUpdate }) {
 
                     {activeTab === 'activity' && (
                         <div className={styles.activityList}>
-                            {activities.map(activity => (
-                                <div key={activity.id} className={styles.activityItem}>
-                                    <div className={styles.activityIcon}>
-                                        <Clock size={16} />
-                                    </div>
-                                    <div className={styles.activityContent}>
-                                        <p className={styles.activityDescription}>{activity.description}</p>
-                                        <p className={styles.activityMeta}>
-                                            {activity.user} • {activity.date}
-                                        </p>
-                                    </div>
-                                </div>
-                            ))}
+                            {loadingHistory ? (
+                                <div className="p-4 text-center text-slate-400">Loading history...</div>
+                            ) : (
+                                <DealTimeline history={stageHistory} />
+                            )}
                         </div>
                     )}
 

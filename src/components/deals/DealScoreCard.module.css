@@ -1,0 +1,89 @@
+.scoreCard {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    color: #6b7280;
+}
+
+.header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.mainScore {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.scoreCircle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+}
+
+.score {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.grade {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+.factors {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.factor {
+    display: grid;
+    grid-template-columns: 20px 1fr 2fr 50px;
+    gap: 12px;
+    align-items: center;
+    font-size: 13px;
+    color: #4b5563;
+}
+
+.factor svg {
+    color: #9ca3af;
+}
+
+.bar {
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.loading {
+    padding: 20px;
+    text-align: center;
+    color: #9ca3af;
+}

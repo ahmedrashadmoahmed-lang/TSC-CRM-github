@@ -1,0 +1,119 @@
+.container {
+    padding: var(--spacing-6);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-6);
+}
+
+.header h1 {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-2);
+    color: var(--color-text);
+}
+
+.header p {
+    color: var(--color-text-secondary);
+}
+
+.loading {
+    text-align: center;
+    padding: var(--spacing-8);
+    color: var(--color-text-secondary);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: var(--spacing-4);
+}
+
+.reportCard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.reportHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.reportHeader h3 {
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-2);
+    color: var(--color-text);
+}
+
+.meta {
+    display: flex;
+    gap: var(--spacing-2);
+    align-items: center;
+}
+
+.frequency {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    padding: var(--spacing-1) var(--spacing-2);
+    background: var(--color-background);
+    border-radius: var(--radius-sm);
+}
+
+.reportDetails {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+}
+
+.detail {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.label {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.actions {
+    display: flex;
+    gap: var(--spacing-2);
+    padding-top: var(--spacing-3);
+    border-top: 1px solid var(--color-border);
+}
+
+.empty {
+    text-align: center;
+    padding: var(--spacing-8);
+}
+
+.empty p {
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-4);
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: var(--spacing-4);
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+}

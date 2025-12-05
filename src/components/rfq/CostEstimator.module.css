@@ -1,0 +1,444 @@
+.estimator {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px;
+    color: #6b7280;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e5e7eb;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.summaryCard {
+    padding: 28px;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border-radius: 12px;
+    color: white;
+    margin-bottom: 24px;
+}
+
+.summaryHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.summaryHeader svg {
+    flex-shrink: 0;
+}
+
+.summaryHeader h3 {
+    margin: 0 0 6px 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.summaryHeader p {
+    margin: 0;
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+.totalAmount {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.mainAmount {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.range {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.confidenceMeter {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.confidenceLabel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.confidenceValue {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+.confidenceHigh {
+    background: #10b981;
+    color: white;
+}
+
+.confidenceMedium {
+    background: #f59e0b;
+    color: white;
+}
+
+.confidenceLow {
+    background: #ef4444;
+    color: white;
+}
+
+.confidenceBar {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.confidenceFill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.5s ease;
+}
+
+.budgetCard {
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+    border: 2px solid;
+}
+
+.budgetGood {
+    background: #f0fdf4;
+    border-color: #10b981;
+}
+
+.budgetWarning {
+    background: #fef3c7;
+    border-color: #f59e0b;
+}
+
+.budgetDanger {
+    background: #fef2f2;
+    border-color: #ef4444;
+}
+
+.budgetHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.budgetGood .budgetHeader {
+    color: #065f46;
+}
+
+.budgetWarning .budgetHeader {
+    color: #92400e;
+}
+
+.budgetDanger .budgetHeader {
+    color: #991b1b;
+}
+
+.budgetHeader h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.budgetDetails {
+    margin-bottom: 16px;
+}
+
+.budgetRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 14px;
+}
+
+.budgetRow.difference {
+    padding-top: 12px;
+    border-top: 2px solid rgba(0, 0, 0, 0.1);
+    font-weight: 700;
+}
+
+.budgetAmount {
+    font-weight: 600;
+}
+
+.budgetDifference {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.budgetMessage {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.itemsSection h4 {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.itemsList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.itemCard {
+    padding: 20px;
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    transition: all 0.2s;
+}
+
+.itemCard:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.itemHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.itemInfo h5 {
+    margin: 0 0 6px 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.itemDesc {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.itemCost {
+    text-align: right;
+}
+
+.costAmount {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.unitCost {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.noCost {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: #fef3c7;
+    border-radius: 6px;
+    color: #92400e;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.itemDetails {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 16px;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.itemStat {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.statLabel {
+    font-size: 11px;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+}
+
+.statValue {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.miniConfidence {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.miniBar {
+    flex: 1;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.miniBar div {
+    height: 100%;
+    border-radius: 3px;
+}
+
+.trendBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.trendUp {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.trendDown {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.trendStable {
+    background: #dbeafe;
+    color: #1e3a8a;
+}
+
+.recommendations {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.recommendation {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.recSuccess {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.recWarning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.recInfo {
+    background: #dbeafe;
+    color: #1e3a8a;
+}
+
+.noDataMessage {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: #f3f4f6;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.disclaimer {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    background: #f3f4f6;
+    border-left: 4px solid #6b7280;
+    border-radius: 8px;
+    margin-top: 24px;
+}
+
+.disclaimer p {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .estimator {
+        padding: 16px;
+    }
+
+    .summaryCard {
+        padding: 20px;
+    }
+
+    .mainAmount {
+        font-size: 32px;
+    }
+
+    .itemHeader {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .itemCost {
+        text-align: left;
+    }
+
+    .itemDetails {
+        grid-template-columns: 1fr;
+    }
+}

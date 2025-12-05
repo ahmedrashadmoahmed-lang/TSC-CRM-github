@@ -1,0 +1,346 @@
+.builder {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.header h2 {
+    margin: 0 0 8px 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.header p {
+    margin: 0;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.saveBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.saveBtn:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.errors {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.error {
+    color: #dc2626;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.error:last-child {
+    margin-bottom: 0;
+}
+
+.section {
+    margin-bottom: 32px;
+}
+
+.section h3 {
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.addFieldBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: white;
+    border: 2px solid #3b82f6;
+    border-radius: 6px;
+    color: #3b82f6;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.addFieldBtn:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.field input,
+.field select,
+.field textarea {
+    padding: 10px 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.emptyState {
+    text-align: center;
+    padding: 48px 24px;
+    background: #f9fafb;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+}
+
+.emptyState p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.fieldsList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.fieldCard {
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    transition: all 0.2s;
+}
+
+.fieldCard:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.fieldHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.dragHandle {
+    color: #9ca3af;
+    cursor: move;
+}
+
+.fieldNumber {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+}
+
+.removeBtn {
+    padding: 6px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    color: #ef4444;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.removeBtn:hover {
+    background: #fef2f2;
+}
+
+.fieldGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.fieldInput {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.fieldInput label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.fieldInput input,
+.fieldInput select {
+    padding: 8px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 13px;
+    background: white;
+}
+
+.fieldInput input:focus,
+.fieldInput select:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.checkboxLabel {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.checkboxLabel input[type="checkbox"] {
+    width: auto;
+    cursor: pointer;
+}
+
+.preview {
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 24px;
+}
+
+.previewHeader {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.previewHeader h4 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.previewHeader p {
+    margin: 0;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.previewFields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.previewField {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.previewField label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.required {
+    color: #ef4444;
+    margin-left: 4px;
+}
+
+.previewField input,
+.previewField select,
+.previewField textarea {
+    padding: 10px 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+}
+
+.previewField input:disabled,
+.previewField select:disabled,
+.previewField textarea:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.emptyPreview {
+    text-align: center;
+    padding: 48px 24px;
+    color: #9ca3af;
+}
+
+@media (max-width: 768px) {
+    .grid,
+    .fieldGrid,
+    .previewFields {
+        grid-template-columns: 1fr;
+    }
+
+    .builder {
+        padding: 20px;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 16px;
+    }
+}

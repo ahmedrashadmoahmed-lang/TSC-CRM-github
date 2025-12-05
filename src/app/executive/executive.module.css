@@ -1,0 +1,240 @@
+.container {
+    padding: var(--spacing-6);
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: var(--spacing-6);
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-2);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header p {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+}
+
+.loading,
+.error {
+    text-align: center;
+    padding: var(--spacing-8);
+    color: var(--color-text-secondary);
+    font-size: 1.2rem;
+}
+
+/* Primary KPIs */
+.primaryKPIs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+}
+
+.kpiCard {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    padding: var(--spacing-2);
+}
+
+.kpiIcon {
+    font-size: 3rem;
+    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+}
+
+.kpiContent {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+}
+
+.kpiValue {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.kpiLabel {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.kpiTrend {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.kpiTrend.positive {
+    color: #10b981;
+}
+
+.kpiTrend.negative {
+    color: #ef4444;
+}
+
+.kpiSubtext {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+/* Charts Grid */
+.chartsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+}
+
+.chart {
+    padding: var(--spacing-4) 0;
+}
+
+.chartBars {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 200px;
+    gap: var(--spacing-2);
+}
+
+.barGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.barContainer {
+    width: 100%;
+    height: 180px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.bar {
+    width: 80%;
+    background: linear-gradient(180deg, var(--color-primary), var(--color-secondary));
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.bar:hover {
+    opacity: 0.8;
+    transform: scaleY(1.05);
+}
+
+.barLabel {
+    margin-top: var(--spacing-2);
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+/* Top List */
+.topList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.topItem {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-3);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+}
+
+.topItem:hover {
+    background: var(--color-surface);
+    transform: translateX(-4px);
+}
+
+.rank {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.customerInfo {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.customerName {
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.customerValue {
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+/* Secondary KPIs */
+.secondaryKPIs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-4);
+}
+
+.statBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-4);
+}
+
+.statValue {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-2);
+}
+
+.statLabel {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    text-align: center;
+}
+
+@media (max-width: 1024px) {
+    .chartsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .primaryKPIs,
+    .secondaryKPIs {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .kpiValue {
+        font-size: 2rem;
+    }
+
+    .kpiIcon {
+        font-size: 2.5rem;
+    }
+}

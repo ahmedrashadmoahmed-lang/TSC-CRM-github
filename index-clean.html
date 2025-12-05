@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>نظام محاسبي برو المتكامل v5.0</title>
+    
+    <!-- External Libraries - CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="rtl bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+
+    <!-- ==================== شاشة التحميل ==================== -->
+    <div id="loading-screen" class="fixed inset-0 bg-gradient-to-br from-blue-600 to-purple-700 z-50 flex items-center justify-center">
+        <div class="text-center">
+            <div class="relative">
+                <div class="w-24 h-24 border-8 border-white border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <i class="bi bi-calculator text-white text-4xl"></i>
+                </div>
+            </div>
+            <h2 class="text-white text-2xl font-bold mb-2">نظام محاسبي برو</h2>
+            <p class="text-white/80 mb-4" id="loading-text">جاري تحميل النظام...</p>
+            <div class="w-64 bg-white/20 rounded-full h-2 mx-auto overflow-hidden">
+                <div class="bg-white h-full rounded-full transition-all duration-500" id="loading-progress" style="width: 0%"></div>
+            </div>
+            <p class="text-white/60 text-sm mt-4" id="loading-step">تهيئة البيانات الأساسية</p>
+        </div>
+    </div>
+
+    <!-- ==================== شاشة تسجيل الدخول ==================== -->
+    <div id="login-page" class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4" style="display: none;">
+        <div class="w-full max-w-md">
+            <!-- Logo & Title -->
+            <div class="text-center mb-8 animate-fade-in">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-2xl mb-4 transform hover:scale-110 transition-transform">
+                    <i class="bi bi-calculator text-white text-3xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">نظام محاسبي برو</h1>
+                <p class="text-gray-600 dark:text-gray-400">النظام المحاسبي المتكامل v5.0</p>
+            </div>
+
+            <!-- Login Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 animate-slide-up">
+                <form id="login-form" class="space-y-6">
+                    <!-- User Selection -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold flex items-center gap-2">
+                                <i class="bi bi-person-circle text-primary"></i>
+                                اختر المستخدم
+                            </span>
+                        </label>
+                        <select class="select select-bordered w-full dark:bg-gray-700" id="login-username" required>
+                            <option value="">-- اختر المستخدم --</option>
+                            <optgroup label="المحاسبة">
+                                <option value="accountant">أحمد محمود - المحاسب الرئيسي</option>
+                            </optgroup>
+                            <optgroup label="المبيعات">
+                                <option value="sales_manager">محمد عبدالله - مدير المبيعات</option>
+                                <option value="sales_agent1">خالد سعيد - مندوب مبيعات</option>
+                                <option value="sales_agent2">سارة علي - مندوبة مبيعات</option>
+                            </optgroup>
+                            <optgroup label="المشتريات">
+                                <option value="purchase_manager">محسن كمال - مدير المشتريات</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold flex items-center gap-2">
+                                <i class="bi bi-lock-fill text-primary"></i>
+                                كلمة المرور
+                            </span>
+                        </label>
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                class="input input-bordered w-full pr-10 dark:bg-gray-700" 
+                                id="login-password"
+                                placeholder="أدخل كلمة المرور"
+                                value="123456"
+                                required 
+                            />
+                            <button type="button" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700" onclick="togglePasswordVisibility()">
+                                <i class="bi bi-eye" id="password-toggle-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" class="checkbox checkbox-primary checkbox-sm" id="remember-me" />
+                            <span class="text-sm">تذكرني</span>
+                        </label>
+                        <a href="#" class="text-sm text-primary hover:underline">نسيت كلمة المرور؟</a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary w-full text-lg">
+                        <i class="bi bi-box-arrow-in-left ml-2"></i>
+                        تسجيل الدخول
+                    </button>
+                </form>
+
+                <!-- Demo Info -->
+                <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <div class="flex items-start gap-3">
+                        <i class="bi bi-info-circle text-blue-600 text-xl"></i>
+                        <div class="flex-1">
+                            <p class="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-2">بيانات تجريبية:</p>
+                            <div class="space-y-1 text-xs text-blue-800 dark:text-blue-200">
+                                <p>• اختر أي مستخدم من القائمة</p>
+                                <p>• كلمة المرور: <code class="bg-white dark:bg-gray-700 px-2 py-1 rounded">123456</code></p>
+                                <p>• النظام يدعم صلاحيات متعددة حسب الدور</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="text-center mt-6 text-sm text-gray-500">
+                    <p>النسخة 5.0.0 | © 2025 نظام محاسبي برو</p>
+                    <p class="mt-1">تم التطوير بواسطة <span class="text-primary font-semibold">Ahmed Rashad</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== التطبيق الرئيسي ==================== -->
+    <div id="main-app" style="display: none;">
+        <div class="drawer lg:drawer-open">
+            <input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
+
+            <!-- ==================== المحتوى الرئيسي ==================== -->
+            <div class="drawer-content flex flex-col min-h-screen">
+                
+                <!-- Header -->
+                <header class="navbar bg-white dark:bg-gray-800 shadow-md border-b dark:border-gray-700 sticky top-0 z-30">
+                    <div class="flex-1">
+                        <label for="drawer-toggle" class="btn btn-ghost btn-circle drawer-button lg:hidden">
+                            <i class="bi bi-list text-2xl"></i>
+                        </label>
+                        <h1 class="text-xl font-bold flex.items-center.gap-3.mr-4">
+                            <i class="bi bi-speedometer2 text-primary" id="page-icon"></i>
+                            <span id="page-title">لوحة التحكم</span>
+                        </h1>
+                    </div>
+
+                    <!-- Workflow Tabs (Desktop) -->
+                    <div class="flex-none hidden lg:flex">
+                        <div class="tabs tabs-boxed bg-base-200" id="workflow-tabs">
+                            <!-- يتم ملؤها ديناميكياً -->
+                        </div>
+                    </div>
+
+                    <div class="flex-none gap-2">
+                        <!-- Theme Toggle -->
+                        <button class="btn btn-ghost btn-circle" onclick="APP_AUTH.toggleTheme()" title="تبديل الوضع">
+                            <i class="bi bi-moon-fill text-xl dark:hidden"></i>
+                            <i class="bi bi-sun-fill text-xl hidden dark:block"></i>
+                        </button>
+
+                        <!-- Notifications -->
+                        <div class="dropdown dropdown-end">
+                            <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                                <div class="indicator">
+                                    <i class="bi bi-bell text-xl"></i>
+                                    <span class="badge badge-xs badge-primary indicator-item" id="notification-badge">0</span>
+                                </div>
+                            </div>
+                            <div tabindex="0" class="mt-3 z-[1] card card-compact dropdown-content w-80 bg-base-100 shadow-xl">
+                                <div class="card-body">
+                                    <h3 class="font-bold text-lg">الإشعارات</h3>
+                                    <div class="divider my-2"></div>
+                                    <div id="notifications-list" class="space-y-2 max-h-96 overflow-y-auto">
+                                        <p class="text-center text-gray-500 py-4">لا توجد إشعارات جديدة</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- User Menu -->
+                        <div class="dropdown dropdown-end">
+                            <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                                <div class="w-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center font-bold">
+                                    <span id="user-avatar">م</span>
+                                </div>
+                            </div>
+                            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-xl bg-base-100 rounded-box w-64">
+                                <li class="menu-title">
+                                    <div class="flex items-center gap-3 p-2">
+                                        <div class="avatar">
+                                            <div class="w-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center font-bold">
+                                                <span id="user-avatar-menu">م</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p class="font-bold" id="user-name-menu">المستخدم</p>
+                                            <p class="text-xs opacity-60" id="user-role-menu">الدور</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="my-2"><hr class="border-gray-200 dark:border-gray-700" /></li>
+                                <li><a onclick="APP_PAGES.navigateTo('profile')"><i class="bi bi-person"></i> الملف الشخصي</a></li>
+                                <li><a onclick="APP_PAGES.navigateTo('settings')"><i class="bi bi-gear"></i> الإعدادات</a></li>
+                                <li><a onclick="APP_CORE.showBackupModal()"><i class="bi bi-cloud-download"></i> النسخ الاحتياطي</a></li>
+                                <li class="my-2"><hr class="border-gray-200 dark:border-gray-700" /></li>
+                                <li><a onclick="APP_AUTH.logout()" class="text-error"><i class="bi bi-box-arrow-right"></i> تسجيل الخروج</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Main Content Area -->
+                <main class="flex-1 p-4 lg:p-6">
+                    <div id="main-content" class="animate-fade-in">
+                        <!-- المحتوى يتم تحميله ديناميكياً -->
+                    </div>
+                </main>
+
+                <!-- Footer -->
+                <footer class="footer.footer-center.p-4.bg-base-200.text-base-content.border-t">
+                    <div>
+                        <p class="font-semibold">نظام محاسبي برو v5.0.0</p>
+                        <p class="text-sm.opacity-60">© 2025 - جميع الحقوق محفوظة</p>
+                    </div>
+                </footer>
+            </div>
+
+            <!-- ==================== Sidebar ==================== -->
+            <div class="drawer-side z-40">
+                <label for="drawer-toggle" aria-label="close sidebar" class="drawer-overlay"></label>
+                <div class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+                    
+                    <!-- Logo & Company Info -->
+                    <div class="flex items-center gap-3 mb-6 p-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-white">
+                        <div class="avatar">
+                            <div class="w-12 rounded-xl bg-white/20 flex.items-center.justify-center">
+                                <i class="bi bi-calculator text-2xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-lg">محاسبي برو</h2>
+                            <p class="text-xs.opacity-90">النظام المحاسبي المتكامل</p>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Menu -->
+                    <nav id="sidebar-menu" class="space-y-1">
+                        <!-- يتم ملؤها ديناميكياً -->
+                    </nav>
+
+                    <!-- Quick Stats -->
+                    <div class="mt-auto pt-6">
+                        <div class="card bg-base-100 shadow-lg">
+                            <div class="card-body p-4">
+                                <h3 class="card-title text-sm mb-3">
+                                    <i class="bi bi-graph-up text-primary"></i>
+                                    إحصائيات سريعة
+                                </h3>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex.justify-between">
+                                        <span class="opacity-70">العملاء النشطين:</span>
+                                        <span class="font-bold text-primary" id="stat-customers">0</span>
+                                    </div>
+                                    <div class="flex.justify-between">
+                                        <span class="opacity-70">الفواتير المعلقة:</span>
+                                        <span class="font-bold text-warning" id="stat-invoices">0</span>
+                                    </div>
+                                    <div class="flex.justify-between">
+                                        <span class="opacity-70">المبيعات الشهرية:</span>
+                                        <span class="font-bold text-success" id="stat-sales">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== Toast Container ==================== -->
+    <div id="toast-container" class="fixed top-4 left-4 z-50 space-y-2"></div>
+
+    <!-- ==================== Modals ==================== -->
+    
+    <!-- Backup Modal -->
+    <dialog id="backupModal" class="modal">
+        <div class="modal-box max-w-2xl">
+            <h3 class="font-bold text-lg mb-4">
+                <i class="bi bi-cloud-download text-primary"></i>
+                النسخ الاحتياطي والاستعادة
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Export -->
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <h4 class="card-title text-sm">
+                            <i class="bi bi-download.text-success"></i>
+                            تصدير البيانات
+                        </h4>
+                        <p class="text-sm.opacity-70">تحميل نسخة احتياطية كاملة</p>
+                        <button class="btn.btn-success.btn-sm.mt-2" onclick="APP_CORE.exportData()">
+                            <i class="bi bi-download"></i>
+                            تصدير
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Import -->
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <h4 class="card-title text-sm">
+                            <i class="bi bi-upload text-warning"></i>
+                            استيراد البيانات
+                        </h4>
+                        <input type="file" class="file-input file-input-bordered file-input-sm w-full mt-2" id="import-file" accept=".json" />
+                        <button class="btn btn-warning btn-sm mt-2" onclick="APP_CORE.importData()">
+                            <i class="bi bi-upload"></i>
+                            استيراد
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-action">
+                <form method="dialog">
+                    <button class="btn">إغلاق</button>
+                </form>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- ==================== JavaScript Files ==================== -->
+
+    <!-- 1. Core & Helpers -->
+    <script src="js/app-core.js"></script>
+    <script src="js/app-helpers.js"></script>
+
+    <!-- 2. Auth -->
+    <script src="js/app-auth.js"></script>
+
+    <!-- 3. Modules -->
+    <script src="js/app-sales.js"></script>
+    <script src="js/app-workflow.js"></script>
+    <script src="js/app-accounting.js"></script>
+
+    <!-- 4. Modals & Print -->
+    <script src="js/app-modals.js"></script>
+    <script src="js/app-modals-extended.js"></script>
+    <script src="js/app-print.js"></script>
+
+    <!-- 5. Charts & Notifications -->
+    <script src="js/app-charts.js"></script>
+    <script src="js/app-notifications.js"></script>
+
+    <!-- 6. Data -->
+    <script src="js/app-real-data.js"></script>
+    <script src="js/app-real-data-extended.js"></script>
+
+    <!-- 7. Pages -->
+    <script src="js/app-dashboard-enhanced.js"></script>
+    <script src="js/app-pages-complete.js"></script>
+    <script src="js/app-pages-final.js"></script>
+    <script src="js/app-google-sheets-import.js"></script>
+    <script src="js/app-pages.js"></script>
+
+    <!-- 8. System Check -->
+    <script src="js/app-system-check.js"></script>
+
+    <!-- ==================== Initialize App (مرة واحدة) ==================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 تهيئة نظام محاسبي برو v5.0...');
+            console.log('⏰ التاريخ والوقت:', new Date().toLocaleString('ar-SA'));
+            console.log('👤 المستخدم:', 'ahmedrashadmoahmed-lang');
+            
+            // تهيئة النواة
+            APP_CORE.initialize();
+
+            // بعد 2 ثانية من التهيئة
+            setTimeout(() => {
+                if (APP_CORE.appState && APP_CORE.appState.currentUser) {
+                    console.log('👤 المستخدم:', APP_CORE.appState.currentUser.name);
+
+                    // تحميل البيانات الأساسية
+                    if (typeof APP_REAL_DATA !== 'undefined') {
+                        const stats = APP_REAL_DATA.loadRealData();
+                        console.log('✅ البيانات الأساسية:', stats);
+                    }
+
+                    // تحميل البيانات الإضافية
+                    if (typeof APP_REAL_DATA_EXTENDED !== 'undefined') {
+                        const extendedStats = APP_REAL_DATA_EXTENDED.loadExtendedData();
+                        console.log('✅ البيانات الإضافية:', extendedStats);
+                    }
+
+                    // تهيئة الإشعارات
+                    if (typeof APP_NOTIFICATIONS !== 'undefined') {
+                        APP_NOTIFICATIONS.initialize();
+                    }
+
+                    // تهيئة الرسوم البيانية
+                    if (typeof APP_CHARTS !== 'undefined' && typeof APP_CHARTS.initializeCharts === 'function') {
+                        APP_CHARTS.initializeCharts();
+                    }
+
+                    console.log('✅ النظام جاهز للاستخدام');
+                    if (typeof APP_CORE.showToast === 'function') {
+                        APP_CORE.showToast('مرحباً بك في نظام محاسبي برو! 🎉', 'success');
+                    }
+                } else {
+                    console.log('ℹ️ لا يوجد مستخدم مسجّل حالياً، عرض شاشة تسجيل الدخول.');
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

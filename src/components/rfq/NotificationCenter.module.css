@@ -1,0 +1,221 @@
+.center {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 800px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header h2 {
+    margin: 0 0 4px 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.header p {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.clearBtn {
+    padding: 8px 16px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.clearBtn:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.summaryCard {
+    padding: 16px;
+    background: #f9fafb;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.summaryCard:hover {
+    background: #f3f4f6;
+}
+
+.summaryCard.active {
+    background: #eff6ff;
+    border-color: #3b82f6;
+}
+
+.count {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1f2937;
+}
+
+.label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+}
+
+.alertsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.alertCard {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    background: white;
+    transition: all 0.2s;
+}
+
+.alertCard.critical {
+    border-color: #ef4444;
+    background: #fef2f2;
+}
+
+.alertCard.warning {
+    border-color: #f59e0b;
+    background: #fffbeb;
+}
+
+.alertCard.info {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.alertCard.success {
+    border-color: #10b981;
+    background: #f0fdf4;
+}
+
+.alertCard.read {
+    opacity: 0.6;
+}
+
+.alertIcon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 8px;
+}
+
+.alertContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.alertMessage {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1f2937;
+    line-height: 1.5;
+}
+
+.actionBtn {
+    align-self: flex-start;
+    padding: 6px 12px;
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.actionBtn:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+}
+
+.alertTime {
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+.alertActions {
+    display: flex;
+    gap: 4px;
+}
+
+.iconBtn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #6b7280;
+}
+
+.iconBtn:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    color: #374151;
+}
+
+.empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #9ca3af;
+}
+
+.empty svg {
+    margin: 0 auto 16px;
+    color: #10b981;
+}
+
+.empty p {
+    margin: 0 0 4px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.empty span {
+    font-size: 14px;
+}

@@ -8,6 +8,7 @@ import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import Input from '@/components/ui/Input';
 import Table from '@/components/ui/Table';
+import CurrencySelector from '@/components/rfq/CurrencySelector';
 import styles from './rfq.module.css';
 
 const mockRFQs = [
@@ -69,6 +70,8 @@ export default function RFQManagement() {
         deadline: '',
         items: [{ description: '', quantity: '', unit: '' }],
         selectedSuppliers: [],
+        currency: 'EGP',
+        budget: '',
     });
 
     const getStatusVariant = (status) => {
@@ -115,6 +118,8 @@ export default function RFQManagement() {
             deadline: '',
             items: [{ description: '', quantity: '', unit: '' }],
             selectedSuppliers: [],
+            currency: 'EGP',
+            budget: '',
         });
     };
 
@@ -198,6 +203,25 @@ export default function RFQManagement() {
                                         value={formData.deadline}
                                         onChange={(e) => setFormData(prev => ({ ...prev, deadline: e.target.value }))}
                                         required
+                                    />
+                                </div>
+
+                                <div className={styles.formRow}>
+                                    <div className={styles.formGroup}>
+                                        <label className={styles.formLabel}>Currency</label>
+                                        <CurrencySelector
+                                            value={formData.currency}
+                                            onChange={(currency) => setFormData(prev => ({ ...prev, currency }))}
+                                        />
+                                    </div>
+                                    <Input
+                                        label="Budget (Optional)"
+                                        type="number"
+                                        placeholder="Enter budget amount"
+                                        value={formData.budget}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, budget: e.target.value }))}
+                                        min="0"
+                                        step="0.01"
                                     />
                                 </div>
 

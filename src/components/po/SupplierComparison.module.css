@@ -1,0 +1,154 @@
+.controls {
+    margin-bottom: var(--spacing-4);
+}
+
+.sortButtons {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    flex-wrap: wrap;
+}
+
+.sortButtons span {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.sortButtons button {
+    padding: var(--spacing-2) var(--spacing-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sortButtons button:hover {
+    background: var(--color-background);
+}
+
+.sortButtons button.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.empty {
+    text-align: center;
+    padding: var(--spacing-6);
+    color: var(--color-text-secondary);
+}
+
+.comparison {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-4);
+}
+
+.supplierCard {
+    position: relative;
+    padding: var(--spacing-4);
+    background: var(--color-background);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    transition: all 0.3s;
+}
+
+.supplierCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.supplierCard.bestValue {
+    border-color: var(--color-success);
+    background: linear-gradient(135deg, var(--color-surface) 0%, rgba(34, 197, 94, 0.05) 100%);
+}
+
+.bestBadge {
+    position: absolute;
+    top: var(--spacing-2);
+    right: var(--spacing-2);
+}
+
+.rank {
+    position: absolute;
+    top: var(--spacing-2);
+    left: var(--spacing-2);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.supplierCard h3 {
+    margin: var(--spacing-2) 0 var(--spacing-4) 0;
+    text-align: center;
+    color: var(--color-text);
+}
+
+.metrics {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+}
+
+.metric {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-2);
+    background: var(--color-surface);
+    border-radius: var(--radius-sm);
+}
+
+.label {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}
+
+.value {
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.notes {
+    padding: var(--spacing-3);
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-3);
+}
+
+.notes p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.advantages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-3);
+}
+
+.actions {
+    display: flex;
+    gap: var(--spacing-2);
+}
+
+.actions button {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .comparison {
+        grid-template-columns: 1fr;
+    }
+}

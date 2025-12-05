@@ -1,0 +1,126 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+}
+
+.section {
+    padding: var(--spacing-4);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+}
+
+.section h3 {
+    margin: 0 0 var(--spacing-4) 0;
+    color: var(--color-text);
+    font-size: 1.1rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-3);
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.field label {
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.select,
+.textarea {
+    padding: var(--spacing-2) var(--spacing-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.select:focus,
+.textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.textarea {
+    resize: vertical;
+}
+
+.statusPreview {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    margin-top: var(--spacing-3);
+    padding: var(--spacing-3);
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+}
+
+.defectForm {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 100px auto;
+    gap: var(--spacing-2);
+    align-items: end;
+    margin-bottom: var(--spacing-3);
+}
+
+.defectsList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.defect {
+    display: flex;
+    gap: var(--spacing-3);
+    padding: var(--spacing-3);
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+}
+
+.defectInfo {
+    flex: 1;
+}
+
+.defectInfo h4 {
+    margin: 0 0 var(--spacing-1) 0;
+    color: var(--color-text);
+}
+
+.defectInfo p {
+    margin: 0 0 var(--spacing-2) 0;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}
+
+.defectMeta {
+    display: flex;
+    gap: var(--spacing-2);
+    align-items: center;
+}
+
+.actions {
+    display: flex;
+    gap: var(--spacing-2);
+    justify-content: flex-end;
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .defectForm {
+        grid-template-columns: 1fr;
+    }
+}

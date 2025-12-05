@@ -1,0 +1,232 @@
+.container {
+    background: #1e293b;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid #334155;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    min-width: 800px;
+}
+
+.table th {
+    text-align: right;
+    padding: 1rem;
+    color: #94a3b8;
+    font-weight: 500;
+    border-bottom: 1px solid #334155;
+    font-size: 0.875rem;
+}
+
+.table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #334155;
+    vertical-align: top;
+}
+
+.input {
+    width: 100%;
+    background: #0f172a;
+    border: 1px solid #334155;
+    color: #f8fafc;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    transition: border-color 0.2s;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.total {
+    padding: 0.5rem;
+    color: #f8fafc;
+    font-weight: 600;
+    text-align: left;
+    direction: ltr;
+}
+
+.deleteButton {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deleteButton:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.addButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: 1px dashed #475569;
+    color: #94a3b8;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.container {
+    background: #1e293b;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid #334155;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    min-width: 800px;
+}
+
+.table th {
+    text-align: right;
+    padding: 1rem;
+    color: #94a3b8;
+    font-weight: 500;
+    border-bottom: 1px solid #334155;
+    font-size: 0.875rem;
+}
+
+.table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #334155;
+    vertical-align: top;
+}
+
+.input {
+    width: 100%;
+    background: #0f172a;
+    border: 1px solid #334155;
+    color: #f8fafc;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    transition: border-color 0.2s;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.total {
+    padding: 0.5rem;
+    color: #f8fafc;
+    font-weight: 600;
+    text-align: left;
+    direction: ltr;
+}
+
+.deleteButton {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deleteButton:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.addButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: 1px dashed #475569;
+    color: #94a3b8;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.addButton:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.05);
+}
+
+.marginIndicator {
+    font-size: 0.7rem;
+    margin-top: 0.25rem;
+    font-weight: 500;
+    text-align: left;
+    direction: ltr;
+}
+
+.profitSummary {
+    background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.summaryTitle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #f8fafc;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.summaryGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .summaryGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.summaryItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.summaryLabel {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.summaryValue {
+    font-size: 1.125rem;
+    font-weight: 700;
+}

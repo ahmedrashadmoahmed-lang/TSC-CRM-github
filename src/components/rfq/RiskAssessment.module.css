@@ -1,0 +1,469 @@
+.riskAssessment {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+/* Loading State */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl);
+    gap: var(--spacing-md);
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Overall Risk Card */
+.overallCard {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    border: 2px solid;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.overallCard.riskLow {
+    border-color: #10b981;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), transparent);
+}
+
+.overallCard.riskMedium {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), transparent);
+}
+
+.overallCard.riskHigh {
+    border-color: #ef4444;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), transparent);
+}
+
+.overallCard.riskCritical {
+    border-color: #dc2626;
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), transparent);
+}
+
+.overallHeader {
+    display: flex;
+    gap: var(--spacing-lg);
+    align-items: center;
+}
+
+.overallIcon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.riskLow .overallIcon {
+    background: #10b981;
+    color: white;
+}
+
+.riskMedium .overallIcon {
+    background: #f59e0b;
+    color: white;
+}
+
+.riskHigh .overallIcon {
+    background: #ef4444;
+    color: white;
+}
+
+.riskCritical .overallIcon {
+    background: #dc2626;
+    color: white;
+}
+
+.overallHeader h2 {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin: 0;
+}
+
+.overallLevel {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin: var(--spacing-xs) 0 0;
+}
+
+.overallScore {
+    text-align: center;
+}
+
+.scoreCircle {
+    margin-bottom: var(--spacing-sm);
+}
+
+.scoreLabel {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+/* Categories Section */
+.categoriesSection h3 {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+}
+
+.categoriesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.categoryCard {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.categoryCard:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.categoryCard.selected {
+    border-width: 2px;
+    box-shadow: var(--shadow-xl);
+}
+
+.categoryCard.riskLow {
+    border-left: 4px solid #10b981;
+}
+
+.categoryCard.riskMedium {
+    border-left: 4px solid #f59e0b;
+}
+
+.categoryCard.riskHigh {
+    border-left: 4px solid #ef4444;
+}
+
+.categoryCard.riskCritical {
+    border-left: 4px solid #dc2626;
+}
+
+.categoryHeader {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.categoryIcon {
+    width: 40px;
+    height: 40px;
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+}
+
+.categoryHeader h4 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin: 0;
+}
+
+.categoryLevel {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    margin: var(--spacing-xs) 0 0;
+}
+
+.categoryCard.riskLow .categoryLevel {
+    color: #10b981;
+}
+
+.categoryCard.riskMedium .categoryLevel {
+    color: #f59e0b;
+}
+
+.categoryCard.riskHigh .categoryLevel {
+    color: #ef4444;
+}
+
+.categoryCard.riskCritical .categoryLevel {
+    color: #dc2626;
+}
+
+.categoryScore {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.scoreBar {
+    flex: 1;
+    height: 8px;
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.scoreBarFill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.5s ease;
+}
+
+.scoreValue {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+}
+
+.categoryMessage {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    margin: 0;
+}
+
+/* Factors */
+.factors {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-border);
+}
+
+.factors strong {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+}
+
+.factors ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.factors li {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+}
+
+.factors li.severityHigh {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.factors li.severityMedium {
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.factors li.severityLow {
+    background: rgba(107, 114, 128, 0.1);
+}
+
+.factorName {
+    font-weight: 500;
+}
+
+.factorImpact {
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-xs);
+}
+
+/* Recommendations Section */
+.recommendationsSection {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+}
+
+.recommendationsSection h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-warning);
+}
+
+.recommendationsList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.recommendationCard {
+    background: var(--color-bg-primary);
+    border-left: 4px solid;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+}
+
+.recommendationCard.priorityCritical {
+    border-color: #dc2626;
+}
+
+.recommendationCard.priorityHigh {
+    border-color: #ef4444;
+}
+
+.recommendationCard.priorityMedium {
+    border-color: #f59e0b;
+}
+
+.recommendationCard.priorityLow {
+    border-color: #6b7280;
+}
+
+.recHeader {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+.recPriority {
+    background: var(--color-bg-tertiary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.recCategory {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.recIssue {
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+}
+
+.recAction {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+/* Mitigation Section */
+.mitigationSection {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+}
+
+.mitigationSection h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-success);
+}
+
+.mitigationList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.mitigationCard {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+}
+
+.mitigationCard h4 {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+}
+
+.mitigationCard ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mitigationCard li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.mitigationCard li svg {
+    flex-shrink: 0;
+    color: var(--color-success);
+    margin-top: 2px;
+}
+
+/* Summary Card */
+.summaryCard {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+}
+
+.summaryHeader {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.summaryContent p {
+    margin: var(--spacing-sm) 0;
+    line-height: 1.6;
+}
+
+.timestamp {
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-xs);
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .overallCard {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .categoriesGrid,
+    .mitigationList {
+        grid-template-columns: 1fr;
+    }
+}
